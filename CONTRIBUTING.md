@@ -115,7 +115,7 @@ reactive cascades.
 - Implement conscious_pause modulation
 - Update agent coordination to respect breath cycles
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
+🤖 Generated with Luthier via [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Your Name <your.email@example.com>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
