@@ -14,7 +14,9 @@ name = "lamina-os-workspace"
 version = "0.1.0"
 description = "Workspace for Lamina OS packages"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "lamina-core",
+]
 
 [project.optional-dependencies]
 dev = [

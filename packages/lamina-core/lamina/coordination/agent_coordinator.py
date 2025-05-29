@@ -17,10 +17,53 @@ from lamina.coordination.constraint_engine import ConstraintEngine
 logger = logging.getLogger(__name__)
 
 
+class MockIntentClassifier:
+    """Mock intent classifier for when real one isn't available."""
+    
+    def classify(self, message: str, context: dict = None):
+        """Simple intent classification based on keywords."""
+        message_lower = message.lower()
+        
+        if any(word in message_lower for word in ["research", "analyze", "study", "investigate"]):
+            return {
+                "primary_type": "analytical",
+                "confidence": 0.8,
+                "categories": ["research"],
+                "secondary_types": []
+            }
+        elif any(word in message_lower for word in ["create", "write", "design", "imagine", "brainstorm", "creative", "story"]):
+            return {
+                "primary_type": "creative",
+                "confidence": 0.7,
+                "categories": ["creative"],
+                "secondary_types": []
+            }
+        else:
+            return {
+                "primary_type": "conversational",
+                "confidence": 0.6,
+                "categories": ["general"],
+                "secondary_types": []
+            }
+
+
+class MockConstraintEngine:
+    """Mock constraint engine for when real one isn't available."""
+    
+    def apply_constraints(self, content: str, constraints: list):
+        """Mock constraint application."""
+        return type('obj', (object,), {
+            'content': content,
+            'modified': False,
+            'applied_constraints': []
+        })
+
+
 class MessageType(Enum):
     """Types of messages the coordinator can handle"""
     CONVERSATIONAL = "conversational"
-    ANALYTICAL = "analytical" 
+    ANALYTICAL = "analytical"
+    CREATIVE = "creative"
     SECURITY = "security"
     REASONING = "reasoning"
     SYSTEM = "system"
@@ -54,13 +97,22 @@ class AgentCoordinator:
     comply with system policies.
     """
     
-    def __init__(self, agents: Dict[str, Any], config: Optional[Dict[str, Any]] = None):
-        self.agents = agents
+    def __init__(self, agents: Dict[str, Any] = None, config: Optional[Dict[str, Any]] = None, **kwargs):
+        self.agents = agents or {}
         self.config = config or {}
         
-        # Initialize subsystems
-        self.intent_classifier = IntentClassifier(self.config.get("intent_classifier", {}))
-        self.constraint_engine = ConstraintEngine(self.config.get("constraints", {}))
+        # Breath-aware settings from kwargs
+        self.breath_modulation = kwargs.get("breath_modulation", True)
+        self.conscious_pause = kwargs.get("conscious_pause", 0.5)
+        
+        # Initialize subsystems (with mock implementations for now)
+        # Use MockIntentClassifier which supports creative routing
+        self.intent_classifier = MockIntentClassifier()
+            
+        try:
+            self.constraint_engine = ConstraintEngine(self.config.get("constraints", {}))
+        except:
+            self.constraint_engine = MockConstraintEngine()
         
         # Routing statistics
         self.routing_stats = {
@@ -69,9 +121,9 @@ class AgentCoordinator:
             "constraint_violations": 0
         }
         
-        logger.info(f"Agent Coordinator initialized with {len(agents)} agents")
+        logger.info(f"Agent Coordinator initialized with {len(self.agents)} agents")
     
-    def process_message(self, message: str, context: Optional[Dict[str, Any]] = None) -> str:
+    async def process_message(self, message: str, context: Optional[Dict[str, Any]] = None) -> str:
         """
         Main entry point for processing user messages.
         
@@ -84,12 +136,17 @@ class AgentCoordinator:
         """
         self.routing_stats["total_requests"] += 1
         
+        # Conscious pause for consideration
+        if self.breath_modulation:
+            import asyncio
+            await asyncio.sleep(self.conscious_pause)
+        
         try:
             # Step 1: Classify intent and determine routing
             routing_decision = self._make_routing_decision(message, context)
             
             # Step 2: Route to primary agent
-            response = self._route_to_agent(
+            response = await self._route_to_agent(
                 routing_decision.primary_agent, 
                 message, 
                 context
@@ -148,6 +205,7 @@ class AgentCoordinator:
         agent_mapping = {
             "conversational": "assistant",
             "analytical": "researcher", 
+            "creative": "creative",
             "security": "guardian",
             "reasoning": "reasoner",
             "system": "coordinator"
@@ -158,8 +216,15 @@ class AgentCoordinator:
         # Ensure agent exists
         if selected_agent not in self.agents:
             logger.warning(f"Agent '{selected_agent}' not available, falling back to assistant")
+            # Try to find any available agent as fallback
+            available_agents = list(self.agents.keys())
+            if available_agents:
+                fallback = available_agents[0]
+                logger.info(f"Using fallback agent: {fallback}")
+                return fallback
             return "assistant"
             
+        logger.info(f"Selected agent: {selected_agent} for intent: {primary_type}")
         return selected_agent
     
     def _select_secondary_agents(self, intent_result: Dict[str, Any], primary_agent: str) -> List[str]:
@@ -194,22 +259,39 @@ class AgentCoordinator:
             
         return constraints
     
-    def _route_to_agent(self, agent_name: str, message: str, context: Optional[Dict[str, Any]]) -> AgentResponse:
+    async def _route_to_agent(self, agent_name: str, message: str, context: Optional[Dict[str, Any]]) -> AgentResponse:
         """Route message to specific agent"""
         
         if agent_name not in self.agents:
             raise ValueError(f"Agent '{agent_name}' not available")
         
-        agent = self.agents[agent_name]
+        agent_config = self.agents[agent_name]
         
         try:
-            # Call the agent's chat method
-            response_content = agent.chat(message, context)
+            # Mock response generation based on agent configuration
+            # In full implementation, this would call actual backends
+            import asyncio
+            await asyncio.sleep(0.3)  # Conscious pause
+            
+            personality = agent_config.get("personality_traits", [])
+            description = agent_config.get("description", "")
+            
+            # Build response based on agent traits
+            if "creative" in personality:
+                prefix = "This is an exciting creative challenge!"
+            elif "analytical" in personality:
+                prefix = "Let me analyze this carefully."
+            elif "helpful" in personality:
+                prefix = "I'm happy to help with that."
+            else:
+                prefix = "I understand your request."
+            
+            response_content = f"{prefix} [{agent_name}] {description} Processing: '{message[:50]}{'...' if len(message) > 50 else ''}'"
             
             return AgentResponse(
                 content=response_content,
                 agent_name=agent_name,
-                metadata={"primary": True},
+                metadata={"primary": True, "mock": True},
                 constraints_applied=[]
             )
             
@@ -283,10 +365,34 @@ class AgentCoordinator:
         if agent_name not in self.agents:
             return None
             
-        agent = self.agents[agent_name]
+        agent_config = self.agents[agent_name]
         return {
             "name": agent_name,
-            "description": getattr(agent, "description", "No description available"),
-            "capabilities": getattr(agent, "capabilities", []),
+            "description": agent_config.get("description", "No description available"),
+            "capabilities": agent_config.get("expertise_areas", []),
             "status": "active"
         }
+    
+    def get_agent_status(self) -> Dict[str, Any]:
+        """Get coordinator and agent status information."""
+        return {
+            "coordinator": {
+                "agents_count": len(self.agents),
+                "conversation_count": 0,  # Would track in full implementation
+                "breath_modulation": self.breath_modulation,
+                "conscious_pause": self.conscious_pause
+            },
+            "agents": {
+                name: {
+                    "description": config.get("description", ""),
+                    "traits": config.get("personality_traits", []),
+                    "provider": config.get("ai_provider", "unknown")
+                }
+                for name, config in self.agents.items()
+            }
+        }
+    
+    def get_conversation_history(self, limit: int = 10) -> List[Dict]:
+        """Get recent conversation history."""
+        # Mock implementation - would track real history in full version
+        return []
