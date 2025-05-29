@@ -175,16 +175,16 @@ uv run python -c "import lamina; import lamina_llm_serve"
 ### Architecture Decision Records
 
 See `docs/adr/` for detailed architectural decisions including:
-- [ADR-002: Breath-First Architecture](docs/adr/0002-breath-first-architecture.md)
-- [ADR-003: mTLS Service Mesh](docs/adr/0003-mtls-service-mesh.md)
-- [ADR-005: AMEM Memory Architecture](docs/adr/0005-amem-memory-architecture.md)
+- [ADR-002: Breath-First Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/adrs/0002-monorepo-architecture-for-public-framework.md)
+- [ADR-003: mTLS Service Mesh](https://github.com/benaskins/lamina-os/blob/main/docs/current-capabilities.md)
+- [ADR-005: AMEM Memory Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/architecture-vision.md)
 
 ## 📚 Documentation
 
 - **[Getting Started Guide](docs/getting-started.md)** - Basic concepts and first agent
-- **[Architecture Overview](docs/architecture.md)** - System design and philosophy  
-- **[Agent Development](docs/agent-development.md)** - Building custom agents
-- **[API Reference](docs/api/)** - Complete API documentation
+- **[Architecture Vision](docs/architecture-vision.md)** - System design and philosophy  
+- **[Current Capabilities](docs/current-capabilities.md)** - What's implemented now
+- **[API Reference](packages/lamina-core/docs/api.md)** - Complete API documentation
 - **[Examples](examples/)** - Integration examples and tutorials
 
 ## 🤝 Contributing

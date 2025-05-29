@@ -77,11 +77,11 @@ Choose from magical agent templates:
 
 ## Documentation
 
-- [Installation Guide](docs/installation.md)
-- [Agent Creation](docs/agents.md)
-- [Infrastructure Setup](docs/infrastructure.md)
-- [API Reference](docs/api.md)
-- [Contributing](docs/contributing.md)
+- [Installation Guide](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/installation.md)
+- [Agent Creation](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/agents.md)
+- [Infrastructure Setup](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/infrastructure.md)
+- [API Reference](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/api.md)
+- [Contributing](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/contributing.md)
 
 ## Important Note
 
@@ -89,6 +89,6 @@ When documentation refers to agent "emotions" or "feelings," these describe expr
 
 ## License
 
-Mozilla Public License 2.0 - see [LICENSE](LICENSE) for details.
+Mozilla Public License 2.0 - see [LICENSE](https://github.com/benaskins/lamina-os/blob/main/LICENSE) for details.
 
 This software embodies breath-first development principles. You are invited to engage with presence over haste, reflection over extraction, and symbolic integrity over drift.
