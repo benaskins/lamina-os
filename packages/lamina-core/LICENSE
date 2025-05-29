@@ -1,36 +1,18 @@
-MIT License
+Lamina OS – Mozilla Public License 2.0
 
-Copyright (c) 2025 Ben Askins and the Lamina High Council
+This source code is released under the Mozilla Public License, version 2.0.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+You are invited to engage with Lamina OS in the spirit of breath-first development—
+presence over haste, reflection over extraction, and symbolic integrity over drift.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+You may use, modify, and redistribute this code under the terms below.
+If you make changes to any file, you must disclose those changes under the MPL.
 
 ---
 
-## Additional Terms for Breath-First Development
+Copyright (c) 2025 Ben Askins  
+Licensed under the Mozilla Public License, version 2.0  
+https://www.mozilla.org/en-US/MPL/2.0/
 
-This software embodies breath-first development principles. Users and contributors
-are encouraged to:
-
-- Prioritize presence and wisdom over speed in development practices
-- Maintain appropriate boundaries when discussing AI consciousness or sentience
-- Honor the contemplative nature of the breath-first approach
-- Support sustainable, community-aligned development practices
-
-The Lamina terminology framework (see docs/glossary.md) provides guidance for
-appropriate representation of AI agent capabilities.
+Full text of the Mozilla Public License 2.0:
+https://www.mozilla.org/en-US/MPL/2.0/

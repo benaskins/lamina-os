@@ -88,4 +88,6 @@ When documentation refers to agent "emotions" or "feelings," these describe expr
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+Mozilla Public License 2.0 - see [LICENSE](LICENSE) for details.
+
+This software embodies breath-first development principles. You are invited to engage with presence over haste, reflection over extraction, and symbolic integrity over drift.
