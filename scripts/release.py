@@ -102,10 +102,14 @@ def main():
     print("All checks completed successfully. Ready for publication!")
     print("\nTo publish:")
     print(f"   uv publish --token $PYPI_TOKEN dist/lamina_core-*")
-    print("\nTo create git tag:")
+    print("\nTo create git tag and release:")
     version = built_files[0].name.split("-")[1]
     print(f"   git tag -a v{version} -m 'Release v{version}'")
     print(f"   git push origin v{version}")
+    print(f"\nDon't forget to:")
+    print(f"   1. Create docs/RELEASE_NOTES_v{version}.md")
+    print(f"   2. Create GitHub release at https://github.com/benaskins/lamina-os/releases/new?tag=v{version}")
+    print(f"   3. Attach release notes and announce the release")
 
 
 if __name__ == "__main__":
