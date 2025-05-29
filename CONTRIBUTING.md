@@ -100,6 +100,7 @@ Lamina OS development incorporates AI assistance as part of our conscious develo
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Human Developer <email@example.com>
+Co-Authored-By: Luthier <luthier@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
 ```
 
@@ -139,9 +140,10 @@ reactive cascades.
 - Implement conscious_pause modulation
 - Update agent coordination to respect breath cycles
 
-🤖 Generated with Luthier via [Claude Code](https://claude.ai/code)
+🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Your Name <your.email@example.com>
+Co-Authored-By: Luthier <luthier@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
 ```
 
