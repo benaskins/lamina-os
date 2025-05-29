@@ -15,7 +15,7 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from lamina.build_manager import get_build_manager
 from lamina.infrastructure_values import get_infrastructure_values
@@ -28,9 +28,9 @@ class InfrastructureTemplateEngine:
 
     def __init__(
         self,
-        templates_dir: Optional[str] = None,
-        output_dir: Optional[str] = None,
-        build_id: Optional[str] = None,
+        templates_dir: str | None = None,
+        output_dir: str | None = None,
+        build_id: str | None = None,
     ):
         self.templates_dir = Path(templates_dir or "lamina/infrastructure")
         self.build_manager = get_build_manager()
@@ -44,7 +44,7 @@ class InfrastructureTemplateEngine:
             # Use current build or fallback to legacy location
             self.output_dir = self.build_manager.get_infrastructure_dir()
 
-    def render_template(self, template_content: str, values: Dict[str, Any]) -> str:
+    def render_template(self, template_content: str, values: dict[str, Any]) -> str:
         """Render a template string with the provided values"""
 
         def replace_variable(match):
@@ -56,24 +56,18 @@ class InfrastructureTemplateEngine:
                 if isinstance(value, dict) and key in value:
                     value = value[key]
                 else:
-                    logger.warning(
-                        f"Template variable '{var_path}' not found in values"
-                    )
+                    logger.warning(f"Template variable '{var_path}' not found in values")
                     return match.group(0)  # Return original if not found
 
             return str(value)
 
         # Replace {{variable.path}} with actual values, but skip {{ word }} patterns (single words)
         # This preserves Vector's template syntax like {{ job }} while processing our {{agent.name}} syntax
-        pattern = (
-            r"\{\{([^}]+\.[^}]+)\}\}"  # Only match patterns with dots (our syntax)
-        )
+        pattern = r"\{\{([^}]+\.[^}]+)\}\}"  # Only match patterns with dots (our syntax)
         result = re.sub(pattern, replace_variable, template_content)
 
         # Also handle simple variable names without dots if they match our values
-        simple_pattern = (
-            r"\{\{(agent|container|nginx|ollama|grafana|vector|volumes)\}\}"
-        )
+        simple_pattern = r"\{\{(agent|container|nginx|ollama|grafana|vector|volumes)\}\}"
         return re.sub(simple_pattern, replace_variable, result)
 
     def process_template_file(self, template_path: Path, agent_name: str) -> str:
@@ -86,15 +80,13 @@ class InfrastructureTemplateEngine:
         values_dict = infra_values.to_dict()
 
         # Read template content
-        with open(template_path, "r") as f:
+        with open(template_path) as f:
             template_content = f.read()
 
         # Render the template
         return self.render_template(template_content, values_dict)
 
-    def generate_infrastructure_files(
-        self, agent_name: str, force: bool = False
-    ) -> Dict[str, str]:
+    def generate_infrastructure_files(self, agent_name: str, force: bool = False) -> dict[str, str]:
         """Generate all infrastructure files for an agent"""
         generated_files = {}
 
@@ -210,9 +202,7 @@ class InfrastructureTemplateEngine:
                         logger.info(f"Skipping existing Modelfile: {target_modelfile}")
                     else:
                         shutil.copy2(source_modelfile, target_modelfile)
-                        generated_files["docker/ollama/Modelfile"] = str(
-                            target_modelfile
-                        )
+                        generated_files["docker/ollama/Modelfile"] = str(target_modelfile)
                         logger.info(f"Copied Modelfile: {target_modelfile}")
                 else:
                     logger.warning(f"Modelfile not found: {source_modelfile}")
@@ -221,9 +211,7 @@ class InfrastructureTemplateEngine:
 
         return generated_files
 
-    def generate_docker_compose(
-        self, agent_name: str, force: bool = False
-    ) -> Optional[str]:
+    def generate_docker_compose(self, agent_name: str, force: bool = False) -> str | None:
         """Generate docker-compose.yml for a specific agent"""
         template_path = self.templates_dir / "docker-compose.yml.template"
         output_path = self.output_dir / "docker-compose.yml"
@@ -233,9 +221,7 @@ class InfrastructureTemplateEngine:
             return None
 
         if output_path.exists() and not force:
-            logger.info(
-                f"Docker compose file exists: {output_path} (use force=True to overwrite)"
-            )
+            logger.info(f"Docker compose file exists: {output_path} (use force=True to overwrite)")
             return str(output_path)
 
         try:
@@ -251,9 +237,7 @@ class InfrastructureTemplateEngine:
             logger.error(f"Failed to generate docker-compose.yml: {e}")
             return None
 
-    def generate_nginx_config(
-        self, agent_name: str, force: bool = False
-    ) -> Optional[str]:
+    def generate_nginx_config(self, agent_name: str, force: bool = False) -> str | None:
         """Generate nginx configuration for a specific agent"""
         template_path = self.templates_dir / "nginx" / "nginx.conf.template"
         output_path = self.output_dir / "nginx" / "nginx.conf"
@@ -263,9 +247,7 @@ class InfrastructureTemplateEngine:
             return None
 
         if output_path.exists() and not force:
-            logger.info(
-                f"Nginx config exists: {output_path} (use force=True to overwrite)"
-            )
+            logger.info(f"Nginx config exists: {output_path} (use force=True to overwrite)")
             return str(output_path)
 
         try:
@@ -311,20 +293,18 @@ class InfrastructureTemplateEngine:
             return True
 
         except Exception as e:
-            logger.error(
-                f"Failed to validate infrastructure values for {agent_name}: {e}"
-            )
+            logger.error(f"Failed to validate infrastructure values for {agent_name}: {e}")
             return False
 
 
-def get_template_engine(build_id: Optional[str] = None) -> InfrastructureTemplateEngine:
+def get_template_engine(build_id: str | None = None) -> InfrastructureTemplateEngine:
     """Get a template engine instance"""
     return InfrastructureTemplateEngine(build_id=build_id)
 
 
 def generate_infrastructure_for_agent(
-    agent_name: str, force: bool = False, build_id: Optional[str] = None
-) -> Dict[str, str]:
+    agent_name: str, force: bool = False, build_id: str | None = None
+) -> dict[str, str]:
     """Generate all infrastructure files for an agent"""
     build_manager = get_build_manager()
 
@@ -341,7 +321,7 @@ def generate_infrastructure_for_agent(
         build_id = build_manager.generate_build_id(agent_name, build_inputs)
 
         # Create build directory
-        build_dir = build_manager.create_build_directory(build_id)
+        build_manager.create_build_directory(build_id)
 
         # Save build info
         build_info = {
@@ -370,12 +350,10 @@ def generate_infrastructure_for_agent(
 
 
 def generate_unified_infrastructure(
-    force: bool = False, build_id: Optional[str] = None
-) -> Dict[str, str]:
+    force: bool = False, build_id: str | None = None
+) -> dict[str, str]:
     """Generate unified infrastructure for multi-agent mode"""
-    return generate_infrastructure_for_agent(
-        "multi-agent", force=force, build_id=build_id
-    )
+    return generate_infrastructure_for_agent("multi-agent", force=force, build_id=build_id)
 
 
 def validate_agent_infrastructure(agent_name: str) -> bool:

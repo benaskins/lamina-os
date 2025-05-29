@@ -29,16 +29,14 @@ def load_config(agent_name, config_file="known_entities.yaml"):
     test_config_path = Path(lamina_dir) / "tests" / "agents" / agent_name / config_file
 
     if test_config_path.exists():
-        with open(test_config_path, "r") as file:
+        with open(test_config_path) as file:
             return yaml.safe_load(file)
 
     # If not found in test directory, check sanctuary
     sanctuary_dir = os.getenv("SANCTUARY_DIR")
     if not sanctuary_dir:
         # Default to ../sanctuary relative to this file
-        sanctuary_dir = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "sanctuary")
-        )
+        sanctuary_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "sanctuary"))
 
     # Convert to Path object for easier manipulation
     sanctuary_path = Path(sanctuary_dir)
@@ -51,5 +49,5 @@ def load_config(agent_name, config_file="known_entities.yaml"):
     if not agent_config_path.exists():
         raise FileNotFoundError(f"Configuration file not found: {agent_config_path}")
 
-    with open(agent_config_path, "r") as file:
+    with open(agent_config_path) as file:
         return yaml.safe_load(file)

@@ -15,7 +15,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 
@@ -32,8 +32,8 @@ class AgentConfig:
     # AI Backend configuration
     ai_provider: str = "ollama"
     ai_model: str = "llama3.2:3b"
-    ai_parameters: Dict[str, Any] = field(default_factory=dict)
-    ai_provider_config: Dict[str, Any] = field(default_factory=dict)
+    ai_parameters: dict[str, Any] = field(default_factory=dict)
+    ai_provider_config: dict[str, Any] = field(default_factory=dict)
 
     # Memory configuration
     memory_enabled: bool = True
@@ -42,38 +42,36 @@ class AgentConfig:
     memory_evolution_threshold: int = 5
 
     # Personality configuration
-    personality_traits: List[str] = field(default_factory=list)
+    personality_traits: list[str] = field(default_factory=list)
     communication_style: str = "elegant"
-    expertise_areas: List[str] = field(default_factory=list)
+    expertise_areas: list[str] = field(default_factory=list)
 
     # Capabilities
-    functions: List[str] = field(default_factory=list)
-    tools: List[str] = field(default_factory=list)
-    integrations: List[str] = field(default_factory=list)
+    functions: list[str] = field(default_factory=list)
+    tools: list[str] = field(default_factory=list)
+    integrations: list[str] = field(default_factory=list)
 
     # Constraints
     max_tokens: int = 4096
     timeout_seconds: int = 30
-    rate_limits: Dict[str, int] = field(default_factory=dict)
+    rate_limits: dict[str, int] = field(default_factory=dict)
 
 
 class AgentConfigLoader:
     """Loads and manages agent configurations with backend abstraction"""
 
-    def __init__(
-        self, config_dir: Optional[str] = None, sanctuary_path: Optional[str] = None
-    ):
+    def __init__(self, config_dir: str | None = None, sanctuary_path: str | None = None):
         self.config_dir = Path(config_dir or "config")
         self.sanctuary_path = Path(sanctuary_path or "sanctuary")
         self.agents_config_path = self.config_dir / "agents.yaml"
         self.environment = os.getenv("LAMINA_ENV", "development")
 
-        self._agents_schema: Optional[Dict[str, Any]] = None
-        self._provider_configs: Optional[Dict[str, Any]] = None
-        self._model_mappings: Optional[Dict[str, Any]] = None
-        self._parameter_mappings: Optional[Dict[str, Any]] = None
+        self._agents_schema: dict[str, Any] | None = None
+        self._provider_configs: dict[str, Any] | None = None
+        self._model_mappings: dict[str, Any] | None = None
+        self._parameter_mappings: dict[str, Any] | None = None
 
-    def load_agent_schema(self) -> Dict[str, Any]:
+    def load_agent_schema(self) -> dict[str, Any]:
         """Load agent configuration schema and provider information"""
         if self._agents_schema is not None:
             return self._agents_schema
@@ -85,7 +83,7 @@ class AgentConfigLoader:
                 )
                 self._agents_schema = self._get_default_schema()
             else:
-                with open(self.agents_config_path, "r") as f:
+                with open(self.agents_config_path) as f:
                     self._agents_schema = yaml.safe_load(f) or {}
 
             # Apply environment variable substitution
@@ -108,12 +106,10 @@ class AgentConfigLoader:
         """Load configuration for a specific agent"""
         try:
             # Load from sanctuary if exists
-            agent_config_path = (
-                self.sanctuary_path / "agents" / agent_name / "agent.yaml"
-            )
+            agent_config_path = self.sanctuary_path / "agents" / agent_name / "agent.yaml"
 
             if agent_config_path.exists():
-                with open(agent_config_path, "r") as f:
+                with open(agent_config_path) as f:
                     agent_data = yaml.safe_load(f) or {}
             else:
                 logger.info(f"Agent config not found for {agent_name}, using defaults")
@@ -139,7 +135,7 @@ class AgentConfigLoader:
             # Return default configuration
             return self._create_default_agent_config(agent_name)
 
-    def get_provider_config(self, provider: str) -> Dict[str, Any]:
+    def get_provider_config(self, provider: str) -> dict[str, Any]:
         """Get configuration for a specific AI provider"""
         self.load_agent_schema()
         return self._provider_configs.get(provider, {})
@@ -150,9 +146,7 @@ class AgentConfigLoader:
         model_map = self._model_mappings.get(standard_model, {})
         return model_map.get(provider, standard_model)
 
-    def normalize_parameters(
-        self, parameters: Dict[str, Any], provider: str
-    ) -> Dict[str, Any]:
+    def normalize_parameters(self, parameters: dict[str, Any], provider: str) -> dict[str, Any]:
         """Normalize parameters for a specific provider"""
         self.load_agent_schema()
         normalized = {}
@@ -200,7 +194,7 @@ class AgentConfigLoader:
 
         return base_url
 
-    def _substitute_env_vars(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _substitute_env_vars(self, config: dict[str, Any]) -> dict[str, Any]:
         """Recursively substitute environment variables in configuration"""
         if isinstance(config, dict):
             return {k: self._substitute_env_vars(v) for k, v in config.items()}
@@ -235,9 +229,7 @@ class AgentConfigLoader:
 
         return re.sub(pattern, replace_var, value)
 
-    def _apply_environment_overrides(
-        self, agent_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _apply_environment_overrides(self, agent_data: dict[str, Any]) -> dict[str, Any]:
         """Apply environment-specific overrides to agent configuration"""
         self.load_agent_schema()
         environments = self._agents_schema.get("environments", {})
@@ -250,27 +242,19 @@ class AgentConfigLoader:
 
         return agent_data
 
-    def _deep_merge(
-        self, base: Dict[str, Any], override: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _deep_merge(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         """Deep merge two dictionaries"""
         result = base.copy()
 
         for key, value in override.items():
-            if (
-                key in result
-                and isinstance(result[key], dict)
-                and isinstance(value, dict)
-            ):
+            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value
 
         return result
 
-    def _create_agent_config(
-        self, agent_name: str, agent_data: Dict[str, Any]
-    ) -> AgentConfig:
+    def _create_agent_config(self, agent_name: str, agent_data: dict[str, Any]) -> AgentConfig:
         """Create AgentConfig instance from agent data"""
         # Get default template
         self.load_agent_schema()
@@ -319,9 +303,7 @@ class AgentConfigLoader:
         # Constraints
         constraints = merged_data.get("constraints", {})
         config.max_tokens = constraints.get("max_tokens", config.max_tokens)
-        config.timeout_seconds = constraints.get(
-            "timeout_seconds", config.timeout_seconds
-        )
+        config.timeout_seconds = constraints.get("timeout_seconds", config.timeout_seconds)
         config.rate_limits = constraints.get("rate_limits", {})
 
         return config
@@ -332,9 +314,7 @@ class AgentConfigLoader:
         config.ai_model = self.get_model_mapping(config.ai_model, config.ai_provider)
 
         # Normalize parameters for the provider
-        config.ai_parameters = self.normalize_parameters(
-            config.ai_parameters, config.ai_provider
-        )
+        config.ai_parameters = self.normalize_parameters(config.ai_parameters, config.ai_provider)
 
         # Merge with provider-specific defaults
         provider_config = self.get_provider_config(config.ai_provider)
@@ -357,7 +337,7 @@ class AgentConfigLoader:
             ai_parameters={"temperature": 0.7, "max_tokens": 2048, "top_p": 0.9},
         )
 
-    def _get_default_schema(self) -> Dict[str, Any]:
+    def _get_default_schema(self) -> dict[str, Any]:
         """Get default agent schema when config file is not available"""
         return {
             "default_agent": {
@@ -391,7 +371,7 @@ class AgentConfigLoader:
 
 
 # Global agent config loader instance
-_agent_config_loader: Optional[AgentConfigLoader] = None
+_agent_config_loader: AgentConfigLoader | None = None
 
 
 def get_agent_config_loader() -> AgentConfigLoader:
@@ -408,7 +388,7 @@ def load_agent_config(agent_name: str) -> AgentConfig:
     return loader.load_agent_config(agent_name)
 
 
-def get_provider_config(provider: str) -> Dict[str, Any]:
+def get_provider_config(provider: str) -> dict[str, Any]:
     """Get configuration for a specific AI provider"""
     loader = get_agent_config_loader()
     return loader.get_provider_config(provider)

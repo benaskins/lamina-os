@@ -13,14 +13,14 @@ supporting various models, quantization options, and device management.
 
 import asyncio
 import logging
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import torch
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
-    TextStreamer,
 )
 
 from .base import BaseBackend, Message
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class HuggingFaceBackend(BaseBackend):
     """HuggingFace Transformers backend for local inference"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize HuggingFace backend with configuration"""
         super().__init__(config)
 
@@ -39,8 +39,8 @@ class HuggingFaceBackend(BaseBackend):
         self.torch_dtype = self._determine_torch_dtype()
         self.quantization_config = self._get_quantization_config()
 
-        self.tokenizer: Optional[AutoTokenizer] = None
-        self.model: Optional[AutoModelForCausalLM] = None
+        self.tokenizer: AutoTokenizer | None = None
+        self.model: AutoModelForCausalLM | None = None
         self.is_loaded = False
 
         logger.info(f"HuggingFace backend initialized for model: {self.model_name}")
@@ -78,7 +78,7 @@ class HuggingFaceBackend(BaseBackend):
 
         return dtype_map.get(dtype_config, torch.float32)
 
-    def _get_quantization_config(self) -> Optional[BitsAndBytesConfig]:
+    def _get_quantization_config(self) -> BitsAndBytesConfig | None:
         """Get quantization configuration if enabled"""
         quant_config = self.config.get("quantization", {})
 
@@ -105,9 +105,7 @@ class HuggingFaceBackend(BaseBackend):
             logger.info(f"Loading HuggingFace model: {self.model_name}")
 
             # Load tokenizer
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.model_name, trust_remote_code=True
-            )
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
 
             # Set pad token if not present
             if self.tokenizer.pad_token is None:
@@ -128,9 +126,7 @@ class HuggingFaceBackend(BaseBackend):
                 model_kwargs["device_map"] = self.device
 
             # Load model
-            self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_name, **model_kwargs
-            )
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_name, **model_kwargs)
 
             # Move to device if not using quantization
             if not self.quantization_config and self.device != "auto":
@@ -171,7 +167,7 @@ class HuggingFaceBackend(BaseBackend):
         """Check if the backend is available"""
         try:
             # Check if transformers is available
-            import transformers
+            import transformers  # noqa: F401
 
             # Check if model is loaded or can be loaded
             if not self.is_loaded:
@@ -187,7 +183,7 @@ class HuggingFaceBackend(BaseBackend):
             return False
 
     async def generate(
-        self, messages: List[Message], stream: bool = True
+        self, messages: list[Message], stream: bool = True
     ) -> AsyncGenerator[str, None]:
         """Generate response using HuggingFace model"""
         if not self.is_loaded:
@@ -243,7 +239,7 @@ class HuggingFaceBackend(BaseBackend):
             logger.error(f"Generation failed: {e}")
             yield f"Error: {str(e)}"
 
-    def _format_messages(self, messages: List[Message]) -> str:
+    def _format_messages(self, messages: list[Message]) -> str:
         """Format messages into a prompt string"""
         # Simple chat template - can be enhanced based on model requirements
         formatted_parts = []
@@ -262,7 +258,7 @@ class HuggingFaceBackend(BaseBackend):
         return "\n".join(formatted_parts)
 
     async def _generate_streaming(
-        self, generation_params: Dict[str, Any], input_length: int
+        self, generation_params: dict[str, Any], input_length: int
     ) -> AsyncGenerator[str, None]:
         """Generate response with streaming"""
         try:
@@ -289,9 +285,7 @@ class HuggingFaceBackend(BaseBackend):
             logger.error(f"Streaming generation failed: {e}")
             yield f"Error: {str(e)}"
 
-    async def _generate_complete(
-        self, generation_params: Dict[str, Any], input_length: int
-    ) -> str:
+    async def _generate_complete(self, generation_params: dict[str, Any], input_length: int) -> str:
         """Generate complete response"""
         try:
             with torch.no_grad():
@@ -307,7 +301,7 @@ class HuggingFaceBackend(BaseBackend):
             logger.error(f"Complete generation failed: {e}")
             return f"Error: {str(e)}"
 
-    def get_model_info(self) -> Dict[str, Any]:
+    def get_model_info(self) -> dict[str, Any]:
         """Get detailed model information"""
         info = super().get_model_info()
         info.update(
@@ -335,5 +329,5 @@ class HuggingFaceBackend(BaseBackend):
                 return f"{param_count / 1e6:.1f}M parameters"
             else:
                 return f"{param_count / 1e3:.1f}K parameters"
-        except:
+        except Exception:
             return "Unknown"

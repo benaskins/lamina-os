@@ -14,7 +14,7 @@ and provides them for templating infrastructure components.
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
 
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class InfrastructureValues:
     """Container for infrastructure values"""
 
-    def __init__(self, values: Dict[str, Any]):
+    def __init__(self, values: dict[str, Any]):
         self._values = values
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -44,31 +44,31 @@ class InfrastructureValues:
         """Get the agent name"""
         return self.get("agent.name", "example")
 
-    def get_container_config(self) -> Dict[str, Any]:
+    def get_container_config(self) -> dict[str, Any]:
         """Get container configuration"""
         return self.get("container", {})
 
-    def get_nginx_config(self) -> Dict[str, Any]:
+    def get_nginx_config(self) -> dict[str, Any]:
         """Get nginx configuration"""
         return self.get("nginx", {})
 
-    def get_ollama_config(self) -> Dict[str, Any]:
+    def get_ollama_config(self) -> dict[str, Any]:
         """Get ollama configuration"""
         return self.get("ollama", {})
 
-    def get_grafana_config(self) -> Dict[str, Any]:
+    def get_grafana_config(self) -> dict[str, Any]:
         """Get grafana configuration"""
         return self.get("grafana", {})
 
-    def get_vector_config(self) -> Dict[str, Any]:
+    def get_vector_config(self) -> dict[str, Any]:
         """Get vector configuration"""
         return self.get("vector", {})
 
-    def get_volumes_config(self) -> Dict[str, Any]:
+    def get_volumes_config(self) -> dict[str, Any]:
         """Get volumes configuration"""
         return self.get("volumes", {})
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Get all values as dictionary"""
         return self._values.copy()
 
@@ -76,7 +76,7 @@ class InfrastructureValues:
 class InfrastructureValuesLoader:
     """Loads infrastructure values from sanctuary agent configurations"""
 
-    def __init__(self, sanctuary_path: Optional[str] = None):
+    def __init__(self, sanctuary_path: str | None = None):
         self.sanctuary_path = Path(sanctuary_path or "sanctuary")
 
     def load_agent_values(self, agent_name: str) -> InfrastructureValues:
@@ -91,7 +91,7 @@ class InfrastructureValuesLoader:
             return self._get_default_values(agent_name)
 
         try:
-            with open(values_file, "r") as f:
+            with open(values_file) as f:
                 values = yaml.safe_load(f) or {}
 
             logger.info(f"Loaded infrastructure values for agent: {agent_name}")
@@ -147,7 +147,7 @@ class InfrastructureValuesLoader:
 
 
 # Global instance for easy access
-_infrastructure_values_loader: Optional[InfrastructureValuesLoader] = None
+_infrastructure_values_loader: InfrastructureValuesLoader | None = None
 
 
 def get_infrastructure_values(agent_name: str) -> InfrastructureValues:

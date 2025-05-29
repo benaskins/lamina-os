@@ -13,24 +13,25 @@ without requiring a running server.
 """
 
 import sys
+
 from lamina.coordination import AgentCoordinator
 
 
 class SimpleAgent:
     """Simple agent implementation for demonstration"""
-    
+
     def __init__(self, name: str, description: str, personality: str = "helpful"):
         self.name = name
         self.description = description
         self.personality = personality
         self.conversation_history = []
-    
+
     def chat(self, message: str, context=None):
         """Simple chat implementation with personality"""
-        
+
         # Store conversation
         self.conversation_history.append({"role": "user", "content": message})
-        
+
         # Generate response based on agent type
         if self.name == "assistant":
             response = self._conversational_response(message)
@@ -40,12 +41,12 @@ class SimpleAgent:
             response = self._security_response(message)
         else:
             response = f"I'm {self.name}, {self.description}. I received: '{message}'"
-        
+
         # Store response
         self.conversation_history.append({"role": "assistant", "content": response})
-        
+
         return response
-    
+
     def _conversational_response(self, message: str) -> str:
         """Generate conversational response"""
         if any(word in message.lower() for word in ["hello", "hi", "hey", "greetings"]):
@@ -58,7 +59,7 @@ class SimpleAgent:
             return "You're very welcome! Is there anything else I can help you with?"
         else:
             return f"That's an interesting question about '{message}'. As your assistant, I'm here to help with information, explanations, and problem-solving. Could you tell me more about what specifically you'd like help with?"
-    
+
     def _analytical_response(self, message: str) -> str:
         """Generate analytical response"""
         if any(word in message.lower() for word in ["analyze", "research", "study", "examine"]):
@@ -67,7 +68,7 @@ class SimpleAgent:
             return f"From an analytical perspective on '{message}': I would need to examine the data sources, validate the methodology, and look for statistical significance. What data do you have available?"
         else:
             return f"Analyzing your request: '{message}'. To provide a thorough analysis, I need to understand the scope, available data, and your specific research objectives. Could you provide more details?"
-    
+
     def _security_response(self, message: str) -> str:
         """Generate security-focused response"""
         if any(word in message.lower() for word in ["secure", "security", "safe", "protect"]):
@@ -82,43 +83,37 @@ def create_agents():
     """Create demo agents with different personalities"""
     return {
         "assistant": SimpleAgent(
-            "Assistant",
-            "a friendly conversational AI assistant",
-            "helpful and conversational"
+            "Assistant", "a friendly conversational AI assistant", "helpful and conversational"
         ),
         "researcher": SimpleAgent(
-            "Researcher", 
-            "an analytical research specialist",
-            "thorough and objective"
+            "Researcher", "an analytical research specialist", "thorough and objective"
         ),
         "guardian": SimpleAgent(
-            "Guardian",
-            "a security and safety specialist",
-            "protective and cautious"
-        )
+            "Guardian", "a security and safety specialist", "protective and cautious"
+        ),
     }
 
 
 def interactive_chat():
     """Run interactive chat with agent coordinator"""
-    
+
     print("🤖 Lamina Core Chat Demo")
     print("=" * 40)
-    
+
     # Create agents and coordinator
     agents = create_agents()
     coordinator = AgentCoordinator(agents)
-    
+
     print("Available agents:")
     for name, agent in agents.items():
         print(f"  🔹 {name}: {agent.description}")
-    
+
     print("\nThe coordinator will automatically route your messages to the most appropriate agent.")
     print("Type 'quit', 'exit', or press Ctrl+C to exit.")
     print("Type 'stats' to see routing statistics.")
     print("=" * 40)
     print()
-    
+
     try:
         while True:
             # Get user input
@@ -127,63 +122,64 @@ def interactive_chat():
             except (EOFError, KeyboardInterrupt):
                 print("\n👋 Goodbye!")
                 break
-            
+
             if not user_input:
                 continue
-                
+
             # Handle special commands
-            if user_input.lower() in ['quit', 'exit']:
+            if user_input.lower() in ["quit", "exit"]:
                 print("👋 Goodbye!")
                 break
-            elif user_input.lower() == 'stats':
+            elif user_input.lower() == "stats":
                 stats = coordinator.get_routing_stats()
-                print(f"\n📊 Routing Statistics:")
+                print("\n📊 Routing Statistics:")
                 print(f"   Total requests: {stats['total_requests']}")
                 print(f"   Agent usage: {stats['routing_decisions']}")
                 print(f"   Constraint violations: {stats['constraint_violations']}")
                 print()
                 continue
-            
+
             # Process message through coordinator
             print("🤔 Processing...", end=" ", flush=True)
             response = coordinator.process_message(user_input)
-            
+
             # Show which agent responded (for demo purposes)
             stats = coordinator.get_routing_stats()
             last_agent = None
-            if stats['routing_decisions']:
+            if stats["routing_decisions"]:
                 # Find the agent that was used most recently
-                for agent_name, count in stats['routing_decisions'].items():
+                for agent_name, count in stats["routing_decisions"].items():
                     if count > 0:
                         last_agent = agent_name
-            
+
             print(f"\r🤖 {last_agent or 'Agent'}: {response}")
             print()
-    
+
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
+
         traceback.print_exc()
 
 
 def single_message_chat(agent_name: str, message: str):
     """Send a single message to a specific agent"""
-    
+
     agents = create_agents()
-    
+
     if agent_name not in agents:
         print(f"❌ Agent '{agent_name}' not found. Available: {list(agents.keys())}")
         return
-    
+
     coordinator = AgentCoordinator(agents)
     response = coordinator.process_message(message)
-    
+
     print(f"🤖 {agent_name}: {response}")
 
 
 def main():
     """Main entry point"""
-    
+
     if len(sys.argv) == 1:
         # Interactive mode
         interactive_chat()
@@ -195,7 +191,7 @@ def main():
     else:
         print("Usage:")
         print("  python chat_demo.py                    # Interactive chat")
-        print("  python chat_demo.py <agent> \"<message>\"  # Single message")
+        print('  python chat_demo.py <agent> "<message>"  # Single message')
         print()
         print("Available agents: assistant, researcher, guardian")
 

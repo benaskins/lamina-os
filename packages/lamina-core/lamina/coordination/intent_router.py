@@ -14,7 +14,6 @@ Implements natural language intent recognition and multi-agent coordination.
 import logging
 import re
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +22,11 @@ logger = logging.getLogger(__name__)
 class RoutingDecision:
     """Represents a routing decision made by the intent router."""
 
-    target_agents: List[str]
+    target_agents: list[str]
     confidence: float
     reasoning: str
     multi_agent: bool = False
-    transparency_info: Optional[str] = None
+    transparency_info: str | None = None
 
 
 class IntentRouter:
@@ -37,7 +36,7 @@ class IntentRouter:
     Implements Clara's suggested routing patterns and natural language understanding.
     """
 
-    def __init__(self, agent_config: Dict):
+    def __init__(self, agent_config: dict):
         self.agent_config = agent_config
         self.transparency_mode = False
 
@@ -112,9 +111,7 @@ class IntentRouter:
             r"(\w+) join us",
         ]
 
-    def route_message(
-        self, message: str, context: Optional[Dict] = None
-    ) -> RoutingDecision:
+    def route_message(self, message: str, context: dict | None = None) -> RoutingDecision:
         """
         Analyze message and determine routing decision.
 
@@ -154,9 +151,7 @@ class IntentRouter:
                 reasoning="Multi-agent consultation requested",
                 multi_agent=True,
                 transparency_info=(
-                    "Triggered by multi-agent keywords"
-                    if self.transparency_mode
-                    else None
+                    "Triggered by multi-agent keywords" if self.transparency_mode else None
                 ),
             )
 
@@ -168,9 +163,7 @@ class IntentRouter:
                 confidence=0.95,
                 reasoning=f"Explicit agent summoning: {summoned_agent}",
                 transparency_info=(
-                    f"Direct agent reference detected"
-                    if self.transparency_mode
-                    else None
+                    "Direct agent reference detected" if self.transparency_mode else None
                 ),
             )
 
@@ -186,9 +179,7 @@ class IntentRouter:
                 confidence=best_agent[1],
                 reasoning=f"Intent analysis suggests {best_agent[0]} (score: {best_agent[1]:.2f})",
                 transparency_info=(
-                    self._get_transparency_info(agent_scores)
-                    if self.transparency_mode
-                    else None
+                    self._get_transparency_info(agent_scores) if self.transparency_mode else None
                 ),
             )
 
@@ -198,9 +189,7 @@ class IntentRouter:
             confidence=0.5,
             reasoning="Default routing to Clara for general conversation",
             transparency_info=(
-                "No strong intent match, using fallback"
-                if self.transparency_mode
-                else None
+                "No strong intent match, using fallback" if self.transparency_mode else None
             ),
         )
 
@@ -208,7 +197,7 @@ class IntentRouter:
         """Check if message requests multi-agent consultation."""
         return any(trigger in message for trigger in self.multi_agent_triggers)
 
-    def _check_agent_summoning(self, message: str) -> Optional[str]:
+    def _check_agent_summoning(self, message: str) -> str | None:
         """Check for explicit agent summoning patterns."""
         for pattern in self.summoning_patterns:
             match = re.search(pattern, message)
@@ -218,7 +207,7 @@ class IntentRouter:
                     return agent_name
         return None
 
-    def _calculate_agent_scores(self, message: str) -> Dict[str, float]:
+    def _calculate_agent_scores(self, message: str) -> dict[str, float]:
         """Calculate relevance scores for each agent."""
         scores = {}
 
@@ -226,15 +215,11 @@ class IntentRouter:
             score = 0.0
 
             # Keyword matching
-            keyword_matches = sum(
-                1 for keyword in patterns["keywords"] if keyword in message
-            )
+            keyword_matches = sum(1 for keyword in patterns["keywords"] if keyword in message)
             score += keyword_matches * 0.3
 
             # Domain relevance (simple heuristic)
-            domain_matches = sum(
-                1 for domain in patterns["domains"] if domain in message
-            )
+            domain_matches = sum(1 for domain in patterns["domains"] if domain in message)
             score += domain_matches * 0.4
 
             # Agent name bonus
@@ -245,11 +230,9 @@ class IntentRouter:
 
         return scores
 
-    def _get_transparency_info(self, scores: Dict[str, float]) -> str:
+    def _get_transparency_info(self, scores: dict[str, float]) -> str:
         """Generate transparency information for routing decision."""
-        score_info = ", ".join(
-            [f"{agent}: {score:.2f}" for agent, score in scores.items()]
-        )
+        score_info = ", ".join([f"{agent}: {score:.2f}" for agent, score in scores.items()])
         return f"Agent scores: {score_info}"
 
     def toggle_transparency(self) -> bool:

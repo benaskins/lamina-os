@@ -12,7 +12,8 @@ This backend provides AI inference using Ollama for local model serving.
 
 import json
 import logging
-from typing import Any, AsyncGenerator, Dict, List
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import aiohttp
 
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 class OllamaBackend(BaseBackend):
     """Ollama backend for local model serving"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize Ollama backend with configuration"""
         super().__init__(config)
 
@@ -42,9 +43,7 @@ class OllamaBackend(BaseBackend):
     async def is_available(self) -> bool:
         """Check if Ollama is available"""
         try:
-            async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=5)
-            ) as session:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
                 async with session.get(f"{self.base_url}/api/tags") as response:
                     return response.status == 200
         except Exception as e:
@@ -62,7 +61,7 @@ class OllamaBackend(BaseBackend):
         return True
 
     async def generate(
-        self, messages: List[Message], stream: bool = True
+        self, messages: list[Message], stream: bool = True
     ) -> AsyncGenerator[str, None]:
         """Generate response using Ollama"""
         try:
@@ -117,13 +116,13 @@ class OllamaBackend(BaseBackend):
                                 yield text
                         except Exception as e:
                             logger.error(f"Failed to parse Ollama response: {e}")
-                            yield f"Error: Failed to parse response"
+                            yield "Error: Failed to parse response"
 
         except Exception as e:
             logger.error(f"Ollama generation failed: {e}")
             yield f"Error: {str(e)}"
 
-    def get_model_info(self) -> Dict[str, Any]:
+    def get_model_info(self) -> dict[str, Any]:
         """Get Ollama model information"""
         info = super().get_model_info()
         info.update(

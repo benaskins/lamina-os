@@ -27,12 +27,11 @@ This implementation adapts A-MEM principles for Lamina while adding:
 """
 
 import json
-import logging
 import os
 import re
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import chromadb
 import numpy as np
@@ -42,7 +41,6 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from lamina.agent_config import build_provider_url, get_provider_config
-from lamina.infrastructure_config import get_infrastructure_config
 from lamina.logging_config import get_logger
 from lamina.system_config import get_memory_config
 
@@ -55,16 +53,16 @@ class MemoryNote:
     def __init__(
         self,
         content: str,
-        id: Optional[str] = None,
-        keywords: Optional[List[str]] = None,
-        links: Optional[List[str]] = None,
-        retrieval_count: Optional[int] = None,
-        timestamp: Optional[str] = None,
-        last_accessed: Optional[str] = None,
-        context: Optional[str] = None,
-        evolution_history: Optional[List] = None,
-        category: Optional[str] = None,
-        tags: Optional[List[str]] = None,
+        id: str | None = None,
+        keywords: list[str] | None = None,
+        links: list[str] | None = None,
+        retrieval_count: int | None = None,
+        timestamp: str | None = None,
+        last_accessed: str | None = None,
+        context: str | None = None,
+        evolution_history: list | None = None,
+        category: str | None = None,
+        tags: list[str] | None = None,
     ):
         # Core content and ID
         self.content = content
@@ -86,7 +84,7 @@ class MemoryNote:
         self.retrieval_count = retrieval_count or 0
         self.evolution_history = evolution_history or []
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert memory note to dictionary for storage."""
         return {
             "id": self.id,
@@ -103,7 +101,7 @@ class MemoryNote:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MemoryNote":
+    def from_dict(cls, data: dict[str, Any]) -> "MemoryNote":
         """Create memory note from dictionary."""
         return cls(**data)
 
@@ -137,17 +135,13 @@ class AgenticMemoryStore:
 
         # Use provided values or fall back to configuration
         self.db_name = db_name or memory_config.get("default_database", "long-term")
-        self.model_name = model_name or memory_config.get(
-            "embedding_model", "all-MiniLM-L6-v2"
-        )
+        self.model_name = model_name or memory_config.get("embedding_model", "all-MiniLM-L6-v2")
         self.evolution_threshold = evolution_threshold or memory_config.get(
             "evolution_threshold", 5
         )
 
         # Set up storage path (for fallback/local development)
-        self.db_path = os.path.join(
-            "sanctuary", "agents", agent_name, "memory", db_name
-        )
+        self.db_path = os.path.join("sanctuary", "agents", agent_name, "memory", db_name)
 
         # Initialize ChromaDB - try HTTP client first (containerized), fallback to local
         embedding_fn = SentenceTransformerEmbeddingFunction(model_name=model_name)
@@ -164,21 +158,17 @@ class AgenticMemoryStore:
 
             # Test connection
             self.client.heartbeat()
-            logger.info(
-                f"[AgenticMemoryStore] Connected to containerized ChromaDB at chromadb:8000"
-            )
+            logger.info("[AgenticMemoryStore] Connected to containerized ChromaDB at chromadb:8000")
 
         except Exception as e:
-            logger.warning(
-                f"[AgenticMemoryStore] Failed to connect to containerized ChromaDB: {e}"
-            )
-            logger.info(f"[AgenticMemoryStore] Falling back to local ChromaDB")
+            logger.warning(f"[AgenticMemoryStore] Failed to connect to containerized ChromaDB: {e}")
+            logger.info("[AgenticMemoryStore] Falling back to local ChromaDB")
 
             # Fallback to local PersistentClient - but skip if in container environment
             if os.path.exists("/.dockerenv"):
                 # We're in a container, don't try local file access
                 logger.error(
-                    f"[AgenticMemoryStore] Cannot create local ChromaDB in container environment"
+                    "[AgenticMemoryStore] Cannot create local ChromaDB in container environment"
                 )
                 raise Exception(
                     "ChromaDB connection failed and local fallback not available in container"
@@ -196,25 +186,21 @@ class AgenticMemoryStore:
         # Initialize sentence transformer for embeddings
         try:
             self.sentence_model = SentenceTransformer(self.model_name)
-            logger.info(
-                f"[AgenticMemoryStore] Loaded sentence transformer: {self.model_name}"
-            )
+            logger.info(f"[AgenticMemoryStore] Loaded sentence transformer: {self.model_name}")
         except Exception as e:
             logger.warning(
                 f"[AgenticMemoryStore] Failed to load sentence transformer {self.model_name}: {e}"
             )
-            logger.info(f"[AgenticMemoryStore] Falling back to simple similarity")
+            logger.info("[AgenticMemoryStore] Falling back to simple similarity")
             self.sentence_model = None
 
         # Memory storage
         self.memories = {}
         self.evolution_count = 0
 
-        logger.info(
-            f"[AgenticMemoryStore] Initialized for agent '{agent_name}' at {self.db_path}"
-        )
+        logger.info(f"[AgenticMemoryStore] Initialized for agent '{agent_name}' at {self.db_path}")
 
-    def simple_tokenize(self, text: str) -> List[str]:
+    def simple_tokenize(self, text: str) -> list[str]:
         """Simple tokenization using regex."""
         # Convert to lowercase and extract words
         words = re.findall(r"\b[a-zA-Z]{3,}\b", text.lower())
@@ -289,7 +275,7 @@ class AgenticMemoryStore:
 
         return [word for word in words if word not in stop_words]
 
-    def analyze_content(self, content: str) -> Dict[str, Any]:
+    def analyze_content(self, content: str) -> dict[str, Any]:
         """
         Analyze content to extract semantic metadata using local LLM when available.
 
@@ -359,7 +345,7 @@ Content to analyze: """
                     return result
                 else:
                     logger.warning(
-                        f"[AgenticMemoryStore] Could not parse JSON from local LLM response"
+                        "[AgenticMemoryStore] Could not parse JSON from local LLM response"
                     )
             else:
                 logger.warning(
@@ -367,18 +353,14 @@ Content to analyze: """
                 )
 
         except requests.exceptions.ConnectionError:
-            logger.warning(
-                f"[AgenticMemoryStore] Ollama not available (connection refused)"
-            )
+            logger.warning("[AgenticMemoryStore] Ollama not available (connection refused)")
         except requests.exceptions.Timeout:
-            logger.warning(f"[AgenticMemoryStore] Local LLM request timed out")
+            logger.warning("[AgenticMemoryStore] Local LLM request timed out")
         except Exception as e:
             logger.warning(f"[AgenticMemoryStore] Local LLM analysis failed: {e}")
 
         # Fall back to simple analysis
-        logger.info(
-            f"[AgenticMemoryStore] Using simple analysis fallback for: {content[:50]}..."
-        )
+        logger.info(f"[AgenticMemoryStore] Using simple analysis fallback for: {content[:50]}...")
 
         # Simple analysis (our current implementation)
         tokens = self.simple_tokenize(content)
@@ -394,7 +376,7 @@ Content to analyze: """
 
         return {"keywords": keywords, "context": context, "tags": tags}
 
-    def _extract_semantic_tags(self, content: str, keywords: List[str]) -> List[str]:
+    def _extract_semantic_tags(self, content: str, keywords: list[str]) -> list[str]:
         """
         Extract semantic tags dynamically using pure linguistic analysis.
 
@@ -431,9 +413,7 @@ Content to analyze: """
                     noun_freq[noun] = noun_freq.get(noun, 0) + 1
 
                 # Sort by frequency and take top ones
-                top_nouns = sorted(noun_freq.items(), key=lambda x: x[1], reverse=True)[
-                    :3
-                ]
+                top_nouns = sorted(noun_freq.items(), key=lambda x: x[1], reverse=True)[:3]
                 for noun, _ in top_nouns:
                     tags.add(noun)
 
@@ -465,11 +445,7 @@ Content to analyze: """
             # If we still have no tags, use the root word of the sentence
             if not tags:
                 for token in doc:
-                    if (
-                        token.dep_ == "ROOT"
-                        and token.is_alpha
-                        and len(token.lemma_) > 2
-                    ):
+                    if token.dep_ == "ROOT" and token.is_alpha and len(token.lemma_) > 2:
                         tags.add(token.lemma_.lower())
                         break
 
@@ -492,7 +468,7 @@ Content to analyze: """
                     return [word]
             return ["content"]
 
-    def store(self, memory_text: str, metadata: Optional[Dict] = None) -> str:
+    def store(self, memory_text: str, metadata: dict | None = None) -> str:
         """
         Store a new memory with agentic processing.
 
@@ -539,7 +515,7 @@ Content to analyze: """
             memory_note.links = [mem_id for mem_id, _ in related_memories[:3]]
 
             # Update related memories to link back
-            for mem_id, similarity in related_memories[:3]:
+            for mem_id, _similarity in related_memories[:3]:
                 if mem_id in self.memories:
                     related_memory = self.memories[mem_id]
                     if memory_note.id not in related_memory.links:
@@ -553,9 +529,7 @@ Content to analyze: """
             self._evolve_memories()
             self.evolution_count = 0
 
-    def _find_related_memories(
-        self, content: str, k: int = 5
-    ) -> List[Tuple[str, float]]:
+    def _find_related_memories(self, content: str, k: int = 5) -> list[tuple[str, float]]:
         """Find memories related to the given content."""
         if not self.memories:
             return []
@@ -594,9 +568,7 @@ Content to analyze: """
             logger.warning(f"[AgenticMemoryStore] Embedding similarity failed: {e}")
             return self._find_related_memories_simple(content, k)
 
-    def _find_related_memories_simple(
-        self, content: str, k: int = 5
-    ) -> List[Tuple[str, float]]:
+    def _find_related_memories_simple(self, content: str, k: int = 5) -> list[tuple[str, float]]:
         """Simple keyword-based memory similarity as fallback."""
         if not self.memories:
             return []
@@ -669,9 +641,7 @@ Content to analyze: """
         except Exception as e:
             logger.error(f"[AgenticMemoryStore] Error storing in ChromaDB: {e}")
 
-    def recall(
-        self, query: str, n_results: int = 3, score_threshold: float = 2.0
-    ) -> List[Dict]:
+    def recall(self, query: str, n_results: int = 3, score_threshold: float = 2.0) -> list[dict]:
         """
         Recall memories using hybrid search (semantic + keyword).
 
@@ -694,11 +664,12 @@ Content to analyze: """
 
             memories = []
             if results["documents"] and results["documents"][0]:
-                for i, (doc, distance, metadata) in enumerate(
+                for _i, (doc, distance, metadata) in enumerate(
                     zip(
                         results["documents"][0],
                         results["distances"][0],
                         results["metadatas"][0],
+                        strict=False,
                     )
                 ):
                     if distance < score_threshold:
@@ -720,7 +691,7 @@ Content to analyze: """
             # Fallback to simple keyword search
             return self._recall_simple(query, n_results)
 
-    def _recall_simple(self, query: str, n_results: int = 3) -> List[Dict]:
+    def _recall_simple(self, query: str, n_results: int = 3) -> list[dict]:
         """Simple keyword-based recall as fallback."""
         logger.info(f"[AgenticMemoryStore] Using simple recall for query: '{query}'")
 
@@ -757,7 +728,7 @@ Content to analyze: """
         )
         return matches[:n_results]
 
-    def get_memory(self, memory_id: str) -> Optional[MemoryNote]:
+    def get_memory(self, memory_id: str) -> MemoryNote | None:
         """Get a specific memory by ID."""
         return self.memories.get(memory_id)
 
@@ -804,7 +775,7 @@ Content to analyze: """
     def debug_all_memories(self):
         """Debug function to print all memories."""
         logger.info("[AgenticMemoryStore] MEMORY DUMP")
-        for i, (mem_id, memory) in enumerate(self.memories.items()):
+        for i, (_mem_id, memory) in enumerate(self.memories.items()):
             logger.info(f"[{i}] {memory.content} | {memory.to_dict()}")
 
     def purge(self):

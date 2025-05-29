@@ -10,7 +10,6 @@ import argparse
 import json
 import os
 import ssl
-from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -18,7 +17,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from lamina.agent_config import load_agent_config
-from lamina.chat import ChatSession, Message
+from lamina.chat import ChatSession
 from lamina.infrastructure_config import get_infrastructure_config
 from lamina.logging_config import LogContext, get_logger
 from lamina.system_config import get_api_config, get_system_config
@@ -59,7 +58,7 @@ async def chat(request: ChatRequest):
     # Use structured logging with context
     with LogContext(logger, agent=agent_name, message_length=len(request.message)):
         logger.info(
-            f"Received chat request",
+            "Received chat request",
             extra={"agent": agent_name, "stream": request.stream},
         )
 
@@ -81,9 +80,7 @@ async def chat(request: ChatRequest):
                 try:
                     full_response = ""
                     # Stream the response using the full conversation history
-                    async for chunk in session.query_ollama(
-                        session.messages, stream=True
-                    ):
+                    async for chunk in session.query_ollama(session.messages, stream=True):
                         if chunk:  # Only yield non-empty chunks
                             full_response += chunk
                             yield json.dumps({"response": chunk}) + "\n"
@@ -104,9 +101,7 @@ async def chat(request: ChatRequest):
                     )
                     yield json.dumps({"error": str(e)}) + "\n"
 
-            return StreamingResponse(
-                generate_response(), media_type="application/x-ndjson"
-            )
+            return StreamingResponse(generate_response(), media_type="application/x-ndjson")
         else:
             try:
                 full_response = ""
@@ -140,18 +135,12 @@ def get_ssl_context() -> ssl.SSLContext:
 
     # Load server's certificate and private key using config paths
     ssl_context.load_cert_chain(
-        certfile=infra_config.get_cert_path(
-            os.getenv("AGENT_NAME", "example"), "cert_file"
-        ),
-        keyfile=infra_config.get_cert_path(
-            os.getenv("AGENT_NAME", "example"), "key_file"
-        ),
+        certfile=infra_config.get_cert_path(os.getenv("AGENT_NAME", "example"), "cert_file"),
+        keyfile=infra_config.get_cert_path(os.getenv("AGENT_NAME", "example"), "key_file"),
     )
 
     # Load CA certificate for client verification
-    ssl_context.load_verify_locations(
-        cafile=infra_config.get_cert_path("ca", "cert_file")
-    )
+    ssl_context.load_verify_locations(cafile=infra_config.get_cert_path("ca", "cert_file"))
 
     # Configure client verification based on config
     if ssl_config.get("verify_client", True):
@@ -202,32 +191,24 @@ def main():
 
     # Validate that the agent exists
     try:
-        agent_config = load_agent_config(DEFAULT_AGENT)
+        load_agent_config(DEFAULT_AGENT)
         logger.info(f"Loaded configuration for agent: {DEFAULT_AGENT}")
     except Exception as e:
         logger.error(f"Failed to load agent configuration for {DEFAULT_AGENT}: {e}")
         return
 
     get_ssl_context()
-    logger.info(
-        f"Starting server on {args.host}:{args.port} with agent {DEFAULT_AGENT}"
-    )
+    logger.info(f"Starting server on {args.host}:{args.port} with agent {DEFAULT_AGENT}")
 
     # Configure SSL certificate requirements based on config
-    ssl_cert_reqs = (
-        ssl.CERT_REQUIRED if ssl_config.get("verify_client", True) else ssl.CERT_NONE
-    )
+    ssl_cert_reqs = ssl.CERT_REQUIRED if ssl_config.get("verify_client", True) else ssl.CERT_NONE
 
     uvicorn.run(
         "lamina.api.server:app",
         host=args.host,
         port=args.port,
-        ssl_keyfile=infra_config.get_cert_path(
-            os.getenv("AGENT_NAME", "example"), "key_file"
-        ),
-        ssl_certfile=infra_config.get_cert_path(
-            os.getenv("AGENT_NAME", "example"), "cert_file"
-        ),
+        ssl_keyfile=infra_config.get_cert_path(os.getenv("AGENT_NAME", "example"), "key_file"),
+        ssl_certfile=infra_config.get_cert_path(os.getenv("AGENT_NAME", "example"), "cert_file"),
         ssl_ca_certs=infra_config.get_cert_path("ca", "cert_file"),
         ssl_cert_reqs=ssl_cert_reqs,
     )

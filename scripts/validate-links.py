@@ -14,53 +14,48 @@ in PyPI and GitHub releases.
 
 import re
 import sys
-import subprocess
 from pathlib import Path
-from typing import List, Tuple, Dict
+
 import requests
-from urllib.parse import urlparse, urljoin
 
 
-def find_markdown_files(root_dir: Path) -> List[Path]:
+def find_markdown_files(root_dir: Path) -> list[Path]:
     """Find all markdown files in the project."""
     markdown_files = []
-    
+
     # Core package README
     core_readme = root_dir / "packages" / "lamina-core" / "README.md"
     if core_readme.exists():
         markdown_files.append(core_readme)
-    
-    # Main repository README  
+
+    # Main repository README
     main_readme = root_dir / "README.md"
     if main_readme.exists():
         markdown_files.append(main_readme)
-    
+
     # Documentation files
-    docs_dirs = [
-        root_dir / "docs",
-        root_dir / "packages" / "lamina-core" / "docs"
-    ]
-    
+    docs_dirs = [root_dir / "docs", root_dir / "packages" / "lamina-core" / "docs"]
+
     for docs_dir in docs_dirs:
         if docs_dir.exists():
             markdown_files.extend(docs_dir.glob("**/*.md"))
-    
+
     return markdown_files
 
 
-def extract_links(content: str) -> List[Tuple[str, str]]:
+def extract_links(content: str) -> list[tuple[str, str]]:
     """Extract markdown links from content."""
     # Match [text](url) pattern
-    link_pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+    link_pattern = r"\[([^\]]+)\]\(([^)]+)\)"
     return re.findall(link_pattern, content)
 
 
 def validate_url(url: str) -> bool:
     """Validate that a URL is accessible."""
     try:
-        if url.startswith('mailto:'):
+        if url.startswith("mailto:"):
             return True  # Don't validate email links
-            
+
         response = requests.head(url, timeout=10, allow_redirects=True)
         return response.status_code < 400
     except Exception:
@@ -69,7 +64,7 @@ def validate_url(url: str) -> bool:
 
 def validate_local_file(file_path: str, base_path: Path) -> bool:
     """Validate that a local file exists."""
-    if file_path.startswith('/'):
+    if file_path.startswith("/"):
         # Absolute path
         return Path(file_path).exists()
     else:
@@ -78,16 +73,20 @@ def validate_local_file(file_path: str, base_path: Path) -> bool:
         return full_path.exists()
 
 
-def validate_github_file(file_path: str, repo_base: str = "https://github.com/benaskins/lamina-os") -> bool:
+def validate_github_file(
+    file_path: str, repo_base: str = "https://github.com/benaskins/lamina-os"
+) -> bool:
     """Validate that a file exists in the GitHub repository."""
     if not file_path.startswith(repo_base):
         return True  # Not a GitHub link
-    
+
     # Convert GitHub blob URL to raw URL for HEAD request
     if "/blob/main/" in file_path:
-        raw_url = file_path.replace("github.com", "raw.githubusercontent.com").replace("/blob/main/", "/main/")
+        raw_url = file_path.replace("github.com", "raw.githubusercontent.com").replace(
+            "/blob/main/", "/main/"
+        )
         return validate_url(raw_url)
-    
+
     return validate_url(file_path)
 
 
@@ -95,19 +94,19 @@ def main():
     """Main validation function."""
     root_dir = Path(__file__).parent.parent
     markdown_files = find_markdown_files(root_dir)
-    
+
     print("🔗 Validating links in Lamina OS documentation...")
     print(f"Found {len(markdown_files)} markdown files to check")
-    
-    all_links: Dict[str, List[Tuple[str, str, Path]]] = {}
+
+    all_links: dict[str, list[tuple[str, str, Path]]] = {}
     broken_links = []
-    
+
     # Extract all links
     for md_file in markdown_files:
         try:
-            content = md_file.read_text(encoding='utf-8')
+            content = md_file.read_text(encoding="utf-8")
             links = extract_links(content)
-            
+
             for text, url in links:
                 if url not in all_links:
                     all_links[url] = []
@@ -115,22 +114,22 @@ def main():
         except Exception as e:
             print(f"❌ Error reading {md_file}: {e}")
             continue
-    
+
     print(f"Found {len(all_links)} unique links to validate")
-    
+
     # Validate each unique link
     for url, occurrences in all_links.items():
         print(f"Checking: {url}")
-        
+
         is_valid = True
-        
-        if url.startswith('http://') or url.startswith('https://'):
+
+        if url.startswith("http://") or url.startswith("https://"):
             # External URL - validate with HTTP request
-            if url.startswith('https://github.com/benaskins/lamina-os'):
+            if url.startswith("https://github.com/benaskins/lamina-os"):
                 is_valid = validate_github_file(url)
             else:
                 is_valid = validate_url(url)
-        elif url.startswith('#'):
+        elif url.startswith("#"):
             # Anchor link - skip for now
             continue
         else:
@@ -138,7 +137,7 @@ def main():
             # Use first occurrence to determine base path
             base_path = occurrences[0][2]
             is_valid = validate_local_file(url, base_path)
-        
+
         if not is_valid:
             print(f"❌ BROKEN: {url}")
             for text, _, file_path in occurrences:
@@ -146,9 +145,9 @@ def main():
                 print(f"   Used in: {file_path} as '{text}'")
         else:
             print(f"✅ OK: {url}")
-    
+
     # Report results
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     if broken_links:
         print(f"❌ VALIDATION FAILED: {len(broken_links)} broken links found")
         print("\nBroken links:")

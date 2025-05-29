@@ -11,8 +11,9 @@ This module defines the abstract base class that all AI provider backends must i
 """
 
 from abc import ABC, abstractmethod
+from collections.abc import AsyncGenerator
 from dataclasses import dataclass
-from typing import Any, AsyncGenerator, Dict, List
+from typing import Any
 
 
 @dataclass
@@ -26,7 +27,7 @@ class Message:
 class BaseBackend(ABC):
     """Abstract base class for AI provider backends"""
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """
         Initialize the backend with configuration
 
@@ -39,7 +40,7 @@ class BaseBackend(ABC):
 
     @abstractmethod
     async def generate(
-        self, messages: List[Message], stream: bool = True
+        self, messages: list[Message], stream: bool = True
     ) -> AsyncGenerator[str, None]:
         """
         Generate a response from the AI model
@@ -83,7 +84,7 @@ class BaseBackend(ABC):
         """
         pass
 
-    def get_model_info(self) -> Dict[str, Any]:
+    def get_model_info(self) -> dict[str, Any]:
         """
         Get information about the loaded model
 

@@ -15,7 +15,6 @@ and provides the appropriate interface.
 import argparse
 import json
 import sys
-from typing import Optional
 
 import requests
 import urllib3
@@ -99,9 +98,7 @@ class UnifiedCLI:
         """List all available agents."""
         return {"agents": self.available_agents}
 
-    def chat_with_agent(
-        self, agent_name: str, message: str, stream: bool = False
-    ) -> str:
+    def chat_with_agent(self, agent_name: str, message: str, stream: bool = False) -> str:
         """Send a message to a specific agent."""
         try:
             payload = {"message": message, "stream": stream}
@@ -115,9 +112,7 @@ class UnifiedCLI:
                 # Use path-based routing
                 endpoint = f"{self.base_url}/{agent_name}/chat"
 
-            response = self.session.post(
-                endpoint, json=payload, cert=self.cert_path, verify=False
-            )
+            response = self.session.post(endpoint, json=payload, cert=self.cert_path, verify=False)
             response.raise_for_status()
 
             if stream:
@@ -151,7 +146,7 @@ class UnifiedCLI:
         source_agent: str,
         target_agent: str,
         message: str,
-        context: Optional[str] = None,
+        context: str | None = None,
     ) -> str:
         """Facilitate interaction between two agents (multi-agent mode only)."""
         if self.server_mode != "multi-agent":
@@ -174,9 +169,7 @@ class UnifiedCLI:
             return data.get("response", "")
 
         except Exception as e:
-            logger.error(
-                f"Failed agent interaction {source_agent} -> {target_agent}: {e}"
-            )
+            logger.error(f"Failed agent interaction {source_agent} -> {target_agent}: {e}")
             return f"Error: {e}"
 
     def get_agent_memory(self, agent_name: str, limit: int = 10) -> dict:
@@ -262,12 +255,8 @@ def interactive_mode(cli: UnifiedCLI):
                 elif command == "agents":
                     for agent_name, info in agents.items():
                         status = "🟢" if info.get("loaded", False) else "🔴"
-                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
-                            agent_name, "🤖"
-                        )
-                        print(
-                            f"  {status} {symbol} {agent_name}: {info.get('description', '')}"
-                        )
+                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(agent_name, "🤖")
+                        print(f"  {status} {symbol} {agent_name}: {info.get('description', '')}")
                 elif command.startswith("memory "):
                     agent_name = command[7:].strip()
                     if agent_name in agents:
@@ -277,9 +266,7 @@ def interactive_mode(cli: UnifiedCLI):
                         )
                         for msg in memory_info.get("memory", []):
                             role_symbol = "👤" if msg["role"] == "user" else "🤖"
-                            print(
-                                f"  {role_symbol} {msg['role']}: {msg['content'][:100]}..."
-                            )
+                            print(f"  {role_symbol} {msg['role']}: {msg['content'][:100]}...")
                     else:
                         print(f"❌ Agent '{agent_name}' not found")
                 else:
@@ -292,9 +279,7 @@ def interactive_mode(cli: UnifiedCLI):
                 if len(parts) == 2:
                     agent_name, message = parts
                     if agent_name in agents:
-                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
-                            agent_name, "🤖"
-                        )
+                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(agent_name, "🤖")
                         print(f"{symbol} {agent_name}: ", end="")
                         response = cli.chat_with_agent(agent_name, message, stream=True)
                     else:
@@ -304,9 +289,7 @@ def interactive_mode(cli: UnifiedCLI):
                     agent_name = parts[0]
                     if agent_name in agents:
                         current_agent = agent_name
-                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
-                            agent_name, "🤖"
-                        )
+                        symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(agent_name, "🤖")
                         print(f"🔄 Switched to {symbol} {agent_name}")
                     else:
                         print(f"❌ Agent '{agent_name}' not found")
@@ -328,37 +311,25 @@ def interactive_mode(cli: UnifiedCLI):
                         target_symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
                             target_agent, "🤖"
                         )
-                        print(
-                            f"{source_symbol} {source_agent} → {target_symbol} {target_agent}"
-                        )
-                        response = cli.agent_interaction(
-                            source_agent, target_agent, message
-                        )
+                        print(f"{source_symbol} {source_agent} → {target_symbol} {target_agent}")
+                        response = cli.agent_interaction(source_agent, target_agent, message)
                         print(f"{target_symbol} {target_agent}: {response}")
                     else:
-                        print(
-                            f"❌ One or both agents not found: {source_agent}, {target_agent}"
-                        )
+                        print(f"❌ One or both agents not found: {source_agent}, {target_agent}")
                 except ValueError:
-                    print(
-                        "❌ Invalid interaction format. Use: agent1 -> agent2: message"
-                    )
+                    print("❌ Invalid interaction format. Use: agent1 -> agent2: message")
                 continue
 
             # Handle regular chat with current agent
             if current_agent:
-                symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
-                    current_agent, "🤖"
-                )
+                symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(current_agent, "🤖")
                 print(f"{symbol} {current_agent}: ", end="")
                 response = cli.chat_with_agent(current_agent, line, stream=True)
             else:
                 if cli.server_mode == "single-agent" and len(agents) == 1:
                     # Auto-chat with the single agent
                     agent_name = list(agents.keys())[0]
-                    symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(
-                        agent_name, "🤖"
-                    )
+                    symbol = {"clara": "🪶", "luna": "🔥", "phi": "🧠"}.get(agent_name, "🤖")
                     print(f"{symbol} {agent_name}: ", end="")
                     response = cli.chat_with_agent(agent_name, line, stream=True)
                 else:
@@ -376,12 +347,8 @@ def interactive_mode(cli: UnifiedCLI):
 
 def main():
     parser = argparse.ArgumentParser(description="Lamina OS Unified CLI")
-    parser.add_argument(
-        "--agent", type=str, help="Start in single-agent mode with specified agent"
-    )
-    parser.add_argument(
-        "--message", type=str, help="Send a single message (requires --agent)"
-    )
+    parser.add_argument("--agent", type=str, help="Start in single-agent mode with specified agent")
+    parser.add_argument("--message", type=str, help="Send a single message (requires --agent)")
     parser.add_argument(
         "--interaction",
         type=str,
@@ -396,9 +363,7 @@ def main():
         default="localhost",
         help="API server host (default: localhost)",
     )
-    parser.add_argument(
-        "--port", type=int, default=443, help="API server port (default: 443)"
-    )
+    parser.add_argument("--port", type=int, default=443, help="API server port (default: 443)")
 
     args = parser.parse_args()
 
@@ -408,9 +373,7 @@ def main():
     # Get certificate paths from configuration
     infra_config = get_infrastructure_config()
     cert_path = (
-        infra_config.get_cert_path(
-            "clara", "cert_file"
-        ),  # Use Clara's cert for client auth
+        infra_config.get_cert_path("clara", "cert_file"),  # Use Clara's cert for client auth
         infra_config.get_cert_path("clara", "key_file"),
     )
 
@@ -444,9 +407,7 @@ def main():
             response = cli.agent_interaction(source_agent, target_agent, message)
             print(f"{target_agent}: {response}")
         except ValueError:
-            print(
-                "❌ Invalid interaction format. Use: source_agent->target_agent:message"
-            )
+            print("❌ Invalid interaction format. Use: source_agent->target_agent:message")
             sys.exit(1)
         return
 

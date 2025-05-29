@@ -10,37 +10,39 @@ Quick test of the LLM server API endpoints
 """
 
 import sys
-import requests
-import json
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+import requests
 
-from server import LLMServer
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
 import threading
 import time
 
+from server import LLMServer
+
+
 def test_server_api():
     """Test the server API endpoints"""
-    
+
     # Start server in a separate thread
     server = LLMServer()
-    
+
     def run_server():
-        server.app.run(host='127.0.0.1', port=8080, debug=False)
-    
+        server.app.run(host="127.0.0.1", port=8080, debug=False)
+
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
-    
+
     # Wait for server to start
     time.sleep(2)
-    
+
     base_url = "http://127.0.0.1:8080"
-    
+
     print("🧪 Testing LLM Server API")
     print("=" * 40)
-    
+
     # Test health endpoint
     try:
         response = requests.get(f"{base_url}/health")
@@ -51,7 +53,7 @@ def test_server_api():
             print(f"   Active servers: {health_data.get('active_servers', 0)}")
     except Exception as e:
         print(f"❌ Health check failed: {e}")
-    
+
     # Test models endpoint
     try:
         response = requests.get(f"{base_url}/models")
@@ -63,7 +65,7 @@ def test_server_api():
             print(f"   Active: {models_data.get('active', 0)}")
     except Exception as e:
         print(f"❌ Models list failed: {e}")
-    
+
     # Test backends endpoint
     try:
         response = requests.get(f"{base_url}/backends")
@@ -74,20 +76,19 @@ def test_server_api():
             print(f"   Available: {backends_data.get('total_available', 0)}")
     except Exception as e:
         print(f"❌ Backends check failed: {e}")
-    
+
     # Test suggest endpoint
     try:
-        response = requests.post(f"{base_url}/suggest", 
-                               json={"use_case": "conversational"})
+        response = requests.post(f"{base_url}/suggest", json={"use_case": "conversational"})
         print(f"✅ Suggest: {response.status_code}")
         if response.status_code == 200:
             suggest_data = response.json()
             print(f"   Suggested: {suggest_data.get('suggested', 'None')}")
         elif response.status_code == 404:
-            print(f"   No suitable model found (expected - no models available)")
+            print("   No suitable model found (expected - no models available)")
     except Exception as e:
         print(f"❌ Suggest failed: {e}")
-    
+
     # Test individual model info
     try:
         response = requests.get(f"{base_url}/models/llama3.2-3b-q4_k_m")
@@ -98,8 +99,9 @@ def test_server_api():
             print(f"   Backend: {model_data.get('backend', 'unknown')}")
     except Exception as e:
         print(f"❌ Model info failed: {e}")
-    
+
     print("\n🎯 Server API test completed!")
+
 
 if __name__ == "__main__":
     test_server_api()

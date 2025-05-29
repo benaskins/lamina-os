@@ -7,7 +7,7 @@
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
 
@@ -22,7 +22,7 @@ class InfrastructureConfig:
     def __init__(
         self,
         config_file: str = "config/infrastructure.yaml",
-        environment: Optional[str] = None,
+        environment: str | None = None,
     ):
         """
         Initialize the infrastructure configuration.
@@ -42,11 +42,9 @@ class InfrastructureConfig:
         config_path = Path(self.config_file)
 
         if not config_path.exists():
-            raise FileNotFoundError(
-                f"Infrastructure configuration file not found: {config_path}"
-            )
+            raise FileNotFoundError(f"Infrastructure configuration file not found: {config_path}")
 
-        with open(config_path, "r") as file:
+        with open(config_path) as file:
             self._config = yaml.safe_load(file)
 
         # Set environment if not specified
@@ -87,12 +85,10 @@ class InfrastructureConfig:
         return (
             os.path.exists("/.dockerenv")
             or os.path.exists("/proc/1/cgroup")
-            and any(
-                "docker" in line for line in open("/proc/1/cgroup", "r").readlines()
-            )
+            and any("docker" in line for line in open("/proc/1/cgroup").readlines())
         )
 
-    def _deep_merge(self, base: Dict, override: Dict):
+    def _deep_merge(self, base: dict, override: dict):
         """Deep merge override dictionary into base dictionary."""
         for key, value in override.items():
             if key in base and isinstance(base[key], dict) and isinstance(value, dict):
@@ -107,10 +103,7 @@ class InfrastructureConfig:
     def _substitute_vars_recursive(self, obj):
         """Recursively substitute environment variables in configuration."""
         if isinstance(obj, dict):
-            return {
-                key: self._substitute_vars_recursive(value)
-                for key, value in obj.items()
-            }
+            return {key: self._substitute_vars_recursive(value) for key, value in obj.items()}
         elif isinstance(obj, list):
             return [self._substitute_vars_recursive(item) for item in obj]
         elif isinstance(obj, str):
@@ -129,13 +122,11 @@ class InfrastructureConfig:
                 var_name, default_value = var_expr.split(":-", 1)
                 return os.getenv(var_name, default_value)
             else:
-                return os.getenv(
-                    var_expr, match.group(0)
-                )  # Return original if not found
+                return os.getenv(var_expr, match.group(0))  # Return original if not found
 
         return re.sub(pattern, replace_var, value)
 
-    def get_service_config(self, service_name: str) -> Dict[str, Any]:
+    def get_service_config(self, service_name: str) -> dict[str, Any]:
         """Get configuration for a specific service."""
         services = self._config.get("services", {})
         if service_name not in services:
@@ -184,14 +175,12 @@ class InfrastructureConfig:
         endpoints = service_config.get("endpoints", {})
 
         if endpoint_name not in endpoints:
-            raise ValueError(
-                f"Endpoint '{endpoint_name}' not found for service '{service_name}'"
-            )
+            raise ValueError(f"Endpoint '{endpoint_name}' not found for service '{service_name}'")
 
         endpoint_path = endpoints[endpoint_name]
         return self.get_service_url(service_name, endpoint_path)
 
-    def get_ssl_config(self) -> Dict[str, Any]:
+    def get_ssl_config(self) -> dict[str, Any]:
         """Get SSL/TLS configuration."""
         return self._config.get("ssl", {}).copy()
 
@@ -212,9 +201,7 @@ class InfrastructureConfig:
         # Handle CA certificates
         if cert_type == "ca":
             if cert_type not in ssl_config:
-                raise ValueError(
-                    f"Certificate type '{cert_type}' not found in SSL configuration"
-                )
+                raise ValueError(f"Certificate type '{cert_type}' not found in SSL configuration")
             cert_config = ssl_config[cert_type]
         else:
             # Handle service certificates
@@ -237,7 +224,7 @@ class InfrastructureConfig:
         """Get the current environment name."""
         return self.environment
 
-    def get_raw_config(self) -> Dict[str, Any]:
+    def get_raw_config(self) -> dict[str, Any]:
         """Get the raw configuration dictionary (for debugging)."""
         return self._config.copy()
 
@@ -247,7 +234,7 @@ _infrastructure_config = None
 
 
 def get_infrastructure_config(
-    config_file: str = "config/infrastructure.yaml", environment: Optional[str] = None
+    config_file: str = "config/infrastructure.yaml", environment: str | None = None
 ) -> InfrastructureConfig:
     """
     Get the global infrastructure configuration instance.

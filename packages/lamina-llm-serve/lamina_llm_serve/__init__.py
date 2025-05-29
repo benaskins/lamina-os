@@ -13,8 +13,8 @@ handling model discovery, caching, and backend routing.
 
 __version__ = "0.1.0"
 
-from .model_manager import ModelManager
 from .backends import get_backend_for_model
+from .model_manager import ModelManager
 from .server import LLMServer
 
 __all__ = ["ModelManager", "get_backend_for_model", "LLMServer"]

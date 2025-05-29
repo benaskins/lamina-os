@@ -14,11 +14,9 @@ can be uniquely identified and preserved.
 import hashlib
 import json
 import logging
-import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +32,7 @@ class BuildManager:
         # Ensure build directories exist
         self.builds_dir.mkdir(parents=True, exist_ok=True)
 
-    def generate_build_id(self, agent_name: str, build_inputs: Dict) -> str:
+    def generate_build_id(self, agent_name: str, build_inputs: dict) -> str:
         """Generate a unique build ID based on timestamp and content hash"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -60,7 +58,7 @@ class BuildManager:
         """Get the path to the build info file"""
         return self.builds_dir / build_id / "build_info.json"
 
-    def save_build_info(self, build_id: str, build_info: Dict) -> None:
+    def save_build_info(self, build_id: str, build_info: dict) -> None:
         """Save build information to the build directory"""
         info_path = self.get_build_info_path(build_id)
 
@@ -78,7 +76,7 @@ class BuildManager:
 
         logger.info(f"Saved build info: {info_path}")
 
-    def load_build_info(self, build_id: str) -> Optional[Dict]:
+    def load_build_info(self, build_id: str) -> dict | None:
         """Load build information from the build directory"""
         info_path = self.get_build_info_path(build_id)
 
@@ -86,7 +84,7 @@ class BuildManager:
             return None
 
         try:
-            with open(info_path, "r") as f:
+            with open(info_path) as f:
                 return json.load(f)
         except Exception as e:
             logger.error(f"Failed to load build info from {info_path}: {e}")
@@ -112,7 +110,7 @@ class BuildManager:
         except Exception as e:
             logger.error(f"Failed to create symlink: {e}")
 
-    def list_builds(self) -> List[Tuple[str, Dict]]:
+    def list_builds(self) -> list[tuple[str, dict]]:
         """List all builds with their information"""
         builds = []
 
@@ -126,7 +124,7 @@ class BuildManager:
         builds.sort(key=lambda x: x[1].get("created_at", ""), reverse=True)
         return builds
 
-    def get_current_build_id(self) -> Optional[str]:
+    def get_current_build_id(self) -> str | None:
         """Get the current build ID from the symlink"""
         if not self.current_link.exists():
             return None
@@ -138,7 +136,7 @@ class BuildManager:
             logger.error(f"Failed to resolve current symlink: {e}")
             return None
 
-    def cleanup_old_builds(self, keep_count: int = 10) -> List[str]:
+    def cleanup_old_builds(self, keep_count: int = 10) -> list[str]:
         """Clean up old builds, keeping only the specified number"""
         builds = self.list_builds()
 
@@ -151,7 +149,7 @@ class BuildManager:
         removed_builds = []
         builds_to_remove = builds[keep_count:]
 
-        for build_id, build_info in builds_to_remove:
+        for build_id, _build_info in builds_to_remove:
             # Don't remove the current build
             if build_id == current_build_id:
                 continue
@@ -166,7 +164,7 @@ class BuildManager:
 
         return removed_builds
 
-    def get_infrastructure_dir(self, build_id: Optional[str] = None) -> Path:
+    def get_infrastructure_dir(self, build_id: str | None = None) -> Path:
         """Get the infrastructure directory for a specific build or current build"""
         if build_id is None:
             if self.current_link.exists():
@@ -183,9 +181,7 @@ class BuildManager:
         legacy_dir = self.base_build_dir / "infrastructure"
 
         if not source_dir.exists():
-            logger.warning(
-                f"Source infrastructure directory does not exist: {source_dir}"
-            )
+            logger.warning(f"Source infrastructure directory does not exist: {source_dir}")
             return
 
         try:

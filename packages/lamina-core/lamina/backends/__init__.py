@@ -17,21 +17,24 @@ from .ollama import OllamaBackend
 # Optional backends with graceful import handling
 try:
     from .huggingface import HuggingFaceBackend
+
     HUGGINGFACE_AVAILABLE = True
 except ImportError:
     HuggingFaceBackend = None
     HUGGINGFACE_AVAILABLE = False
 
+
 class MockBackend(BaseBackend):
     """Mock backend for testing and demonstrations."""
-    
+
     def __init__(self, config: dict):
         super().__init__(config)
         self.model_name = config.get("model", "mock-model")
-    
+
     async def generate(self, messages, stream=True):
         """Generate mock response."""
         import asyncio
+
         await asyncio.sleep(0.2)  # Simulate processing time
         response = f"Mock response from {self.model_name}: I understand your request and am providing a thoughtful response."
         if stream:
@@ -39,15 +42,16 @@ class MockBackend(BaseBackend):
                 yield chunk + " "
         else:
             yield response
-    
+
     async def is_available(self):
         return True
-    
+
     async def load_model(self):
         return True
-    
+
     async def unload_model(self):
         return True
+
 
 # Backend registry
 BACKENDS = {
@@ -65,7 +69,7 @@ def get_backend(provider: str, config: dict = None) -> BaseBackend:
     if provider not in BACKENDS:
         available = ", ".join(BACKENDS.keys())
         raise ValueError(f"Unknown backend '{provider}'. Available: {available}")
-    
+
     backend_class = BACKENDS[provider]
     return backend_class(config or {})
 
@@ -77,7 +81,7 @@ def list_backends() -> list[str]:
 
 __all__ = [
     "BaseBackend",
-    "OllamaBackend", 
+    "OllamaBackend",
     "HuggingFaceBackend",
     "get_backend",
     "list_backends",

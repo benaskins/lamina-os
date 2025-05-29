@@ -9,7 +9,6 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
 
 class StructuredFormatter(logging.Formatter):
@@ -74,7 +73,7 @@ def setup_logging(
     level: str = None,
     enable_stdout: bool = True,
     enable_structured: bool = True,
-    agent_name: Optional[str] = None,
+    agent_name: str | None = None,
 ) -> logging.Logger:
     """
     Set up unified logging for the application.
@@ -126,7 +125,7 @@ def setup_logging(
     return logger
 
 
-def get_logger(name: str, agent_name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str, agent_name: str | None = None) -> logging.Logger:
     """
     Get a logger instance with unified configuration.
 

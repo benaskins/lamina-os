@@ -16,7 +16,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import yaml
 
@@ -34,8 +34,8 @@ class SystemConfig:
     # Agent management
     agent_discovery_enabled: bool = True
     agent_scan_interval: int = 60
-    agent_defaults: Dict[str, Any] = field(default_factory=dict)
-    agent_registry: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    agent_defaults: dict[str, Any] = field(default_factory=dict)
+    agent_registry: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     # API configuration
     api_host: str = "localhost"
@@ -53,7 +53,7 @@ class SystemConfig:
     # AI defaults
     ai_default_provider: str = "ollama"
     ai_fallback_providers: list = field(default_factory=lambda: ["huggingface"])
-    ai_generation_defaults: Dict[str, Any] = field(default_factory=dict)
+    ai_generation_defaults: dict[str, Any] = field(default_factory=dict)
 
     # Observability
     log_level: str = "INFO"
@@ -70,16 +70,14 @@ class SystemConfig:
 class SystemConfigLoader:
     """Loads and manages system configuration with environment overrides"""
 
-    def __init__(
-        self, config_dir: Optional[str] = None, sanctuary_path: Optional[str] = None
-    ):
+    def __init__(self, config_dir: str | None = None, sanctuary_path: str | None = None):
         self.config_dir = Path(config_dir or "config")
         self.sanctuary_path = Path(sanctuary_path or "sanctuary")
         self.system_config_path = self.config_dir / "system.yaml"
         self.sanctuary_config_path = self.sanctuary_path / "system" / "local.yaml"
         self.environment = os.getenv("LAMINA_ENV", "development")
-        self._config: Optional[SystemConfig] = None
-        self._raw_config: Optional[Dict[str, Any]] = None
+        self._config: SystemConfig | None = None
+        self._raw_config: dict[str, Any] | None = None
 
     def load(self) -> SystemConfig:
         """Load system configuration with environment overrides"""
@@ -94,7 +92,7 @@ class SystemConfigLoader:
                 )
                 self._raw_config = {}
             else:
-                with open(self.system_config_path, "r") as f:
+                with open(self.system_config_path) as f:
                     self._raw_config = yaml.safe_load(f) or {}
 
             # Load sanctuary-specific overrides
@@ -109,9 +107,7 @@ class SystemConfigLoader:
             # Create SystemConfig instance
             self._config = self._create_system_config()
 
-            logger.info(
-                f"Loaded system configuration for environment: {self.environment}"
-            )
+            logger.info(f"Loaded system configuration for environment: {self.environment}")
             return self._config
 
         except Exception as e:
@@ -126,7 +122,7 @@ class SystemConfigLoader:
         self._raw_config = None
         return self.load()
 
-    def get_agent_config(self, agent_name: str) -> Dict[str, Any]:
+    def get_agent_config(self, agent_name: str) -> dict[str, Any]:
         """Get configuration for a specific agent"""
         config = self.load()
         agent_config = config.agent_registry.get(agent_name, {})
@@ -137,7 +133,7 @@ class SystemConfigLoader:
 
         return merged_config
 
-    def get_api_config(self) -> Dict[str, Any]:
+    def get_api_config(self) -> dict[str, Any]:
         """Get API server configuration"""
         config = self.load()
         return {
@@ -148,7 +144,7 @@ class SystemConfigLoader:
             "request_timeout": config.api_request_timeout,
         }
 
-    def get_memory_config(self) -> Dict[str, Any]:
+    def get_memory_config(self) -> dict[str, Any]:
         """Get memory system configuration"""
         config = self.load()
         return {
@@ -158,7 +154,7 @@ class SystemConfigLoader:
             "retention_days": config.memory_retention_days,
         }
 
-    def get_ai_config(self) -> Dict[str, Any]:
+    def get_ai_config(self) -> dict[str, Any]:
         """Get AI system configuration"""
         config = self.load()
         return {
@@ -167,7 +163,7 @@ class SystemConfigLoader:
             "generation_defaults": config.ai_generation_defaults,
         }
 
-    def get_observability_config(self) -> Dict[str, Any]:
+    def get_observability_config(self) -> dict[str, Any]:
         """Get observability configuration"""
         config = self.load()
         return {
@@ -177,7 +173,7 @@ class SystemConfigLoader:
             "performance_monitoring": config.performance_monitoring,
         }
 
-    def _substitute_env_vars(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _substitute_env_vars(self, config: dict[str, Any]) -> dict[str, Any]:
         """Recursively substitute environment variables in configuration"""
         if isinstance(config, dict):
             return {k: self._substitute_env_vars(v) for k, v in config.items()}
@@ -216,12 +212,10 @@ class SystemConfigLoader:
         """Load sanctuary-specific configuration overrides"""
         if self.sanctuary_config_path.exists():
             try:
-                with open(self.sanctuary_config_path, "r") as f:
+                with open(self.sanctuary_config_path) as f:
                     sanctuary_config = yaml.safe_load(f) or {}
 
-                logger.info(
-                    f"Loading sanctuary overrides from {self.sanctuary_config_path}"
-                )
+                logger.info(f"Loading sanctuary overrides from {self.sanctuary_config_path}")
                 self._raw_config = self._deep_merge(self._raw_config, sanctuary_config)
             except Exception as e:
                 logger.warning(f"Failed to load sanctuary config: {e}")
@@ -237,18 +231,12 @@ class SystemConfigLoader:
             logger.info(f"Applying {self.environment} environment overrides")
             self._raw_config = self._deep_merge(self._raw_config, env_overrides)
 
-    def _deep_merge(
-        self, base: Dict[str, Any], override: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _deep_merge(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         """Deep merge two dictionaries"""
         result = base.copy()
 
         for key, value in override.items():
-            if (
-                key in result
-                and isinstance(result[key], dict)
-                and isinstance(value, dict)
-            ):
+            if key in result and isinstance(result[key], dict) and isinstance(value, dict):
                 result[key] = self._deep_merge(result[key], value)
             else:
                 result[key] = value
@@ -262,9 +250,7 @@ class SystemConfigLoader:
         # Lamina settings
         lamina_config = self._raw_config.get("lamina", {})
         config.version = lamina_config.get("version", config.version)
-        config.sanctuary_path = lamina_config.get(
-            "sanctuary_path", config.sanctuary_path
-        )
+        config.sanctuary_path = lamina_config.get("sanctuary_path", config.sanctuary_path)
         config.default_agent = lamina_config.get("default_agent", config.default_agent)
 
         # Agent settings
@@ -284,9 +270,7 @@ class SystemConfigLoader:
         config.api_host = api_config.get("default_host", config.api_host)
         config.api_port = api_config.get("default_port", config.api_port)
         config.api_ssl_enabled = api_config.get("ssl_enabled", config.api_ssl_enabled)
-        config.api_max_sessions = api_config.get(
-            "max_sessions", config.api_max_sessions
-        )
+        config.api_max_sessions = api_config.get("max_sessions", config.api_max_sessions)
         config.api_request_timeout = api_config.get(
             "request_timeout_seconds", config.api_request_timeout
         )
@@ -308,9 +292,7 @@ class SystemConfigLoader:
 
         # AI settings
         ai_config = self._raw_config.get("ai", {})
-        config.ai_default_provider = ai_config.get(
-            "default_provider", config.ai_default_provider
-        )
+        config.ai_default_provider = ai_config.get("default_provider", config.ai_default_provider)
         config.ai_fallback_providers = ai_config.get(
             "fallback_providers", config.ai_fallback_providers
         )
@@ -319,9 +301,7 @@ class SystemConfigLoader:
         # Observability settings
         obs_config = self._raw_config.get("observability", {})
         config.log_level = obs_config.get("default_log_level", config.log_level)
-        config.metrics_enabled = obs_config.get(
-            "metrics_enabled", config.metrics_enabled
-        )
+        config.metrics_enabled = obs_config.get("metrics_enabled", config.metrics_enabled)
         config.trace_conversations = obs_config.get(
             "trace_conversations", config.trace_conversations
         )
@@ -345,7 +325,7 @@ class SystemConfigLoader:
 
 
 # Global system config loader instance
-_system_config_loader: Optional[SystemConfigLoader] = None
+_system_config_loader: SystemConfigLoader | None = None
 
 
 def get_system_config() -> SystemConfig:
@@ -364,7 +344,7 @@ def reload_system_config() -> SystemConfig:
     return _system_config_loader.reload()
 
 
-def get_agent_config(agent_name: str) -> Dict[str, Any]:
+def get_agent_config(agent_name: str) -> dict[str, Any]:
     """Get configuration for a specific agent"""
     global _system_config_loader
     if _system_config_loader is None:
@@ -372,7 +352,7 @@ def get_agent_config(agent_name: str) -> Dict[str, Any]:
     return _system_config_loader.get_agent_config(agent_name)
 
 
-def get_api_config() -> Dict[str, Any]:
+def get_api_config() -> dict[str, Any]:
     """Get API server configuration"""
     global _system_config_loader
     if _system_config_loader is None:
@@ -380,7 +360,7 @@ def get_api_config() -> Dict[str, Any]:
     return _system_config_loader.get_api_config()
 
 
-def get_memory_config() -> Dict[str, Any]:
+def get_memory_config() -> dict[str, Any]:
     """Get memory system configuration"""
     global _system_config_loader
     if _system_config_loader is None:
@@ -388,7 +368,7 @@ def get_memory_config() -> Dict[str, Any]:
     return _system_config_loader.get_memory_config()
 
 
-def get_ai_config() -> Dict[str, Any]:
+def get_ai_config() -> dict[str, Any]:
     """Get AI system configuration"""
     global _system_config_loader
     if _system_config_loader is None:
@@ -396,7 +376,7 @@ def get_ai_config() -> Dict[str, Any]:
     return _system_config_loader.get_ai_config()
 
 
-def get_observability_config() -> Dict[str, Any]:
+def get_observability_config() -> dict[str, Any]:
     """Get observability configuration"""
     global _system_config_loader
     if _system_config_loader is None:

@@ -10,8 +10,6 @@ import argparse
 import json
 import os
 import ssl
-from pathlib import Path
-from typing import Dict, List, Optional
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -20,7 +18,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from lamina.agent_config import load_agent_config
-from lamina.chat import ChatSession, Message
+from lamina.chat import ChatSession
 from lamina.infrastructure_config import get_infrastructure_config
 from lamina.logging_config import LogContext, get_logger
 from lamina.system_config import get_api_config, get_system_config
@@ -31,8 +29,8 @@ logger = get_logger(__name__)
 app = FastAPI(title="Lamina OS Unified Agent API", version="1.0.0")
 
 # Global state for agent sessions and configurations
-agent_sessions: Dict[str, ChatSession] = {}
-loaded_agents: Dict[str, dict] = {}
+agent_sessions: dict[str, ChatSession] = {}
+loaded_agents: dict[str, dict] = {}
 DEFAULT_AGENT = None  # Will be set from command line args or system config
 
 
@@ -45,7 +43,7 @@ class ChatRequest(BaseModel):
 class AgentInteractionRequest(BaseModel):
     target_agent: str
     message: str
-    context: Optional[str] = None
+    context: str | None = None
 
 
 @app.get("/health")
@@ -175,14 +173,10 @@ async def _chat_with_agent(agent_name: str, request: ChatRequest):
                 try:
                     full_response = ""
                     # Stream the response using the full conversation history
-                    async for chunk in session.query_ollama(
-                        session.messages, stream=True
-                    ):
+                    async for chunk in session.query_ollama(session.messages, stream=True):
                         if chunk:  # Only yield non-empty chunks
                             full_response += chunk
-                            yield json.dumps(
-                                {"response": chunk, "agent": agent_name}
-                            ) + "\n"
+                            yield json.dumps({"response": chunk, "agent": agent_name}) + "\n"
 
                     logger.info(
                         "Streaming response completed",
@@ -200,9 +194,7 @@ async def _chat_with_agent(agent_name: str, request: ChatRequest):
                     )
                     yield json.dumps({"error": str(e), "agent": agent_name}) + "\n"
 
-            return StreamingResponse(
-                generate_response(), media_type="application/x-ndjson"
-            )
+            return StreamingResponse(generate_response(), media_type="application/x-ndjson")
         else:
             try:
                 full_response = ""
@@ -246,9 +238,7 @@ async def agent_interaction(
 
     # Validate both agents exist
     if agent_name not in loaded_agents:
-        raise HTTPException(
-            status_code=404, detail=f"Source agent '{agent_name}' not found"
-        )
+        raise HTTPException(status_code=404, detail=f"Source agent '{agent_name}' not found")
 
     if request.target_agent not in loaded_agents:
         try:
@@ -301,9 +291,7 @@ async def agent_interaction(
         # Generate response from target agent
         try:
             full_response = ""
-            async for chunk in target_session.query_ollama(
-                target_session.messages, stream=False
-            ):
+            async for chunk in target_session.query_ollama(target_session.messages, stream=False):
                 if chunk:
                     full_response += chunk
 
@@ -350,9 +338,7 @@ async def get_agent_memory(
 
     return {
         "agent": agent_name,
-        "memory": [
-            {"role": msg.role, "content": msg.content} for msg in recent_messages
-        ],
+        "memory": [{"role": msg.role, "content": msg.content} for msg in recent_messages],
         "total_messages": len(session.messages),
     }
 
@@ -446,9 +432,7 @@ def get_ssl_context() -> ssl.SSLContext:
     )
 
     # Load CA certificate for client verification
-    ssl_context.load_verify_locations(
-        cafile=infra_config.get_cert_path("ca", "cert_file")
-    )
+    ssl_context.load_verify_locations(cafile=infra_config.get_cert_path("ca", "cert_file"))
 
     # Configure client verification based on config
     if ssl_config.get("verify_client", True):
@@ -488,7 +472,7 @@ def main():
     global DEFAULT_AGENT
 
     # Load system and infrastructure configuration
-    system_config = get_system_config()
+    get_system_config()
     api_config = get_api_config()
     infra_config = get_infrastructure_config()
     ssl_config = infra_config.get_ssl_config()
@@ -529,9 +513,7 @@ def main():
         logger.info(f"Single agent: {DEFAULT_AGENT}")
 
     # Configure SSL certificate requirements based on config
-    ssl_cert_reqs = (
-        ssl.CERT_REQUIRED if ssl_config.get("verify_client", True) else ssl.CERT_NONE
-    )
+    ssl_cert_reqs = ssl.CERT_REQUIRED if ssl_config.get("verify_client", True) else ssl.CERT_NONE
 
     # Use the specified agent or default for SSL certificates
     # Don't use AGENT_NAME if it's "multi-agent" (server mode, not an agent)

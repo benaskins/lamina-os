@@ -12,7 +12,7 @@ and inter-agent communication patterns through a unified coordinator.
 """
 
 from .agent_coordinator import AgentCoordinator
-from .intent_classifier import IntentClassifier
 from .constraint_engine import ConstraintEngine
+from .intent_classifier import IntentClassifier
 
 __all__ = ["AgentCoordinator", "IntentClassifier", "ConstraintEngine"]
