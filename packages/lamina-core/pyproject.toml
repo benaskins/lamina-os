@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "lamina-core"
-version = "1.0.0"
+version = "1.0.1"
 description = "Breath-first framework for building presence-aware AI agent systems"
 readme = "README.md"
 requires-python = ">=3.11"
