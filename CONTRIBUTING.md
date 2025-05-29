@@ -79,6 +79,30 @@ uv run ruff --version
    uv run mypy packages/
    ```
 
+### AI Assistant Usage
+
+Lamina OS development incorporates AI assistance as part of our conscious development practice:
+
+#### Lamina OS Assistant (GitHub App)
+- **App ID**: 1338167
+- **Purpose**: Automated code review, linting assistance, and development workflow support
+- **Permissions**: Read repository contents, manage issues/PRs, monitor CI/CD
+- **Transparency**: All AI-assisted commits include co-authorship attribution
+
+#### AI-Assisted Development Guidelines
+- **Conscious Collaboration**: AI assistance should enhance, not replace, human judgment
+- **Attribution Required**: All AI-assisted work must include proper co-authorship
+- **Breath-First Integration**: AI tools should support deliberate, thoughtful development
+- **Quality Assurance**: Human review required for all AI-generated code and decisions
+
+#### Co-Authorship Format
+```
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Human Developer <email@example.com>
+Co-Authored-By: Lamina High Council <council@getlamina.ai>
+```
+
 ### Code Quality Standards
 
 #### Code Style

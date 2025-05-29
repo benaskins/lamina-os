@@ -184,6 +184,7 @@ See `docs/adr/` for detailed architectural decisions including:
 - **[Getting Started Guide](docs/getting-started.md)** - Basic concepts and first agent
 - **[Architecture Vision](docs/architecture-vision.md)** - System design and philosophy  
 - **[Current Capabilities](docs/current-capabilities.md)** - What's implemented now
+- **[AI Assistant Usage](docs/AI_ASSISTANT_USAGE.md)** - Transparent AI integration practices
 - **[API Reference](packages/lamina-core/docs/api.md)** - Complete API documentation
 - **[Examples](examples/)** - Integration examples and tutorials
 
