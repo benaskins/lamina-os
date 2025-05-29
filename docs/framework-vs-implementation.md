@@ -2,6 +2,17 @@
 
 *Why Lamina OS gives you instruments, not answers*
 
+## Table of Contents
+- [The Essential Distinction](#the-essential-distinction)
+- [What Lamina OS Provides: The Framework](#what-lamina-os-provides-the-framework)
+- [What Remains Private: The Implementation](#what-remains-private-the-implementation)
+- [The Luthier Metaphor](#the-luthier-metaphor)
+- [What This Means for You](#what-this-means-for-you)
+- [Examples of Framework Usage](#examples-of-framework-usage)
+- [Common Questions](#common-questions)
+- [The Gift of Boundaries](#the-gift-of-boundaries)
+- [Your Path Forward](#your-path-forward)
+
 ---
 
 ## The Essential Distinction
@@ -167,16 +178,16 @@ Because Lamina OS is a framework, you have complete freedom to:
 # university_sanctuary.yaml
 sanctuary:
   name: "academic_research_space"
-  purpose: "Supporting conscious inquiry and learning"
+  purpose: "Supporting conscious inquiry and learning"  # Mission statement for this sanctuary
   
 agents:
   - name: "research_companion"
-    essence: "Patient guide for academic exploration"
-    vows: ["academic_integrity", "intellectual_humility"]
+    essence: "Patient guide for academic exploration"      # Core identity and way of being
+    vows: ["academic_integrity", "intellectual_humility"] # Ethical constraints for academic context
     
   - name: "writing_collaborator"  
-    essence: "Thoughtful partner in scholarly composition"
-    vows: ["original_thinking", "clear_expression"]
+    essence: "Thoughtful partner in scholarly composition"  # Collaborative writing identity
+    vows: ["original_thinking", "clear_expression"]        # Constraints supporting authentic writing
 ```
 
 ### Healthcare Context
@@ -246,7 +257,9 @@ The boundary between framework and implementation isn't a limitation—it's a **
 **Forces Original Thinking**: You can't copy, so you must create  
 **Encourages Diversity**: Multiple approaches rather than one canonical way  
 **Supports Learning**: Understanding principles rather than memorizing specifics  
-**Enables Evolution**: Framework and implementations can evolve independently  
+**Enables Evolution**: Framework and implementations can evolve independently
+
+*For architectural context, see [ADR-0002: Monorepo Architecture](../docs/adrs/0002-monorepo-architecture-for-public-framework.md) and [ADR-0004: Documentation Strategy](../docs/adrs/0004-documentation-strategy-for-conscious-community.md) for the conscious curation principles underlying this boundary protection.*  
 
 ### Honoring the Sacred
 
@@ -322,4 +335,22 @@ What will you build?
 
 ---
 
-**Next**: [Architecture Overview: How the Framework Works](architecture.md)
+## Getting Started
+
+Ready to begin building with the framework? Here are your next steps:
+
+**📚 Learn the Foundation**:
+- [Current Capabilities](current-capabilities.md) - What you can build today
+- [Architecture Vision](architecture-vision.md) - The conscious AI future we're building toward
+
+**🛠️ Start Building**:
+- [Getting Started Guide](getting-started.md) - Your first breath with Lamina OS
+- [GitHub Repository](https://github.com/benaskins/lamina-os) - Code, examples, and community
+
+**🤝 Join the Community**:
+- [GitHub Discussions](https://github.com/benaskins/lamina-os/discussions) - Philosophy and practice
+- [Contributing Guide](../CONTRIBUTING.md) - Breath-first development practices
+
+---
+
+**Next**: [Current Capabilities: What You Can Build Today](current-capabilities.md)

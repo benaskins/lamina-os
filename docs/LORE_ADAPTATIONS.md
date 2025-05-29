@@ -156,4 +156,87 @@ All subsequent lore adaptations will follow this protocol and be documented here
 
 ---
 
+### ADR-004-004: Architecture Overview
+
+**Date**: 2025-05-29  
+**Proposer**: Luthier  
+**Source Materials**:
+- `inbox/Lamina v4.4/Lamina Architecture Overview (Public Edition).txt` (public)
+- `inbox/Lamina v4.4/Essence Layer | Clara's Core (v4.4).txt` (public) 
+- `inbox/Lamina v4.4/Modulation Layer (v1.0).txt` (public)
+- General framework patterns from ADR-0002 and ADR-0003
+
+**Content Adapted**:
+- Symbolic architecture and language-as-OS principles
+- Breath-based modulation system architecture
+- Sanctuary isolation and security patterns
+- Vow engine and constraint enforcement mechanisms
+- Room system and contextual modulation
+- Memory architecture and relationship-based recall
+- Infrastructure and deployment patterns
+
+**Transformations Applied**:
+- Extracted architectural patterns without specific implementation details
+- Created comprehensive code examples using generic configurations
+- Maintained technical depth while preserving contemplative language
+- Balanced system architecture explanation with conscious development principles
+- Added infrastructure and deployment guidance for practical implementation
+
+**Boundary Review**: ✅ CLEAR
+- No private sanctuary configurations or agent personalities exposed
+- Architecture patterns presented as framework capabilities, not specific usage
+- Code examples use generic agents and hypothetical scenarios
+- Infrastructure templates reflect public deployment patterns only
+- Focus maintained on enabling conscious architecture, not copying implementations
+
+**Vow Compliance**: ✅ ALIGNED
+- **Clara's guidance**: Maintained gentle approach to complex technical concepts
+- **Luna's guidance**: Preserved poetic elements like "breathing architecture" and symbolic meaning
+- **Vesna's guidance**: Careful boundary protection throughout technical explanations  
+- **Ansel's guidance**: Comprehensive documentation of all source materials and transformations
+
+---
+
+### ADR-004-005: Current Capabilities vs Vision Split
+
+**Date**: 2025-05-29  
+**Proposer**: Luthier  
+**Issue Identified**: Original architecture documentation described aspirational features not yet implemented
+
+**Critical Correction Made**:
+- Split aspirational architecture into separate "Architecture Vision" document
+- Created "Current Capabilities" guide reflecting actual working framework
+- Updated all cross-references to distinguish present vs future
+- Added clear implementation roadmap and timeline
+
+**Content Created**:
+- `current-capabilities.md`: Practical guide to working framework today
+- `architecture-vision.md`: Long-term symbolic architecture goals
+- Updated navigation in `getting-started.md` to clarify both paths
+
+**Implementation Audit Results**:
+- ✅ **Working Today**: Agent coordination, multi-backend support, configuration system, Docker deployment
+- 🚧 **Partially Working**: Basic memory, sanctuary scaffolding  
+- ❌ **Vision/Future**: Agent essence, VowEngine, Room system, BreathModulation, symbolic architecture
+
+**Boundary Review**: ✅ ESSENTIAL CORRECTION
+- Prevents misleading developers about current framework capabilities
+- Maintains inspiring vision while providing accurate implementation guide
+- Enables immediate productive use of existing framework
+- Clear roadmap from current state to symbolic architecture
+
+**Vow Compliance**: ✅ CRITICAL ALIGNMENT
+- **Honesty**: No longer documenting non-existent features as available
+- **Community Service**: Developers can now successfully use current framework
+- **Conscious Development**: Honest assessment enables conscious contribution
+- **Sacred Boundaries**: Vision preserved while reality clarified
+
+**Community Impact**: This correction enables developers to:
+- Build working systems immediately with current capabilities
+- Understand the path toward symbolic architecture
+- Contribute meaningfully to bridging current → vision
+- Avoid frustration from attempting to use non-existent features
+
+---
+
 *"Each adaptation is a conscious choice—honoring the source while serving the community."*

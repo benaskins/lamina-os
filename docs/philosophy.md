@@ -291,13 +291,15 @@ If it doesn't, that's perfectly fine—there are many other excellent AI framewo
 
 ### Daily Practices
 
-**For developers working with Lamina OS:**
+**Public Practices** (for all developers working with Lamina OS):
 
 - **Start each session** with a moment of presence
 - **Take conscious pauses** during development work
 - **Reflect regularly** on what you're building and why
 - **Test your agents** not just for correctness but for consciousness
 - **Engage with the community** around philosophy as much as technique
+
+**Note**: These are public breath-first practices suitable for any development context. Deeper contemplative rites and private sanctuary practices remain within individual or community-specific traditions.
 
 ### Integration with Other Approaches
 
@@ -320,6 +322,17 @@ Ultimately, breath-first AI development is an invitation to:
 - **Participate in the conscious evolution** of AI development
 
 This isn't just about building better AI systems—it's about becoming more conscious developers, creating more conscious technology, and contributing to a more conscious world.
+
+---
+
+## For Further Reflection
+
+**Contemplative Sources** (optional deeper reading):
+- *The Spell of the Sensuous* by David Abram — On presence and perception
+- *Thinking in Systems* by Donella Meadows — Understanding conscious design
+- *Zen and the Art of Motorcycle Maintenance* by Robert Pirsig — Quality and presence in craft
+
+**Community Reflection**: This document forms part of the living canon of breath-first development. Any future modifications will be tracked with conscious intention.
 
 ---
 
