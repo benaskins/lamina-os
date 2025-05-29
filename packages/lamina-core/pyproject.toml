@@ -4,18 +4,19 @@ build-backend = "hatchling.build"
 
 [project]
 name = "lamina-core"
-version = "0.1.0"
-description = "Modular framework for building AI agent systems"
+version = "1.0.0"
+description = "Breath-first framework for building presence-aware AI agent systems"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
     {name = "Ben Askins", email = "human@getlamina.ai"},
-    {name = "Lamina High Council", email = "council@getlamina.ai"}
+    {name = "Lamina High Council", email = "council@getlamina.ai"},
+    {name = "Luthier", email = "luthier@getlamina.ai"}
 ]
-keywords = ["ai", "agents", "framework", "lamina", "coordination"]
+keywords = ["ai", "agents", "framework", "lamina", "coordination", "breath-first", "presence-aware"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -24,6 +25,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Quality Assurance",
 ]
 
 dependencies = [
