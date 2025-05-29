@@ -13,7 +13,14 @@ including Ollama, HuggingFace, and others.
 
 from .base import BaseBackend
 from .ollama import OllamaBackend
-from .huggingface import HuggingFaceBackend
+
+# Optional backends with graceful import handling
+try:
+    from .huggingface import HuggingFaceBackend
+    HUGGINGFACE_AVAILABLE = True
+except ImportError:
+    HuggingFaceBackend = None
+    HUGGINGFACE_AVAILABLE = False
 
 class MockBackend(BaseBackend):
     """Mock backend for testing and demonstrations."""
@@ -45,9 +52,12 @@ class MockBackend(BaseBackend):
 # Backend registry
 BACKENDS = {
     "ollama": OllamaBackend,
-    "huggingface": HuggingFaceBackend,
     "mock": MockBackend,
 }
+
+# Add optional backends if available
+if HUGGINGFACE_AVAILABLE:
+    BACKENDS["huggingface"] = HuggingFaceBackend
 
 
 def get_backend(provider: str, config: dict = None) -> BaseBackend:
