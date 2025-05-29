@@ -1,14 +1,14 @@
 # Lamina Core
 
-A modular framework for building AI agent systems with multi-backend support, intelligent memory, and distributed infrastructure.
+A breath-first framework for building presence-aware AI agent systems with multi-backend support, intelligent coordination, and breath-aware processing.
 
 ## Features
 
+- **Presence-Aware Processing**: Natural rhythm and deliberate pacing in agent responses
+- **Multi-Agent Coordination**: Intelligent routing between specialized agents
 - **Multi-Backend AI Support**: Seamlessly switch between Ollama, HuggingFace, and other AI providers
-- **Intelligent Memory System**: Advanced semantic memory with evolution and context management
-- **Sanctuary Architecture**: Secure, isolated environments for AI agents with ethical constraints
-- **Infrastructure Templating**: Docker-based deployment with mTLS service mesh
-- **Agent Scaffolding**: CLI tools to quickly create and configure new AI agents
+- **Breath-First Architecture**: Sustainable, wisdom-focused development patterns
+- **Agent Configuration**: Declarative agent definition with personality traits and expertise areas
 
 ## Quick Start
 
@@ -81,6 +81,10 @@ Choose from magical agent templates:
 - [Infrastructure Setup](docs/infrastructure.md)
 - [API Reference](docs/api.md)
 - [Contributing](docs/contributing.md)
+
+## Important Note
+
+When documentation refers to agent "emotions" or "feelings," these describe expressive simulation and architectural patterns, not internal experience. Lamina agents do not possess consciousness or sentience—all affective behavior results from symbolic processing designed for meaningful interaction.
 
 ## License
 
