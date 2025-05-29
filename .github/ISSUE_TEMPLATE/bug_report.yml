@@ -1,0 +1,121 @@
+name: 🐛 Bug Report
+description: Report a bug in Lamina OS framework
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report this bug! Please provide as much detail as possible to help us understand and reproduce the issue.
+        
+        Before submitting, please check if this issue has already been reported.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: "When I try to..., I expect... but instead..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Provide detailed steps to reproduce the behavior
+      placeholder: |
+        1. Install lamina-core version X
+        2. Create sanctuary with config...
+        3. Run command...
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "I expected the agent to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Include error messages if any.
+      placeholder: "Instead, the system..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Information
+      description: Please provide your environment details
+      value: |
+        - OS: [e.g., Ubuntu 22.04, macOS 14.0]
+        - Python version: [e.g., 3.11.5]
+        - lamina-core version: [e.g., 0.1.0]
+        - lamina-llm-serve version: [e.g., 0.1.0]
+        - Package manager: [uv/pip]
+        - Docker version (if applicable): [e.g., 24.0.0]
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration Files
+      description: Share relevant sanctuary or agent configurations (remove any sensitive information)
+      render: yaml
+      placeholder: |
+        # sanctuary/agents/my-agent.yaml
+        essence:
+          name: "test-agent"
+          # ... rest of config
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Messages and Logs
+      description: Include any relevant error messages, stack traces, or log output
+      render: text
+      placeholder: |
+        Traceback (most recent call last):
+          File "...", line ..., in ...
+            ...
+
+  - type: checkboxes
+    id: breath-alignment
+    attributes:
+      label: Breath-First Development Check
+      description: Help us understand the impact on conscious development practices
+      options:
+        - label: This bug prevents breath-first development workflows
+        - label: This bug affects agent safety or vow enforcement
+        - label: This bug impacts multi-agent coordination
+        - label: This bug affects sanctuary isolation
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or information that might be helpful
+      placeholder: "This issue might be related to..."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have provided a clear, reproducible example
+          required: true
+        - label: I have removed any sensitive information from configurations
+          required: true
+        - label: I understand this project follows breath-first development principles
+          required: true

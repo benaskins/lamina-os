@@ -5,7 +5,7 @@
 
 set -e
 
-SERVICES=("clara" "luna" "phi" "ollama" "loki" "grafana" "vector" "nginx" "chromadb")
+SERVICES=("assistant" "researcher" "guardian" "ollama" "loki" "grafana" "vector" "nginx" "chromadb")
 CERT_DIR="$(dirname "$0")"
 CA_DIR="$CERT_DIR/ca"
 SERVICES_DIR="$CERT_DIR/services"

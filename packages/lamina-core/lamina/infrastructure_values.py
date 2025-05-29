@@ -135,7 +135,7 @@ class InfrastructureValuesLoader:
                     "container_name": f"infrastructure-{agent_name}-1",
                     "log_filters": {"agent": agent_name},
                 },
-                "volumes": {"prefix": "aurelia", "agent_specific": True},
+                "volumes": {"prefix": "lamina", "agent_specific": True},
             }
         )
 

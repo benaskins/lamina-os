@@ -74,7 +74,7 @@ dev = [
 ai-backends = [
     "transformers>=4.47.0",
     "torch>=2.5.0",
-    "ollama>=0.4.0",
+    "ollama>=0.4.9",
     "sentence-transformers>=3.3.0",
 ]
 
@@ -86,10 +86,10 @@ all = [
 lamina-core = "lamina.cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/benaskins/lamina-core"
-Documentation = "https://github.com/benaskins/lamina-core/docs"
-Repository = "https://github.com/benaskins/lamina-core"
-Issues = "https://github.com/benaskins/lamina-core/issues"
+Homepage = "https://github.com/benaskins/lamina-os"
+Documentation = "https://github.com/benaskins/lamina-os/blob/main/docs/"
+Repository = "https://github.com/benaskins/lamina-os"
+Issues = "https://github.com/benaskins/lamina-os/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["lamina"]

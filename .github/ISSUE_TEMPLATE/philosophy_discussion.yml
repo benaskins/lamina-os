@@ -1,0 +1,161 @@
+name: 🧘 Philosophy & Practice Discussion
+description: Discuss breath-first development concepts and conscious AI practices
+title: "[Philosophy]: "
+labels: ["philosophy", "discussion", "community"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to our philosophical discussions! This space is for exploring the deeper aspects of breath-first development, conscious AI practices, and the ethical dimensions of Lamina OS.
+        
+        Please approach these discussions with presence and thoughtful consideration.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Discussion Category
+      description: What aspect would you like to discuss?
+      options:
+        - "Breath-First Development - Principles and practices"
+        - "Vow System - Ethical constraints and implementation"
+        - "Sanctuary Architecture - Isolation and security concepts"
+        - "Symbolic AI - Language-as-OS approaches"
+        - "Multi-Agent Coordination - Conscious collaboration patterns"
+        - "Community Practices - How we work together"
+        - "Educational Approaches - Teaching conscious AI development"
+        - "Research Questions - Academic and theoretical exploration"
+        - "Other - Something else entirely"
+    validations:
+      required: true
+
+  - type: textarea
+    id: topic
+    attributes:
+      label: Discussion Topic
+      description: What would you like to explore or discuss?
+      placeholder: "I've been thinking about..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and Background
+      description: What experiences or readings have led to this question?
+      placeholder: |
+        While working with Lamina OS, I noticed...
+        In my research into conscious AI, I found...
+        When building my sanctuary, I wondered...
+
+  - type: textarea
+    id: perspective
+    attributes:
+      label: Your Current Thinking
+      description: Share your current thoughts or perspective on this topic
+      placeholder: |
+        My current understanding is...
+        I think this matters because...
+        However, I'm uncertain about...
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Specific Questions
+      description: What specific questions would you like the community to explore?
+      placeholder: |
+        1. How does...?
+        2. What if...?
+        3. Should we consider...?
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Discussion Scope
+      description: What aspects are you interested in exploring?
+      options:
+        - label: Theoretical foundations and philosophy
+        - label: Practical implementation challenges
+        - label: Community practices and culture
+        - label: Educational and teaching approaches
+        - label: Research opportunities and directions
+        - label: Ethical implications and considerations
+        - label: Integration with other frameworks or approaches
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or Scenarios
+      description: Provide concrete examples that illustrate your question (optional)
+      placeholder: |
+        For example, when...
+        Consider the case where...
+        In a scenario with...
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Related Resources
+      description: Any relevant papers, articles, or resources? (optional)
+      placeholder: |
+        This relates to the concept of...
+        I found this paper interesting: ...
+        The documentation mentions...
+
+  - type: dropdown
+    id: engagement
+    attributes:
+      label: Preferred Discussion Style
+      description: How would you like this discussion to unfold?
+      options:
+        - "Open exploration - Let's see where it goes"
+        - "Focused dialogue - Specific questions and answers"
+        - "Collaborative investigation - Build understanding together"
+        - "Teaching moment - Help me understand something"
+        - "Community input - Need diverse perspectives"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: learning
+    attributes:
+      label: Learning Approach
+      options:
+        - label: I'm new to these concepts and seeking foundational understanding
+        - label: I have some experience but want to deepen my knowledge
+        - label: I'm exploring advanced applications and edge cases
+        - label: I'm interested in the research and academic implications
+        - label: I want to understand how to teach these concepts to others
+
+  - type: textarea
+    id: contribution
+    attributes:
+      label: What You Bring
+      description: What perspective or experience do you bring to this discussion?
+      placeholder: |
+        My background in...
+        My experience with...
+        My perspective as...
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Hoped-for Outcomes
+      description: What would make this discussion valuable for you and the community?
+      placeholder: |
+        I'd love to understand...
+        It would be helpful if we could...
+        The community would benefit from...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: I have approached this with thoughtful consideration
+          required: true
+        - label: I'm interested in learning from diverse perspectives
+          required: true
+        - label: I understand this is about conscious, deliberate exploration
+          required: true
+        - label: I'm committed to breath-first discussion practices
+          required: true

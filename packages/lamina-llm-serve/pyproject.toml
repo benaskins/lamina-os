@@ -82,10 +82,10 @@ lamina-llm-serve = "lamina_llm_serve.server:main"
 model-manager = "scripts.model-manager:main"
 
 [project.urls]
-Homepage = "https://github.com/benaskins/lamina-llm-serve"
-Documentation = "https://github.com/benaskins/lamina-llm-serve/docs"
-Repository = "https://github.com/benaskins/lamina-llm-serve"
-Issues = "https://github.com/benaskins/lamina-llm-serve/issues"
+Homepage = "https://github.com/benaskins/lamina-os"
+Documentation = "https://github.com/benaskins/lamina-os/blob/main/docs/"
+Repository = "https://github.com/benaskins/lamina-os"
+Issues = "https://github.com/benaskins/lamina-os/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["lamina_llm_serve"]

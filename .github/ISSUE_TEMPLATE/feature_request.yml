@@ -1,0 +1,159 @@
+name: ✨ Feature Request
+description: Suggest a new feature for Lamina OS framework
+title: "[Feature]: "
+labels: ["enhancement", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your interest in improving Lamina OS! We welcome feature requests that align with our breath-first development philosophy.
+        
+        Please take time to thoughtfully describe your proposal and its alignment with conscious AI development principles.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature Summary
+      description: A brief, clear description of the feature you'd like to see
+      placeholder: "I would like to see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation and Use Case
+      description: Why is this feature needed? What problem does it solve?
+      placeholder: |
+        As a developer building conscious AI systems, I need...
+        This would help me to...
+        Currently, I have to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe how you envision this feature working
+      placeholder: |
+        I propose adding...
+        This would work by...
+        Users would interact with it by...
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: |
+        I've considered...
+        However, this approach would be better because...
+
+  - type: checkboxes
+    id: breath-alignment
+    attributes:
+      label: Breath-First Development Alignment
+      description: How does this feature align with our core principles?
+      options:
+        - label: This feature supports conscious, deliberate development practices
+        - label: This feature enhances agent safety or vow enforcement
+        - label: This feature improves multi-agent coordination capabilities  
+        - label: This feature strengthens sanctuary isolation and security
+        - label: This feature uses symbolic/natural language configuration
+        - label: This feature prioritizes understanding over speed
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - "Low - Configuration or documentation change"
+        - "Medium - New API methods or CLI commands"
+        - "High - Core architecture changes"
+        - "Very High - Fundamental design changes"
+        - "Unknown - Need community input"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to your use case?
+      options:
+        - "Nice to have - Would improve experience"
+        - "Important - Needed for specific use cases"
+        - "Critical - Blocking current implementation"
+        - "Essential - Required for breath-first development"
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Thoughts
+      description: Do you have ideas about how this could be implemented? (Optional)
+      placeholder: |
+        This could be implemented by...
+        It might require changes to...
+        Potential challenges include...
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Usage Examples
+      description: Provide examples of how this feature would be used
+      render: python
+      placeholder: |
+        # Example configuration
+        agent = Agent(
+            name="example",
+            new_feature_option=True
+        )
+        
+        # Example usage
+        result = agent.new_method()
+
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation Impact
+      description: What documentation would need to be created or updated?
+      placeholder: |
+        This would require:
+        - New section in getting started guide
+        - API reference updates
+        - Example configurations
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Interest
+      options:
+        - label: I would be interested in contributing to the implementation
+        - label: I can help with documentation
+        - label: I can help with testing
+        - label: I need help from the community to implement this
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, related issues, or information that might be helpful
+      placeholder: "This feature relates to..."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: I have searched existing issues to ensure this hasn't been requested
+          required: true
+        - label: I have considered how this aligns with breath-first development
+          required: true
+        - label: I have provided clear examples and use cases
+          required: true
+        - label: I understand this may require community discussion before implementation
+          required: true

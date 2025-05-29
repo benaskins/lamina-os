@@ -1,7 +1,7 @@
 {
   "id": null,
-  "title": "Clara - Agent Insights & Conversations",
-  "tags": ["clara", "agent", "conversations"],
+  "title": "Agent Insights & Conversations",
+  "tags": ["agent", "conversations", "insights"],
   "style": "dark",
   "timezone": "browser",
   "refresh": "10s",
