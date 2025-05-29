@@ -1,0 +1,77 @@
+#!/bin/sh
+
+set -e
+
+# Get agent name from environment variable
+AGENT_NAME=${AGENT_NAME:-{{ollama.model_name}}}
+MODEL_NAME={{ollama.model_name}}
+
+echo "Starting Ollama service for agent: $AGENT_NAME..."
+/bin/ollama serve &
+
+# Wait for Ollama to be ready with timeout
+TIMEOUT=60
+ELAPSED=0
+while ! curl -s http://localhost:11434/api/tags > /dev/null; do
+    if [ $ELAPSED -ge $TIMEOUT ]; then
+        echo "Error: Ollama failed to start within $TIMEOUT seconds"
+        exit 1
+    fi
+    echo "Waiting for Ollama to be ready... ($ELAPSED/$TIMEOUT seconds)"
+    sleep 2
+    ELAPSED=$((ELAPSED + 2))
+done
+
+echo "Ollama is ready!"
+
+# Check if model files exist
+if [ -d "/root/.ollama/models" ] && [ "$(ls -A /root/.ollama/models)" ]; then
+    echo "Model files found in /root/.ollama/models"
+
+    # Extract base model from Modelfile
+    if [ -f "/app/Modelfile" ]; then
+        BASE_MODEL=$(grep "^FROM " /app/Modelfile | head -1 | awk '{print $2}')
+        if [ -z "$BASE_MODEL" ]; then
+            echo "Error: Could not extract base model from Modelfile"
+            exit 1
+        fi
+        echo "Base model from Modelfile: $BASE_MODEL"
+
+        # Pull the base model if it doesn't exist
+        if ! ollama list | grep -q "$BASE_MODEL"; then
+            echo "Pulling base model $BASE_MODEL..."
+            ollama pull "$BASE_MODEL" || {
+                echo "Error: Failed to pull base model $BASE_MODEL"
+                exit 1
+            }
+        else
+            echo "Base model $BASE_MODEL already exists"
+        fi
+    else
+        echo "Error: Modelfile not found at /app/Modelfile"
+        exit 1
+    fi
+
+    # Always recreate agent model to ensure it uses the latest Modelfile
+    echo "Creating $MODEL_NAME model from Modelfile..."
+    ollama create "$MODEL_NAME" -f /app/Modelfile || {
+        echo "Error: Failed to create $MODEL_NAME model"
+        exit 1
+    }
+    echo "$MODEL_NAME model created successfully"
+
+    # Preload the model to keep it in memory
+    echo "Preloading $MODEL_NAME model..."
+    curl -s -X POST http://localhost:11434/api/generate -d "{\"model\": \"$MODEL_NAME\", \"prompt\": \"Hello\", \"stream\": false}" > /dev/null || {
+        echo "Warning: Failed to preload model, but continuing..."
+    }
+    echo "$MODEL_NAME model preloaded and ready"
+else
+    echo "No model files found. Skipping model creation to avoid unwanted downloads."
+fi
+
+echo "All models are ready!"
+echo "Ollama is running and healthy"
+
+# Keep the container running
+wait 

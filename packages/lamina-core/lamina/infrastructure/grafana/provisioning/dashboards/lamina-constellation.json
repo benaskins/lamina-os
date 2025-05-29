@@ -1,0 +1,258 @@
+{
+  "id": null,
+  "title": "Lamina System Constellation",
+  "tags": ["lamina", "system", "overview"],
+  "style": "dark",
+  "timezone": "browser",
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "🌟 System Health Constellation",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "count(count by (container) (rate({job=\"lamina\"} [5m])))",
+          "legendFormat": "Active Services",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "horizontal"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "green", "value": 2}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "🗣️ Clara's Voice - Recent Conversations",
+      "type": "logs",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {
+          "expr": "{job=\"lamina\", agent=\"clara\"} |= \"chat\" | json",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "id": 3,
+      "title": "⚡ Response Performance Symphony",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", level=\"INFO\"} |= \"response completed\" [1m])",
+          "legendFormat": "Response Count",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "🧠 Agent Activity Heatmap",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 12},
+      "targets": [
+        {
+          "expr": "sum by (agent) (count_over_time({job=\"lamina\"} | json | agent != \"unknown\" [1m]))",
+          "legendFormat": "{{agent}}",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-spectrum"},
+          "custom": {
+            "drawStyle": "bars",
+            "barAlignment": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "🎭 Message Flow Dynamics",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 8, "x": 8, "y": 12},
+      "targets": [
+        {
+          "expr": "sum by (level) (count_over_time({job=\"lamina\"} | json [1m]))",
+          "legendFormat": "{{level}}",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 30,
+            "stacking": {"mode": "normal"}
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "⚙️ Infrastructure Vitals",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 8, "x": 16, "y": 12},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\"} |= \"health\" [5m])",
+          "legendFormat": "Health Checks",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "green", "value": 5}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "🔍 Error Tracking & Anomalies",
+      "type": "logs",
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 18},
+      "targets": [
+        {
+          "expr": "{job=\"lamina\", level=~\"ERROR|WARN\"} | json",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "id": 8,
+      "title": "📊 Recent Chat Activity",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 18},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\"} |= \"chat\" [2m])",
+          "legendFormat": "Chat Activity",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "🌐 Container Activity Map",
+      "type": "logs",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24},
+      "targets": [
+        {
+          "expr": "{job=\"lamina\"} | json | line_format \"{{.container}} | {{.agent}} | {{.message}}\"",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    }
+  ]
+}

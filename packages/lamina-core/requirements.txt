@@ -1,0 +1,16 @@
+# Core dependencies for Lamina Core
+PyYAML>=6.0
+requests>=2.25.0
+flask>=2.0.0
+
+# Optional AI backend dependencies
+# Install as needed:
+# pip install ollama
+# pip install transformers torch
+# pip install aiohttp  # for async backends
+
+# Development dependencies (install with: pip install -r requirements-dev.txt)
+# pytest>=6.0.0
+# black>=22.0.0
+# flake8>=4.0.0
+# mypy>=0.900

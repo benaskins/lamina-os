@@ -1,0 +1,16 @@
+FROM ollama/ollama:latest
+
+# Install curl for health check
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Build argument for agent name
+ARG AGENT_NAME=example
+
+# Copy the Modelfile for the specific agent
+COPY Modelfile /app/Modelfile
+
+# Copy and set up the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"] 

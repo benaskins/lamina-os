@@ -1,0 +1,27 @@
+# Development dependencies for Lamina Core
+-r requirements.txt
+
+# Testing
+pytest>=6.0.0
+pytest-cov>=3.0.0
+pytest-asyncio>=0.18.0
+
+# Code quality
+black>=22.0.0
+isort>=5.10.0
+flake8>=4.0.0
+mypy>=0.900
+bandit>=1.7.0
+
+# Documentation
+sphinx>=4.0.0
+sphinx-rtd-theme>=1.0.0
+
+# Pre-commit hooks
+pre-commit>=2.15.0
+
+# Optional AI dependencies for testing
+ollama>=0.1.0
+transformers>=4.20.0
+torch>=1.12.0
+chromadb>=0.3.0

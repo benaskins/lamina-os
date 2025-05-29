@@ -1,0 +1,200 @@
+name: lamina-unified
+
+services:
+  # Nginx Service Mesh Proxy
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: nginx-service-mesh:latest
+    ports:
+      - "443:443"    # External HTTPS API gateway
+      - "8000:8000"  # ChromaDB proxy for development/testing
+    volumes:
+      - ../../lamina/api/certs:/etc/nginx/certs:ro
+    networks:
+      - lamina_network
+    depends_on:
+      - unified-agent-server
+      - ollama
+      - loki
+      - grafana
+    restart: unless-stopped
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+  # Unified Agent Server (supports both single and multi-agent modes)
+  unified-agent-server:
+    build:
+      context: ../..
+      dockerfile: lamina/Dockerfile
+      args:
+        - DOCKER_BUILDKIT=1
+        - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      cache_from:
+        - lamina-agent:latest
+    image: lamina-unified:latest
+    volumes:
+      - ../../lamina/api/certs:/app/lamina/api/certs
+      - /Users/benaskins/dev/aurelia/sanctuary:/app/sanctuary
+    environment:
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - CHROMA_TELEMETRY=false
+      - LAMINA_ENV={{container.environment.LAMINA_ENV}}
+      - LOG_LEVEL={{container.environment.LOG_LEVEL}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+      - SERVER_MODE=${SERVER_MODE:-{{server.mode}}}  # single-agent or multi-agent
+    networks:
+      - lamina_network
+    depends_on:
+      - ollama
+      - loki
+      - chromadb
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+      - "server_mode={{server.mode}}"
+    # Command varies based on mode
+    command: >
+      sh -c "
+      if [ \"$${SERVER_MODE}\" = \"single-agent\" ]; then
+        echo 'Starting in single-agent mode with agent: $${AGENT_NAME}';
+        python -m lamina.api.unified_server --host 0.0.0.0 --port 8001 --agent $${AGENT_NAME};
+      else
+        echo 'Starting in multi-agent mode';
+        python -m lamina.api.unified_server --host 0.0.0.0 --port 8001;
+      fi
+      "
+
+  ollama:
+    build:
+      context: ./docker/ollama
+      dockerfile: Dockerfile
+      args:
+        - DOCKER_BUILDKIT=1
+        - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+        - SERVER_MODE=${SERVER_MODE:-{{server.mode}}}
+      cache_from:
+        - ollama:latest
+    image: ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+      - ollama_models:/root/.ollama/models
+      - /Users/benaskins/dev/aurelia/sanctuary:/app/sanctuary
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - SERVER_MODE=${SERVER_MODE:-{{server.mode}}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+  # Vector - Log processing and routing + Docker metrics
+  vector:
+    build:
+      context: ./vector
+      dockerfile: Dockerfile
+    image: vector:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - vector_data:/vector-data-dir
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - VECTOR_LOG=info
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - SERVER_MODE=${SERVER_MODE:-{{server.mode}}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    depends_on:
+      - loki
+      - nginx
+    restart: unless-stopped
+
+  # Loki - Log storage
+  loki:
+    image: grafana/loki:2.9.0
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+      - ../../lamina/api/certs:/app/certs:ro
+    command: -config.file=/etc/loki/local-config.yaml
+    environment:
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    restart: unless-stopped
+
+  # Grafana - Log and metrics visualization
+  grafana:
+    image: grafana/grafana:10.0.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_LOG_LEVEL=info
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  # ChromaDB - Vector database for embeddings and semantic search
+  chromadb:
+    build:
+      context: ./docker/chromadb
+      dockerfile: Dockerfile
+    image: chromadb-lamina:latest
+    volumes:
+      - chromadb_data:/chroma/data
+      - ../../lamina/api/certs:/chroma/certs:ro
+    environment:
+      - CHROMA_SERVER_AUTH_CREDENTIALS=lamina_chroma_token
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    restart: unless-stopped
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+networks:
+  lamina_network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+    name: {{volumes.prefix}}_ollama_data
+  ollama_models:
+    name: {{volumes.prefix}}_ollama_models
+  vector_data:
+    name: {{volumes.prefix}}_vector_data
+  loki_data:
+    name: {{volumes.prefix}}_loki_data
+  grafana_data:
+    name: {{volumes.prefix}}_grafana_data
+  chromadb_data:
+    name: {{volumes.prefix}}_chromadb_data 

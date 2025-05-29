@@ -1,0 +1,188 @@
+name: lamina
+
+services:
+  # Nginx Service Mesh Proxy
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: nginx-service-mesh:latest
+    ports:
+      - "443:443"    # External HTTPS API gateway
+      - "8000:8000"  # ChromaDB proxy for development/testing
+      # Internal proxies are accessed via Docker networking, not external ports
+    volumes:
+      - ../../lamina/api/certs:/etc/nginx/certs:ro
+    networks:
+      - lamina_network
+    depends_on:
+      - lamina-agent
+      - ollama
+      - loki
+      - grafana
+    restart: unless-stopped
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+  lamina-agent:
+    build:
+      context: ../..
+      dockerfile: lamina/Dockerfile
+      args:
+        - DOCKER_BUILDKIT=1
+        - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      cache_from:
+        - lamina-agent:latest
+    image: lamina-agent:latest
+    # Remove external port exposure - only accessible through nginx
+    volumes:
+      - ../../lamina/api/certs:/app/lamina/api/certs
+    environment:
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - CHROMA_TELEMETRY=false
+      - LAMINA_ENV={{container.environment.LAMINA_ENV}}
+      - LOG_LEVEL={{container.environment.LOG_LEVEL}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    depends_on:
+      - ollama
+      - loki
+      - chromadb
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+  ollama:
+    build:
+      context: ./docker/ollama
+      dockerfile: Dockerfile
+      args:
+        - DOCKER_BUILDKIT=1
+        - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      cache_from:
+        - ollama:latest
+    image: ollama:latest
+    # Remove external port exposure - only accessible through nginx
+    volumes:
+      - ollama_data:/root/.ollama
+      - ollama_models:/root/.ollama/models
+      - ../../sanctuary:/app/sanctuary
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+  # Vector - Log processing and routing + Docker metrics
+  vector:
+    build:
+      context: ./vector
+      dockerfile: Dockerfile
+    image: vector:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - vector_data:/vector-data-dir
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - VECTOR_LOG=info
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AGENT_NAME=${AGENT_NAME:-{{agent.name}}}
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    depends_on:
+      - loki
+      - nginx
+    restart: unless-stopped
+
+  # Loki - Log storage
+  loki:
+    image: grafana/loki:2.9.0
+    # Remove external port exposure - only accessible through nginx
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+      - ../../lamina/api/certs:/app/certs:ro
+    command: -config.file=/etc/loki/local-config.yaml
+    environment:
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    restart: unless-stopped
+
+  # Grafana - Log and metrics visualization
+  grafana:
+    image: grafana/grafana:10.0.0
+    # Remove external port exposure - accessible through nginx on /grafana/
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ../../lamina/api/certs:/app/certs:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_LOG_LEVEL=info
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  # ChromaDB - Vector database for embeddings and semantic search
+  chromadb:
+    build:
+      context: ./docker/chromadb
+      dockerfile: Dockerfile
+    image: chromadb-lamina:latest
+    # Remove external port exposure - only accessible through nginx
+    volumes:
+      - chromadb_data:/chroma/data
+      - ../../lamina/api/certs:/chroma/certs:ro
+    environment:
+      - CHROMA_SERVER_AUTH_CREDENTIALS=lamina_chroma_token
+      - MTLS_ENABLED=true
+      - NGINX_PROXY=true
+    networks:
+      - lamina_network
+    restart: unless-stopped
+    labels:
+      - "vector.source_type=docker_logs"
+      - "vector.exclude=false"
+
+networks:
+  lamina_network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+    name: {{volumes.prefix}}_ollama_data
+  ollama_models:
+    name: {{volumes.prefix}}_ollama_models
+  vector_data:
+    name: {{volumes.prefix}}_vector_data
+  loki_data:
+    name: {{volumes.prefix}}_loki_data
+  grafana_data:
+    name: {{volumes.prefix}}_grafana_data
+  chromadb_data:
+    name: {{volumes.prefix}}_chromadb_data 

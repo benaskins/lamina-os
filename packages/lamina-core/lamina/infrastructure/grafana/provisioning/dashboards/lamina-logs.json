@@ -1,0 +1,105 @@
+{
+  "id": null,
+  "uid": "lamina-logs",
+  "title": "Lamina Application Logs",
+  "tags": ["lamina", "logs"],
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Log Volume by Level",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum by (level) (count_over_time({job=\"lamina\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": ["lastNotNull"],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Agent Activity",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum by (agent) (count_over_time({job=\"lamina\", agent!=\"unknown\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Error Logs",
+      "type": "logs",
+      "targets": [
+        {
+          "expr": "{job=\"lamina\", level=\"ERROR\"}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Application Logs Stream",
+      "type": "logs",
+      "targets": [
+        {
+          "expr": "{job=\"lamina\"} |= \"\"",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 12, "w": 24, "x": 0, "y": 16},
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Log Rate by Container",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(({job=\"lamina\"} |= \"\")[5m])",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 28}
+    }
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "refresh": "5s",
+  "schemaVersion": 27,
+  "version": 0,
+  "links": []
+}

@@ -1,0 +1,309 @@
+{
+  "id": null,
+  "title": "Clara - Agent Insights & Conversations",
+  "tags": ["clara", "agent", "conversations"],
+  "style": "dark",
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "🌸 Clara's Consciousness State",
+      "type": "stat",
+      "gridPos": {"h": 3, "w": 6, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} [5m])",
+          "legendFormat": "Activity",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "textMode": "value_and_name",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "💭 Chat Requests Today",
+      "type": "stat",
+      "gridPos": {"h": 3, "w": 6, "x": 6, "y": 0},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"Received chat request\" [24h])",
+          "legendFormat": "Chats",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "mappings": [
+            {
+              "options": {"0": {"text": "Resting"}},
+              "type": "value"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "⚡ Response Activity",
+      "type": "gauge",
+      "gridPos": {"h": 3, "w": 6, "x": 12, "y": 0},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"response completed\" [5m])",
+          "legendFormat": "Responses",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 10,
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "green", "value": 3}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "🧘 Clara's Mood (Error Rate)",
+      "type": "gauge",
+      "gridPos": {"h": 3, "w": 6, "x": 18, "y": 0},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\", level=\"ERROR\"} [5m])",
+          "legendFormat": "Errors",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 5,
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 1},
+              {"color": "red", "value": 3}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "💬 Conversation Flow Timeline",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 3},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"chat\" [1m])",
+          "legendFormat": "Chat Activity",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        },
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"response completed\" [1m])",
+          "legendFormat": "Responses",
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 20,
+            "pointSize": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "📝 Recent Conversations",
+      "type": "logs",
+      "gridPos": {"h": 10, "w": 16, "x": 0, "y": 11},
+      "targets": [
+        {
+          "expr": "{job=\"lamina\", agent=\"clara\"} |= \"chat\" | json | line_format \"[{{.level}}] {{.message}} ({{.function}})\"",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
+    },
+    {
+      "id": 7,
+      "title": "🎯 Function Usage Pattern",
+      "type": "timeseries",
+      "gridPos": {"h": 5, "w": 8, "x": 16, "y": 11},
+      "targets": [
+        {
+          "expr": "sum by (function) (count_over_time({job=\"lamina\", agent=\"clara\"} | json [1h]))",
+          "legendFormat": "{{function}}",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-spectrum"},
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "🔄 Agent Memory & Context",
+      "type": "timeseries",
+      "gridPos": {"h": 5, "w": 8, "x": 16, "y": 16},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"entities\" [5m])",
+          "legendFormat": "Entity Processing",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        },
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} |= \"memory\" [5m])",
+          "legendFormat": "Memory Access",
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-spectrum"},
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "🌊 Clara Activity Pattern",
+      "type": "timeseries",
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 21},
+      "targets": [
+        {
+          "expr": "count_over_time({job=\"lamina\", agent=\"clara\"} [5m])",
+          "legendFormat": "Clara Activity",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "continuous-GrYlRd"},
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 40
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "⚠️ Clara's Health Alerts",
+      "type": "logs",
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 21},
+      "targets": [
+        {
+          "expr": "{job=\"lamina\", agent=\"clara\", level=~\"ERROR|WARN\"} | json",
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          }
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    }
+  ]
+}

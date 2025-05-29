@@ -1,0 +1,12 @@
+# Core dependencies
+PyYAML>=6.0
+Flask>=2.0.0
+requests>=2.25.0
+tqdm>=4.0.0
+huggingface_hub>=0.16.0
+
+# Optional model serving backends
+# Install as needed:
+# For llama.cpp: download llama-server binary
+# For MLC: pip install mlc-llm
+# For vLLM: pip install vllm

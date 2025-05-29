@@ -1,0 +1,32 @@
+# ChromaDB Configuration for Lamina OS
+# Optimized for vector storage and retrieval with security
+
+# Server configuration
+chroma_server_host: "0.0.0.0"
+chroma_server_http_port: 8000
+chroma_server_cors_allow_origins: ["*"]
+
+# Authentication
+chroma_server_auth_provider: "chromadb.auth.token.TokenAuthServerProvider"
+chroma_server_auth_credentials_provider: "chromadb.auth.token.TokenAuthCredentialsProvider"
+chroma_server_auth_credentials: "lamina_chroma_token"
+
+# Storage configuration
+persist_directory: "/chroma/data"
+chroma_db_impl: "duckdb+parquet"
+
+# Performance settings
+chroma_collection_embedding_api_impl: "chromadb.utils.embedding_functions.DefaultEmbeddingFunction"
+chroma_segment_cache_policy: "LRU"
+chroma_segment_cache_size: 1000
+
+# Logging
+chroma_log_config: "INFO"
+
+# Security settings
+allow_reset: false
+chroma_server_ssl_enabled: false  # We'll handle SSL at nginx level
+
+# Memory and performance
+chroma_memory_limit_bytes: 1073741824  # 1GB
+chroma_segment_max_size_bytes: 104857600  # 100MB 

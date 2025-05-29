@@ -1,0 +1,314 @@
+# Nginx Unified Configuration for Lamina
+# This configuration provides mTLS-secured service mesh routing for both single and multi-agent modes
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log notice;
+pid /var/cache/nginx/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Logging format with service mesh context
+    log_format service_mesh '$remote_addr - $remote_user [$time_local] '
+                           '"$request" $status $body_bytes_sent '
+                           '"$http_referer" "$http_user_agent" '
+                           'client_cert="$ssl_client_s_dn" '
+                           'upstream="$upstream_addr" '
+                           'response_time=$request_time';
+
+    access_log /var/log/nginx/access.log service_mesh;
+
+    # Performance optimizations
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    client_max_body_size 16M;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    # SSL/TLS configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Upstream definitions for each service
+    upstream unified_agent_backend {
+        server unified-agent-server:8001;
+        keepalive 32;
+    }
+
+    upstream ollama_backend {
+        server ollama:11434;
+        keepalive 32;
+    }
+
+    upstream loki_backend {
+        server loki:3100;
+        keepalive 32;
+    }
+
+    upstream grafana_backend {
+        server grafana:3000;
+        keepalive 32;
+    }
+
+    upstream chromadb_backend {
+        server chromadb:8000;
+        keepalive 32;
+    }
+
+    # Map to extract agent name from URI for multi-agent routing
+    map $uri $agent_name {
+        ~^/(?<agent>[^/]+)/ $agent;
+        default "unknown";
+    }
+
+    # External API Gateway (HTTPS with client cert verification)
+    server {
+        listen 443 ssl;
+        http2 on;
+        server_name localhost;
+
+        # Server certificate for external clients
+        ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+        ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+
+        # Client certificate verification for external clients
+        ssl_client_certificate /etc/nginx/certs/ca/ca.crt;
+        ssl_verify_client on;
+        ssl_verify_depth 2;
+
+        # Security headers
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Frame-Options DENY always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header X-XSS-Protection "1; mode=block" always;
+
+        # Global health check endpoint
+        location /health {
+            proxy_pass https://unified_agent_backend/health;
+            proxy_ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+            proxy_ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+            proxy_ssl_trusted_certificate /etc/nginx/certs/ca/ca.crt;
+            proxy_ssl_verify off;
+            
+            # Headers
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Client-DN $ssl_client_s_dn;
+            proxy_set_header X-Forwarded-Port $server_port;
+        }
+
+        # List agents endpoint
+        location /agents {
+            proxy_pass https://unified_agent_backend/agents;
+            proxy_ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+            proxy_ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+            proxy_ssl_trusted_certificate /etc/nginx/certs/ca/ca.crt;
+            proxy_ssl_verify off;
+            
+            # Headers
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Client-DN $ssl_client_s_dn;
+            proxy_set_header X-Forwarded-Port $server_port;
+        }
+
+        # Legacy single-agent chat endpoint
+        location /chat {
+            proxy_pass https://unified_agent_backend/chat;
+            proxy_ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+            proxy_ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+            proxy_ssl_trusted_certificate /etc/nginx/certs/ca/ca.crt;
+            proxy_ssl_verify off;
+            
+            # Streaming configuration
+            proxy_buffering off;
+            proxy_cache off;
+            proxy_read_timeout 300s;
+            proxy_connect_timeout 75s;
+            proxy_send_timeout 300s;
+            
+            # Headers
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Client-DN $ssl_client_s_dn;
+            proxy_set_header X-Forwarded-Port $server_port;
+            proxy_set_header Connection "";
+            proxy_http_version 1.1;
+        }
+
+        # Agent-specific routes (path-based routing for multi-agent mode)
+        # Match patterns like /clara/chat, /luna/interact, etc.
+        location ~ ^/([^/]+)/(chat|interact|memory)(.*)$ {
+            set $agent_name $1;
+            set $endpoint $2;
+            set $params $3;
+            
+            proxy_pass https://unified_agent_backend/$agent_name/$endpoint$params$is_args$args;
+            proxy_ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+            proxy_ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+            proxy_ssl_trusted_certificate /etc/nginx/certs/ca/ca.crt;
+            proxy_ssl_verify off;
+            
+            # Streaming configuration for chat endpoints
+            proxy_buffering off;
+            proxy_cache off;
+            proxy_read_timeout 300s;
+            proxy_connect_timeout 75s;
+            proxy_send_timeout 300s;
+            
+            # Headers
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Client-DN $ssl_client_s_dn;
+            proxy_set_header X-Forwarded-Port $server_port;
+            proxy_set_header X-Agent-Name $agent_name;
+            proxy_set_header Connection "";
+            proxy_http_version 1.1;
+        }
+
+        # API routes (for backward compatibility)
+        location /api/ {
+            proxy_pass https://unified_agent_backend/;
+            proxy_ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+            proxy_ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+            proxy_ssl_trusted_certificate /etc/nginx/certs/ca/ca.crt;
+            proxy_ssl_verify off;
+            
+            # Headers
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Client-DN $ssl_client_s_dn;
+            proxy_set_header X-Forwarded-Port $server_port;
+        }
+
+        # Grafana dashboard (optional external access)
+        location /grafana/ {
+            proxy_pass http://grafana_backend/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    # ChromaDB external access (development/testing)
+    server {
+        listen 8000;
+        server_name localhost;
+
+        location / {
+            proxy_pass http://chromadb_backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    # Internal Service Mesh Proxy (mTLS enforcement)
+    # Agent -> Ollama proxy
+    server {
+        listen 11434 ssl;
+        http2 on;
+        server_name ollama;
+
+        ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+        ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+        ssl_client_certificate /etc/nginx/certs/ca/ca.crt;
+        ssl_verify_client on;
+        ssl_verify_depth 2;
+
+        location / {
+            # Only allow Agent to access Ollama
+            if ($ssl_client_s_dn !~ "CN={{nginx.ssl_client_cn}}") {
+                return 403;
+            }
+
+            proxy_pass http://ollama_backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Service-Client $ssl_client_s_dn;
+        }
+    }
+
+    # Agent -> Loki proxy (for logging)
+    server {
+        listen 3100 ssl;
+        http2 on;
+        server_name loki;
+
+        ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+        ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+        ssl_client_certificate /etc/nginx/certs/ca/ca.crt;
+        ssl_verify_client on;
+        ssl_verify_depth 2;
+
+        location / {
+            # Only allow Agent and Vector to access Loki
+            if ($ssl_client_s_dn !~ "CN=({{nginx.ssl_client_cn}}|vector)") {
+                return 403;
+            }
+
+            proxy_pass http://loki_backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Service-Client $ssl_client_s_dn;
+        }
+    }
+
+    # Agent -> ChromaDB proxy
+    server {
+        listen 8001 ssl;
+        http2 on;
+        server_name chromadb;
+
+        ssl_certificate /etc/nginx/certs/services/nginx/nginx.crt;
+        ssl_certificate_key /etc/nginx/certs/services/nginx/nginx.key;
+        ssl_client_certificate /etc/nginx/certs/ca/ca.crt;
+        ssl_verify_client on;
+        ssl_verify_depth 2;
+
+        location / {
+            # Only allow Agent to access ChromaDB
+            if ($ssl_client_s_dn !~ "CN={{nginx.ssl_client_cn}}") {
+                return 403;
+            }
+
+            proxy_pass http://chromadb_backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Service-Client $ssl_client_s_dn;
+        }
+    }
+} 

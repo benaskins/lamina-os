@@ -1,0 +1,87 @@
+# Lamina Core
+
+A modular framework for building AI agent systems with multi-backend support, intelligent memory, and distributed infrastructure.
+
+## Features
+
+- **Multi-Backend AI Support**: Seamlessly switch between Ollama, HuggingFace, and other AI providers
+- **Intelligent Memory System**: Advanced semantic memory with evolution and context management
+- **Sanctuary Architecture**: Secure, isolated environments for AI agents with ethical constraints
+- **Infrastructure Templating**: Docker-based deployment with mTLS service mesh
+- **Agent Scaffolding**: CLI tools to quickly create and configure new AI agents
+
+## Quick Start
+
+### Installation
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd lamina-core
+
+# Install in development mode
+pip install -e .
+
+# Install basic dependencies  
+pip install PyYAML requests
+```
+
+### Create Your First Sanctuary
+
+```bash
+# Initialize a new sanctuary
+lamina sanctuary init my-agents
+
+# Navigate to your sanctuary
+cd my-agents
+
+# Create additional agents
+lamina agent create researcher --template=analytical
+
+# Check sanctuary status
+lamina sanctuary status
+```
+
+### Chat with Agents
+
+```bash
+# Interactive chat demo
+lamina chat --demo
+
+# Single message demo
+lamina chat --demo "Hello, can you analyze this data?"
+
+# Test core functionality
+python examples/basic_usage.py
+```
+
+## Architecture
+
+Lamina Core follows a modular architecture:
+
+- **Backends**: Pluggable AI provider integrations
+- **Memory**: Semantic memory system with ChromaDB integration
+- **Infrastructure**: Docker-based service orchestration
+- **Coordination**: Multi-agent communication and routing
+- **Sanctuary**: Agent configuration and deployment system
+
+## Agent Templates
+
+Choose from magical agent templates:
+
+- **Conversational**: General-purpose chat assistant
+- **Analytical**: Research and data analysis specialist  
+- **Security**: Validation and protection agent
+- **Reasoning**: Logic and problem-solving expert
+
+## Documentation
+
+- [Installation Guide](docs/installation.md)
+- [Agent Creation](docs/agents.md)
+- [Infrastructure Setup](docs/infrastructure.md)
+- [API Reference](docs/api.md)
+- [Contributing](docs/contributing.md)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

@@ -1,0 +1,206 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lamina-llm-serve"
+version = "0.1.0"
+description = "Centralized model caching and serving layer for Lamina OS"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Ben Askins", email = "human@getlamina.ai"},
+    {name = "Lamina High Council", email = "council@getlamina.ai"}
+]
+keywords = ["llm", "model-serving", "caching", "lamina", "ai-backends"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    # Core dependencies
+    "PyYAML>=6.0.2",
+    "Flask>=3.1.0",
+    "requests>=2.32.0",
+    "tqdm>=4.67.0",
+    "click>=8.1.7",
+    
+    # Model downloading and management
+    "huggingface-hub>=0.32.0",
+    "transformers>=4.47.0",
+    
+    # Utilities
+    "rich>=13.9.0",
+    "pydantic>=2.10.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=8.3.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "httpx>=0.28.0",  # for testing Flask
+    
+    # Code quality
+    "ruff>=0.8.0",
+    "black>=24.10.0",
+    "isort>=5.13.0",
+    "mypy>=1.13.0",
+    "bandit>=1.8.0",
+    
+    # Development tools
+    "pre-commit>=4.0.0",
+    "jupyter>=1.1.1",
+    "ipython>=8.30.0",
+]
+
+backends = [
+    # Optional model serving backends
+    # Note: These are installed separately as needed
+    # "llama-cpp-python>=0.2.0",  # For llama.cpp backend
+    # "mlc-llm>=0.1.0",           # For MLC backend  
+    # "vllm>=0.2.0",              # For vLLM backend
+]
+
+all = [
+    "lamina-llm-serve[dev,backends]"
+]
+
+[project.scripts]
+lamina-llm-serve = "lamina_llm_serve.server:main"
+model-manager = "scripts.model-manager:main"
+
+[project.urls]
+Homepage = "https://github.com/benaskins/lamina-llm-serve"
+Documentation = "https://github.com/benaskins/lamina-llm-serve/docs"
+Repository = "https://github.com/benaskins/lamina-llm-serve"
+Issues = "https://github.com/benaskins/lamina-llm-serve/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["lamina_llm_serve"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["B011"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311', 'py312', 'py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "transformers.*",
+    "huggingface_hub.*",
+    "llama_cpp.*",
+    "mlc_llm.*",
+    "vllm.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests", 
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["lamina_llm_serve"]
+omit = [
+    "tests/*",
+    "*/test_*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "test_*"]
+skips = ["B101", "B601"]

@@ -1,0 +1,119 @@
+# Vector configuration for Lamina logging + lightweight monitoring
+# Focuses on logs with basic system visibility
+
+data_dir = "/vector-data-dir"
+
+# ===== LOGS =====
+# Sources - collect logs from Docker containers
+[sources.docker_logs]
+type = "docker_logs"
+# Use the actual container names that Docker Compose creates
+include_containers = ["{{vector.container_name}}", "infrastructure-ollama-1"]
+exclude_containers = ["infrastructure-grafana-1", "infrastructure-vector-1"]
+
+# Parse JSON logs from our applications
+[transforms.parse_json]
+type = "remap"
+inputs = ["docker_logs"]
+source = '''
+# Try to parse as JSON, if it fails, keep as plain text
+if is_string(.message) {
+  parsed, err = parse_json(.message)
+  if err == null {
+    ., err = merge(., parsed)
+    if err == null {
+      .structured = true
+    } else {
+      .structured = false
+    }
+  } else {
+    .structured = false
+  }
+}
+
+# Ensure we have a timestamp
+if !exists(.timestamp) {
+  .timestamp = now()
+} else if is_string(.timestamp) {
+  .timestamp, err = parse_timestamp(.timestamp, format: "%Y-%m-%dT%H:%M:%S%.fZ")
+  if err != null {
+    .timestamp = now()
+  }
+}
+
+# Clean up the original message field if we successfully parsed JSON
+if .structured == true {
+  del(.message)
+}
+'''
+
+# Add labels for Loki
+[transforms.add_labels]
+type = "remap"
+inputs = ["parse_json"]
+source = '''
+# Set up basic labels - make sure they always exist
+.job = "lamina"
+.container = .container_name || "unknown"
+.level = .level || "INFO"
+.logger = .logger || "unknown"
+.agent = .agent || "{{vector.log_filters.agent}}"
+
+# Ensure timestamp is properly formatted
+.timestamp = format_timestamp!(.timestamp, format: "%Y-%m-%dT%H:%M:%S%.3fZ")
+'''
+
+# Allow all logs for now
+[transforms.filter_logs]
+type = "filter"
+inputs = ["add_labels"]
+condition.type = "vrl"
+condition.source = '''
+# Allow all logs
+true
+'''
+
+# ===== BASIC METRICS =====
+# Host metrics - CPU, Memory, Disk usage
+[sources.host_metrics]
+type = "host_metrics"
+collectors = ["cpu", "memory", "filesystem"]
+
+# Transform host metrics for better labeling
+[transforms.enrich_metrics]
+type = "remap"
+inputs = ["host_metrics"]
+source = '''
+# Add consistent labeling for metrics
+.service = "lamina"
+.host = "docker-host"
+
+# Ensure timestamp
+if !exists(.timestamp) {
+  .timestamp = now()
+}
+'''
+
+# ===== SINKS =====
+# Logs to Loki
+[sinks.loki]
+type = "loki"
+inputs = ["filter_logs"]
+endpoint = "${LOKI_ENDPOINT:-http://loki:3100}"
+labels.job = "{{ job }}"
+labels.container = "{{ container }}"
+labels.level = "{{ level }}"
+labels.logger = "{{ logger }}"
+labels.agent = "{{ agent }}"
+
+[sinks.loki.encoding]
+codec = "json"
+
+# Optional: Console output for debugging
+[sinks.console]
+type = "console"
+inputs = ["filter_logs"]
+target = "stdout"
+
+[sinks.console.encoding]
+codec = "json" 

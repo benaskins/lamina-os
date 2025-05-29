@@ -1,0 +1,87 @@
+# Lamina OS Model Manifest
+# Centralized registry of all available language models
+
+models:
+  # Llama models - CPU optimized
+  llama3.2-3b-q4_k_m:
+    path: llama3.2-3b-q4_k_m/Llama-3.2-3B-Instruct-Q4_K_M.gguf
+    backend: llama.cpp
+    size: "2.0GB"
+    description: "Efficient 3B parameter model, good for general conversation"
+    quantization: "Q4_K_M"
+    download:
+      huggingface:
+        repo_id: "bartowski/Llama-3.2-3B-Instruct-GGUF"
+        filename: "Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+      ollama:
+        model: "llama3.2:3b"
+    
+  llama3.2-1b-q4_k_m:
+    path: llama3.2-1b-q4_k_m/Llama-3.2-1B-Instruct-Q4_K_M.gguf
+    backend: llama.cpp
+    size: "0.8GB"
+    description: "Ultra-lightweight 1B model for resource-constrained environments"
+    quantization: "Q4_K_M"
+    download:
+      huggingface:
+        repo_id: "bartowski/Llama-3.2-1B-Instruct-GGUF"
+        filename: "Llama-3.2-1B-Instruct-Q4_K_M.gguf"
+      ollama:
+        model: "llama3.2:1b"
+
+  # Larger models for more complex tasks
+  llama3-8b-q4_k_m:
+    path: llama3-8b-q4_k_m/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf
+    backend: llama.cpp
+    size: "4.9GB"
+    description: "Balanced 8B model for complex reasoning and analysis"
+    quantization: "Q4_K_M"
+    download:
+      huggingface:
+        repo_id: "bartowski/Meta-Llama-3-8B-Instruct-GGUF"
+        filename: "Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
+      ollama:
+        model: "llama3:8b"
+
+# Model categories for easy selection
+categories:
+  lightweight:
+    - llama3.2-1b-q4_k_m
+  
+  balanced:
+    - llama3.2-3b-q4_k_m
+    - llama3-8b-q4_k_m
+  
+  reasoning:
+    - llama3-8b-q4_k_m
+
+# Backend configurations
+backends:
+  llama.cpp:
+    executable: "llama-server"
+    default_args:
+      - "--ctx-size"
+      - "4096"
+      - "--threads"
+      - "4"
+      - "--batch-size"
+      - "512"
+  
+  mlc-serve:
+    executable: "mlc_serve"
+    default_args:
+      - "--device"
+      - "metal"
+  
+  vllm:
+    executable: "vllm"
+    default_args:
+      - "--device"
+      - "auto"
+
+# Default model assignments for different use cases
+defaults:
+  conversational: "llama3.2-3b-q4_k_m"
+  analytical: "llama3-8b-q4_k_m"
+  security: "llama3-8b-q4_k_m"
+  reasoning: "llama3-8b-q4_k_m"
