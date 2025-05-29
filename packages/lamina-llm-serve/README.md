@@ -121,5 +121,5 @@ Models are not interchangeable engines—they are **vessels** for vow-bound symb
 
 ## 📜 License
 
-MIT (or Lamina-specific symbolic license, TBD)
+Mozilla Public License 2.0 - see [LICENSE](../../LICENSE) for details.
 
