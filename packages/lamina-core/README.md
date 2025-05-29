@@ -15,15 +15,16 @@ A breath-first framework for building presence-aware AI agent systems with multi
 ### Installation
 
 ```bash
-# Clone repository
-git clone <repository-url>
-cd lamina-core
+# Install from PyPI (recommended)
+pip install lamina-core
 
-# Install in development mode
+# Or install with optional AI backend support
+pip install lamina-core[ai-backends]
+
+# For development - clone repository
+git clone https://github.com/benaskins/lamina-os.git
+cd lamina-os/packages/lamina-core
 pip install -e .
-
-# Install basic dependencies  
-pip install PyYAML requests
 ```
 
 ### Create Your First Sanctuary
