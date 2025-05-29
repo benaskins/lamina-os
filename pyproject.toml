@@ -16,6 +16,8 @@ description = "Workspace for Lamina OS packages"
 requires-python = ">=3.11"
 dependencies = [
     "lamina-core",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=1.0.0",
 ]
 
 [project.optional-dependencies]
