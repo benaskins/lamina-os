@@ -261,7 +261,7 @@ class TestRealAgentCoordination:
         grounded_indicators = breath_validation_criteria["vow_adherence"]["grounded_responses"]
         grounded_found = [indicator for indicator in grounded_indicators
                          if indicator.lower() in response.lower()]
-        
+
         # Validate grounded response characteristics
         assert len(grounded_found) >= 0, "Should have grounded response characteristics"
 

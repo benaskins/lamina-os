@@ -113,7 +113,7 @@ class LaminaLLMClient:
                             logger.warning("No choices in response from LLM serve")
                             yield str(response_data)
 
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.error(f"Timeout connecting to LLM serve at {self.base_url}")
             yield "Error: Request timeout"
         except aiohttp.ClientError as e:
