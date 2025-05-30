@@ -1,0 +1,151 @@
+{
+  "total_tests": 12,
+  "successful_tests": 12,
+  "success_rate": 1.0,
+  "average_comprehension_retention": 1.0,
+  "average_token_reduction": 0.6994795385128628,
+  "detailed_results": [
+    {
+      "question": "What Python environment manager must be used for all projects?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7508650519031141,
+      "traditional_concepts": [
+        "uv",
+        "required",
+        "not pip"
+      ],
+      "sigil_concepts": [
+        "uv",
+        "required",
+        "not pip"
+      ]
+    },
+    {
+      "question": "How do you run tests in the aurelia project?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7521663778162911,
+      "traditional_concepts": [
+        "make test",
+        "uv run pytest",
+        "test-fast"
+      ],
+      "sigil_concepts": [
+        "make test",
+        "uv run pytest",
+        "test-fast"
+      ]
+    },
+    {
+      "question": "What are the core principles of Aurelia's architecture?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7534722222222222,
+      "traditional_concepts": [
+        "breath",
+        "sanctuary",
+        "ethical constraints"
+      ],
+      "sigil_concepts": [
+        "breath",
+        "sanctuary",
+        "ethical constraints"
+      ]
+    },
+    {
+      "question": "What agents are part of the multi-agent system?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7534722222222222,
+      "traditional_concepts": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Phi",
+        "analysis",
+        "security"
+      ],
+      "sigil_concepts": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Phi",
+        "analysis",
+        "security"
+      ]
+    },
+    {
+      "question": "What is the configuration hierarchy in order of priority?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7521663778162911,
+      "traditional_concepts": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment",
+        "highest priority"
+      ],
+      "sigil_concepts": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment",
+        "highest priority"
+      ]
+    },
+    {
+      "question": "What backends does lamina-llm-serve support?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.7574171029668412,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "What Python environment manager must be used for all projects?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6431623931623931,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "How do you run tests in the aurelia project?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6445396145610278,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "What are the core principles of Aurelia's architecture?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6459227467811159,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "What agents are part of the multi-agent system?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6459227467811159,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "What is the configuration hierarchy in order of priority?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6445396145610278,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    },
+    {
+      "question": "What backends does lamina-llm-serve support?",
+      "comprehension_score": 1.0,
+      "token_reduction": 0.6501079913606911,
+      "traditional_concepts": [
+        "llama.cpp",
+        "MLC-serve",
+        "vLLM"
+      ],
+      "sigil_concepts": [
+        "llama.cpp",
+        "MLC-serve",
+        "vLLM"
+      ]
+    }
+  ]
+}
