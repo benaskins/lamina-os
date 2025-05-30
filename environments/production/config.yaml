@@ -1,0 +1,248 @@
+# 🜄 Production Environment Configuration
+# Symbolic marker: 🜄 (breath marker for production)
+# Focus: Scalability, reliability, security, observability
+
+environment:
+  name: production
+  sigil: "🜄"
+  type: kubernetes
+  description: "Production environment with high availability, security, and comprehensive monitoring"
+
+# Production-specific features
+features:
+  auto_scaling: true
+  high_availability: true
+  disaster_recovery: true
+  comprehensive_monitoring: true
+  security_hardening: true
+  backup_automation: true
+
+# Service configuration for production
+services:
+  lamina-core:
+    image: lamina-core:latest
+    replicas: 3
+    deployment_strategy: "RollingUpdate"
+    ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+    environment:
+      ENV: production
+      LOG_LEVEL: info
+      SIGIL: "🜄"
+      METRICS_ENABLED: true
+      TRACING_ENABLED: true
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1"
+    health_checks:
+      liveness_probe:
+        path: "/health"
+        initial_delay: 30
+        period: 10
+      readiness_probe:
+        path: "/ready"
+        initial_delay: 5
+        period: 5
+
+  lamina-llm-serve:
+    image: lamina-llm-serve:latest
+    replicas: 2
+    deployment_strategy: "RollingUpdate"
+    ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+    environment:
+      ENV: production
+      MODEL_CACHE_SIZE: "10GB"
+      SIGIL: "🜄"
+      METRICS_ENABLED: true
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:
+        memory: "8Gi"
+        cpu: "4"
+    volumes:
+      - name: model-storage
+        mount_path: "/app/models"
+        storage_class: "fast-ssd"
+        size: "100Gi"
+    health_checks:
+      liveness_probe:
+        path: "/health"
+        initial_delay: 60
+        period: 15
+
+  chromadb:
+    image: chromadb/chroma:latest
+    replicas: 3
+    deployment_strategy: "StatefulSet"
+    ports:
+      - name: http
+        port: 8000
+        protocol: TCP
+    environment:
+      ENV: production
+      SIGIL: "🜄"
+      CHROMA_DB_IMPL: "clickhouse"
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    storage:
+      class: "fast-ssd"
+      size: "500Gi"
+      backup_enabled: true
+
+# Auto-scaling configuration
+autoscaling:
+  lamina-core:
+    enabled: true
+    min_replicas: 2
+    max_replicas: 10
+    target_cpu_utilization: 70
+    target_memory_utilization: 80
+  
+  lamina-llm-serve:
+    enabled: true
+    min_replicas: 1
+    max_replicas: 5
+    target_cpu_utilization: 80
+    custom_metrics:
+      - name: "model_requests_per_second"
+        target_value: 100
+
+# Networking (production-grade)
+networking:
+  service_mesh:
+    enabled: true
+    provider: "istio"
+    mtls_mode: "STRICT"
+  
+  ingress:
+    enabled: true
+    class: "nginx"
+    tls:
+      enabled: true
+      certificate_manager: "cert-manager"
+    
+  network_policies:
+    enabled: true
+    default_deny: true
+
+# Breath-aware configuration (full implementation)
+breath:
+  modulation: true
+  conscious_pause: 0.5
+  breath_monitoring: true
+  rhythm_adjustment: "adaptive"
+
+# Security (production hardening)
+security:
+  mtls: true
+  rbac: true
+  pod_security_policies: true
+  network_policies: true
+  secrets_encryption: true
+  image_scanning: true
+  runtime_security: true
+  audit_logging: true
+  
+# Logging configuration (comprehensive)
+logging:
+  level: info
+  format: "🜄 [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+  include_sigil: true
+  centralized: true
+  aggregation:
+    enabled: true
+    backend: "loki"
+  retention: "90d"
+  
+# Monitoring and observability
+monitoring:
+  prometheus:
+    enabled: true
+    retention: "30d"
+    storage_class: "fast-ssd"
+    
+  grafana:
+    enabled: true
+    persistence: true
+    dashboards:
+      - lamina-core-metrics
+      - lamina-llm-serve-metrics
+      - breath-monitoring
+      - security-dashboard
+      
+  tracing:
+    enabled: true
+    backend: "jaeger"
+    sampling_rate: 0.1
+    
+  alerting:
+    enabled: true
+    rules:
+      - high_error_rate
+      - resource_exhaustion
+      - breath_irregularity
+      - security_violations
+
+# Backup and disaster recovery
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention: "30d"
+  storage:
+    provider: "s3"
+    encryption: true
+  
+disaster_recovery:
+  enabled: true
+  rpo: "1h"  # Recovery Point Objective
+  rto: "15m"  # Recovery Time Objective
+  multi_region: false  # Enable for global deployments
+
+# Resource management
+resources:
+  namespace: "lamina-production"
+  total_memory: "80Gi"
+  total_cpu: "40"
+  storage: "1Ti"
+  resource_quotas:
+    requests.cpu: "20"
+    requests.memory: "40Gi"
+    limits.cpu: "40"
+    limits.memory: "80Gi"
+    persistentvolumeclaims: "10"
+  
+  node_affinity:
+    preferred:
+      - weight: 100
+        node_selector:
+          lamina.ai/workload-type: "ai-compute"
+
+# Deployment configuration
+deployment:
+  strategy: "blue-green"
+  rollback_on_failure: true
+  health_check_timeout: "300s"
+  progressive_traffic_routing: true
+  
+# Performance tuning
+performance:
+  jvm_opts: "-Xmx2g -XX:+UseG1GC"
+  connection_pooling: true
+  cache_warming: true
+  prefetch_models: true
