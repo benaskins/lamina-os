@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 class EnvironmentValidationError(Exception):
     """Raised when environment configuration validation fails."""
+
     pass
 
 
@@ -55,7 +56,9 @@ def validate_environment_config(config: EnvironmentConfig) -> None:
     errors.extend(_validate_environment_specific(config))
 
     if errors:
-        error_msg = f"Environment '{config.name}' validation failed:\n" + "\n".join(f"  - {e}" for e in errors)
+        error_msg = f"Environment '{config.name}' validation failed:\n" + "\n".join(
+            f"  - {e}" for e in errors
+        )
         raise EnvironmentValidationError(error_msg)
 
     logger.info(f"{config.sigil} Environment '{config.name}' validation passed")
@@ -89,7 +92,9 @@ def _validate_sigil_consistency(config: EnvironmentConfig) -> list[str]:
 
     expected_sigil = ENVIRONMENT_SIGILS.get(config.name)
     if expected_sigil and config.sigil != expected_sigil:
-        errors.append(f"Sigil mismatch: expected '{expected_sigil}' for {config.name}, got '{config.sigil}'")
+        errors.append(
+            f"Sigil mismatch: expected '{expected_sigil}' for {config.name}, got '{config.sigil}'"
+        )
 
     # Check sigil in service environment variables
     for service_name, service_config in config.services.items():
@@ -97,7 +102,9 @@ def _validate_sigil_consistency(config: EnvironmentConfig) -> list[str]:
         if isinstance(env_vars, dict):
             service_sigil = env_vars.get("SIGIL")
             if service_sigil and service_sigil != config.sigil:
-                errors.append(f"Service '{service_name}' sigil mismatch: expected '{config.sigil}', got '{service_sigil}'")
+                errors.append(
+                    f"Service '{service_name}' sigil mismatch: expected '{config.sigil}', got '{service_sigil}'"
+                )
 
     # Check sigil in logging format
     log_format = config.logging.get("format", "")
@@ -128,7 +135,9 @@ def _validate_services_config(config: EnvironmentConfig) -> list[str]:
     return errors
 
 
-def _validate_service_config(service_name: str, service_config: dict[str, Any], env_config: EnvironmentConfig) -> list[str]:
+def _validate_service_config(
+    service_name: str, service_config: dict[str, Any], env_config: EnvironmentConfig
+) -> list[str]:
     """Validate individual service configuration."""
     errors = []
 
@@ -145,12 +154,16 @@ def _validate_service_config(service_name: str, service_config: dict[str, Any], 
         if "resources" in service_config:
             resources = service_config["resources"]
             if "requests" not in resources or "limits" not in resources:
-                errors.append(f"Kubernetes service '{service_name}' should specify both resource requests and limits")
+                errors.append(
+                    f"Kubernetes service '{service_name}' should specify both resource requests and limits"
+                )
 
     elif env_config.type == "docker-compose":
         # Docker Compose validation
         if "image" not in service_config and "build" not in service_config:
-            errors.append(f"Docker Compose service '{service_name}' must specify either image or build")
+            errors.append(
+                f"Docker Compose service '{service_name}' must specify either image or build"
+            )
 
     # Validate environment variables
     env_vars = service_config.get("environment", {})
@@ -158,7 +171,9 @@ def _validate_service_config(service_name: str, service_config: dict[str, Any], 
         if "ENV" not in env_vars:
             errors.append(f"Service '{service_name}' missing ENV environment variable")
         elif env_vars["ENV"] != env_config.name:
-            errors.append(f"Service '{service_name}' ENV mismatch: expected '{env_config.name}', got '{env_vars['ENV']}'")
+            errors.append(
+                f"Service '{service_name}' ENV mismatch: expected '{env_config.name}', got '{env_vars['ENV']}'"
+            )
 
     return errors
 
@@ -236,7 +251,9 @@ def _validate_development_config(config: EnvironmentConfig) -> list[str]:
 
     # Development should support debugging
     if not config.supports_feature("debug_ports"):
-        logger.warning(f"{config.sigil} Development environment should enable debug_ports for better DX")
+        logger.warning(
+            f"{config.sigil} Development environment should enable debug_ports for better DX"
+        )
 
     # Hot reload recommended for development
     if not config.supports_feature("hot_reload"):
@@ -293,7 +310,9 @@ def _validate_production_config(config: EnvironmentConfig) -> list[str]:
 
     # Validate monitoring configuration
     if config.monitoring:
-        if "prometheus" in config.monitoring and not config.monitoring["prometheus"].get("enabled", False):
+        if "prometheus" in config.monitoring and not config.monitoring["prometheus"].get(
+            "enabled", False
+        ):
             errors.append("Production monitoring should enable Prometheus")
 
     return errors
@@ -315,7 +334,7 @@ def validate_environment_transition(from_env: str, to_env: str) -> list[str]:
     valid_transitions = {
         "development": ["test", "production"],
         "test": ["production"],
-        "production": []  # No transitions from production
+        "production": [],  # No transitions from production
     }
 
     if from_env not in valid_transitions:
