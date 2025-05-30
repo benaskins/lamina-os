@@ -56,8 +56,9 @@ class EnvironmentManager:
 
         for env_name in available_envs:
             try:
-                config = load_environment_config(env_name,
-                    self.environments_root / env_name / "config.yaml")
+                config = load_environment_config(
+                    env_name, self.environments_root / env_name / "config.yaml"
+                )
                 validate_environment_config(config)
                 self._configs[env_name] = config
                 logger.info(f"{config.sigil} Discovered environment: {env_name}")
@@ -170,19 +171,16 @@ class EnvironmentManager:
             "sigil": config.sigil,
             "type": config.type,
             "description": config.description,
-            "validation": {
-                "status": validation_status,
-                "errors": validation_errors
-            },
+            "validation": {"status": validation_status, "errors": validation_errors},
             "services": list(config.services.keys()),
             "features": config.features,
             "resources": config.get_resource_limits(),
-            "is_current": environment_name == self._current_environment
+            "is_current": environment_name == self._current_environment,
         }
 
-    def enforce_environment_boundaries(self,
-                                     target_environment: str,
-                                     container_labels: dict[str, str] | None = None) -> bool:
+    def enforce_environment_boundaries(
+        self, target_environment: str, container_labels: dict[str, str] | None = None
+    ) -> bool:
         """
         Enforce environment boundary rules per Vesna's guidance.
 
@@ -205,13 +203,17 @@ class EnvironmentManager:
             container_sigil = container_labels.get("lamina.sigil")
 
             if container_env and container_env != target_environment:
-                logger.error(f"{target_config.sigil} Boundary violation: Container labeled for '{container_env}' "
-                           f"cannot run in '{target_environment}'")
+                logger.error(
+                    f"{target_config.sigil} Boundary violation: Container labeled for '{container_env}' "
+                    f"cannot run in '{target_environment}'"
+                )
                 return False
 
             if container_sigil and container_sigil != target_config.sigil:
-                logger.error(f"{target_config.sigil} Boundary violation: Container sigil '{container_sigil}' "
-                           f"doesn't match environment sigil '{target_config.sigil}'")
+                logger.error(
+                    f"{target_config.sigil} Boundary violation: Container sigil '{container_sigil}' "
+                    f"doesn't match environment sigil '{target_config.sigil}'"
+                )
                 return False
 
         # Production-specific boundary checks
@@ -219,17 +221,16 @@ class EnvironmentManager:
             # Production should never run dev/test artifacts
             env_var = os.environ.get("ENV", "").lower()
             if env_var in ["development", "dev", "test"]:
-                logger.error(f"{target_config.sigil} Boundary violation: Development/test artifact "
-                           f"cannot run in production")
+                logger.error(
+                    f"{target_config.sigil} Boundary violation: Development/test artifact "
+                    f"cannot run in production"
+                )
                 return False
 
         logger.info(f"{target_config.sigil} Environment boundary check passed")
         return True
 
-    def perform_sigil_of_passage(self,
-                                from_env: str,
-                                to_env: str,
-                                run_tests: bool = True) -> bool:
+    def perform_sigil_of_passage(self, from_env: str, to_env: str, run_tests: bool = True) -> bool:
         """
         Perform Luna's "sigil of passage" ritual between environments.
 
@@ -262,8 +263,10 @@ class EnvironmentManager:
             return False
 
         # Symbolic acknowledgment
-        logger.info(f"{from_config.sigil} → {to_config.sigil} Sigil of passage complete. "
-                   f"Transformation from {from_env} to {to_env} is blessed.")
+        logger.info(
+            f"{from_config.sigil} → {to_config.sigil} Sigil of passage complete. "
+            f"Transformation from {from_env} to {to_env} is blessed."
+        )
 
         return True
 
@@ -291,7 +294,7 @@ class EnvironmentManager:
             test_commands = [
                 "uv run pytest packages/lamina-core/tests/ -m unit",
                 "uv run ruff check packages/",
-                "uv run black --check packages/"
+                "uv run black --check packages/",
             ]
         elif to_env == "production":
             # Transitioning to production (comprehensive)
@@ -300,7 +303,7 @@ class EnvironmentManager:
                 "uv run pytest packages/lamina-core/tests/ -m integration",
                 "uv run ruff check packages/",
                 "uv run black --check packages/",
-                "uv run bandit -r packages/"
+                "uv run bandit -r packages/",
             ]
 
         # Run test commands

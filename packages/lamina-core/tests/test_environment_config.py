@@ -37,10 +37,7 @@ class TestEnvironmentConfig:
     def test_environment_config_creation(self):
         """Test creating EnvironmentConfig with minimal data."""
         config = EnvironmentConfig(
-            name="test",
-            sigil="🜁",
-            type="containerized",
-            description="Test environment"
+            name="test", sigil="🜁", type="containerized", description="Test environment"
         )
 
         assert config.name == "test"
@@ -53,10 +50,7 @@ class TestEnvironmentConfig:
     def test_sigil_prefix(self):
         """Test sigil prefix for CLI output."""
         config = EnvironmentConfig(
-            name="development",
-            sigil="🜂",
-            type="docker-compose",
-            description="Dev environment"
+            name="development", sigil="🜂", type="docker-compose", description="Dev environment"
         )
 
         assert config.get_sigil_prefix() == "🜂 "
@@ -64,10 +58,7 @@ class TestEnvironmentConfig:
     def test_log_format_with_sigil(self):
         """Test log format includes sigil."""
         config = EnvironmentConfig(
-            name="production",
-            sigil="🜄",
-            type="kubernetes",
-            description="Prod environment"
+            name="production", sigil="🜄", type="kubernetes", description="Prod environment"
         )
 
         log_format = config.get_log_format()
@@ -81,7 +72,7 @@ class TestEnvironmentConfig:
             sigil="🜂",
             type="docker-compose",
             description="Dev environment",
-            features={"hot_reload": True, "debug_ports": True, "mtls": False}
+            features={"hot_reload": True, "debug_ports": True, "mtls": False},
         )
 
         assert config.supports_feature("hot_reload") is True
@@ -93,7 +84,7 @@ class TestEnvironmentConfig:
         """Test getting service configuration."""
         services = {
             "lamina-core": {"image": "lamina-core:dev"},
-            "chromadb": {"image": "chromadb:latest"}
+            "chromadb": {"image": "chromadb:latest"},
         }
 
         config = EnvironmentConfig(
@@ -101,7 +92,7 @@ class TestEnvironmentConfig:
             sigil="🜁",
             type="containerized",
             description="Test environment",
-            services=services
+            services=services,
         )
 
         core_config = config.get_service_config("lamina-core")
@@ -113,10 +104,7 @@ class TestEnvironmentConfig:
     def test_post_init_sigil_injection(self):
         """Test that sigils are automatically injected into service environments."""
         services = {
-            "lamina-core": {
-                "image": "lamina-core:dev",
-                "environment": {"ENV": "development"}
-            }
+            "lamina-core": {"image": "lamina-core:dev", "environment": {"ENV": "development"}}
         }
 
         config = EnvironmentConfig(
@@ -124,7 +112,7 @@ class TestEnvironmentConfig:
             sigil="🜂",
             type="docker-compose",
             description="Dev environment",
-            services=services
+            services=services,
         )
 
         # Check that sigil was injected
@@ -142,15 +130,15 @@ class TestEnvironmentConfigLoading:
                 "name": "development",
                 "sigil": "🜂",
                 "type": "docker-compose",
-                "description": "Development environment"
+                "description": "Development environment",
             },
             "features": {"hot_reload": True},
             "services": {"lamina-core": {"image": "lamina-core:dev"}},
-            "logging": {"level": "debug"}
+            "logging": {"level": "debug"},
         }
 
         config_file = tmp_path / "config.yaml"
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             yaml.dump(config_data, f)
 
         config = load_environment_config("development", config_file)
@@ -168,7 +156,7 @@ class TestEnvironmentConfigLoading:
     def test_load_invalid_yaml(self, tmp_path):
         """Test loading invalid YAML configuration."""
         config_file = tmp_path / "config.yaml"
-        with open(config_file, 'w') as f:
+        with open(config_file, "w") as f:
             f.write("invalid: yaml: content: [")
 
         with pytest.raises(ValueError, match="Invalid YAML"):
@@ -186,12 +174,12 @@ class TestEnvironmentConfigLoading:
                     "name": env,
                     "sigil": ENVIRONMENT_SIGILS[env],
                     "type": "docker-compose",
-                    "description": f"{env} environment"
+                    "description": f"{env} environment",
                 }
             }
 
             config_file = env_dir / "config.yaml"
-            with open(config_file, 'w') as f:
+            with open(config_file, "w") as f:
                 yaml.dump(config_data, f)
 
         # Create directory without config (should be ignored)
@@ -232,12 +220,12 @@ class TestEnvironmentValidation:
             services={
                 "lamina-core": {
                     "image": "lamina-core:dev",
-                    "environment": {"ENV": "development", "SIGIL": "🜂"}
+                    "environment": {"ENV": "development", "SIGIL": "🜂"},
                 }
             },
             security={"mtls": False},
             logging={"format": "🜂 [%(asctime)s] %(name)s - %(message)s"},
-            resources={"total_memory": "4Gi", "total_cpu": "2"}
+            resources={"total_memory": "4Gi", "total_cpu": "2"},
         )
 
         # Should not raise exception
@@ -249,7 +237,7 @@ class TestEnvironmentValidation:
             name="",  # Invalid
             sigil="🜂",
             type="docker-compose",
-            description="Development environment"
+            description="Development environment",
         )
 
         with pytest.raises(EnvironmentValidationError, match="Environment name is required"):
@@ -262,11 +250,7 @@ class TestEnvironmentValidation:
             sigil="🜄",  # Wrong sigil for development
             type="docker-compose",
             description="Development environment",
-            services={
-                "lamina-core": {
-                    "environment": {"ENV": "development", "SIGIL": "🜄"}
-                }
-            }
+            services={"lamina-core": {"environment": {"ENV": "development", "SIGIL": "🜄"}}},
         )
 
         with pytest.raises(EnvironmentValidationError, match="Sigil mismatch"):
@@ -283,14 +267,16 @@ class TestEnvironmentValidation:
             services={
                 "lamina-core": {
                     "image": "lamina-core:latest",
-                    "environment": {"ENV": "production", "SIGIL": "🜄"}
+                    "environment": {"ENV": "production", "SIGIL": "🜄"},
                 }
             },
             security={"mtls": False},  # Should require mtls for production
-            resources={"total_memory": "80Gi", "total_cpu": "40"}
+            resources={"total_memory": "80Gi", "total_cpu": "40"},
         )
 
-        with pytest.raises(EnvironmentValidationError, match="Production environment requires mtls"):
+        with pytest.raises(
+            EnvironmentValidationError, match="Production environment requires mtls"
+        ):
             validate_environment_config(config)
 
     def test_test_environment_requirements(self):
@@ -301,15 +287,13 @@ class TestEnvironmentValidation:
             type="containerized",
             description="Test environment",
             features={"isolation": True},  # Missing ephemeral
-            services={
-                "lamina-core": {
-                    "environment": {"ENV": "test", "SIGIL": "🜁"}
-                }
-            },
-            security={"mtls": False}
+            services={"lamina-core": {"environment": {"ENV": "test", "SIGIL": "🜁"}}},
+            security={"mtls": False},
         )
 
-        with pytest.raises(EnvironmentValidationError, match="Test environment should be ephemeral"):
+        with pytest.raises(
+            EnvironmentValidationError, match="Test environment should be ephemeral"
+        ):
             validate_environment_config(config)
 
     def test_service_environment_validation(self):
@@ -322,10 +306,10 @@ class TestEnvironmentValidation:
             services={
                 "lamina-core": {
                     "image": "lamina-core:dev",
-                    "environment": {"ENV": "production", "SIGIL": "🜂"}  # Wrong ENV
+                    "environment": {"ENV": "production", "SIGIL": "🜂"},  # Wrong ENV
                 }
             },
-            security={"mtls": False}
+            security={"mtls": False},
         )
 
         with pytest.raises(EnvironmentValidationError, match="ENV mismatch"):
