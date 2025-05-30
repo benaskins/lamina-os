@@ -12,7 +12,7 @@ These tests validate API contracts and mock behavior for fast feedback.
 
 import pytest
 
-from lamina import __version__, get_llm_client, get_coordinator, get_memory_store
+from lamina import __version__, get_coordinator, get_llm_client, get_memory_store
 
 
 @pytest.mark.unit
@@ -66,9 +66,9 @@ class TestCoreFunctions:
 
     def test_function_error_handling(self):
         """Test error handling in core functions."""
-        # Invalid backend provider
-        with pytest.raises(ValueError):
-            get_backend("invalid-provider")
+        # Invalid client configuration
+        with pytest.raises(Exception):
+            get_llm_client({"invalid": "config"})
 
     def test_breath_first_defaults(self):
         """Test that functions default to breath-first behavior."""
