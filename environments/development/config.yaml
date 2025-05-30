@@ -1,0 +1,133 @@
+# 🜂 Development Environment Configuration
+# Symbolic marker: 🜂 (breath marker for development)
+# Focus: Rapid iteration, debugging, local development
+
+environment:
+  name: development
+  sigil: "🜂"
+  type: docker-compose
+  description: "Local development environment optimized for rapid iteration and debugging"
+
+# Development-specific features
+features:
+  hot_reload: true
+  debug_ports: true
+  mtls: false
+  live_coding: true
+  verbose_logging: true
+  test_fixtures: true
+
+# Service configuration for development
+services:
+  lamina-core:
+    image: lamina-core:dev
+    build_target: development
+    ports:
+      - "8080:8080"
+      - "5678:5678"  # Debug port
+    volumes:
+      - "./packages/lamina-core:/app:delegated"
+      - "dev-data:/app/data"
+    environment:
+      ENV: development
+      LOG_LEVEL: debug
+      HOT_RELOAD: true
+      SIGIL: "🜂"
+    resources:
+      memory: "512Mi"
+      cpu: "0.5"
+
+  lamina-llm-serve:
+    image: lamina-llm-serve:dev
+    build_target: development
+    ports:
+      - "8081:8080"
+      - "5679:5678"  # Debug port
+    volumes:
+      - "./packages/lamina-llm-serve:/app:delegated"
+      - "dev-models:/app/models"
+    environment:
+      ENV: development
+      MODEL_CACHE_SIZE: "2GB"
+      LOG_LEVEL: debug
+      SIGIL: "🜂"
+    resources:
+      memory: "2Gi"
+      cpu: "1"
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - "dev-chroma:/chroma/chroma"
+    environment:
+      ENV: development
+      SIGIL: "🜂"
+    resources:
+      memory: "256Mi"
+      cpu: "0.25"
+
+  observability:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - "dev-grafana:/var/lib/grafana"
+    environment:
+      ENV: development
+      GF_SECURITY_ADMIN_PASSWORD: "dev-password"
+      SIGIL: "🜂"
+    resources:
+      memory: "256Mi"
+      cpu: "0.25"
+
+# Development-specific volumes
+volumes:
+  dev-data:
+    driver: local
+  dev-models:
+    driver: local
+  dev-chroma:
+    driver: local
+  dev-grafana:
+    driver: local
+
+# Development-specific networks
+networks:
+  lamina-dev:
+    driver: bridge
+    labels:
+      lamina.environment: "development"
+      lamina.sigil: "🜂"
+
+# Breath-aware configuration
+breath:
+  modulation: false  # Disabled for fast development
+  conscious_pause: 0
+  debug_breathing: true
+
+# Security (relaxed for development)
+security:
+  mtls: false
+  network_policies: false
+  secrets_encryption: false
+  
+# Logging configuration
+logging:
+  level: debug
+  format: "🜂 [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+  include_sigil: true
+  
+# Resource limits (conservative for local development)
+resources:
+  total_memory: "4Gi"
+  total_cpu: "2"
+  storage: "10Gi"
+
+# Development tools integration
+development:
+  ide_integration: true
+  breakpoint_support: true
+  file_watching: true
+  auto_restart: true
