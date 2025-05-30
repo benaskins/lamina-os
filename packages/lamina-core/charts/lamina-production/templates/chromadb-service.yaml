@@ -1,0 +1,21 @@
+{{- if .Values.services.chromadb.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: chromadb
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chromadb
+spec:
+  type: {{ .Values.services.chromadb.service.type }}
+  ports:
+  {{- range .Values.services.chromadb.service.ports }}
+  - port: {{ . }}
+    targetPort: {{ . }}
+    protocol: TCP
+  {{- end }}
+  selector:
+    {{- include "lamina.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: chromadb
+{{- end }}

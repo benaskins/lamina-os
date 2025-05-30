@@ -1,0 +1,175 @@
+autoscaling:
+  configs:
+    lamina-core:
+      enabled: true
+      maxReplicas: 10
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 70
+    lamina-llm-serve:
+      enabled: true
+      maxReplicas: 5
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 70
+  enabled: true
+global:
+  environment: production
+  labels:
+    app.kubernetes.io/part-of: lamina-constellation
+    lamina.environment: production
+    lamina.sigil: "\U0001F704"
+  namespace: lamina-production
+  sigil: "\U0001F704"
+monitoring:
+  enabled: true
+  grafana:
+    dashboards:
+    - lamina-core-metrics
+    - lamina-llm-serve-metrics
+    - breath-monitoring
+    - security-dashboard
+    enabled: true
+    persistence: true
+  prometheus:
+    enabled: true
+    retention: 30d
+    storage_class: fast-ssd
+namespace:
+  create: true
+  labels:
+    lamina.environment: production
+    lamina.sigil: "\U0001F704"
+  name: lamina-production
+rbac:
+  create: true
+  rules:
+  - apiGroups:
+    - ''
+    resources:
+    - pods
+    - services
+    - configmaps
+    - secrets
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+  - apiGroups:
+    - apps
+    resources:
+    - deployments
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+resources:
+  namespace: lamina-production
+  node_affinity:
+    preferred:
+    - node_selector:
+        lamina.ai/workload-type: ai-compute
+      weight: 100
+  resource_quotas:
+    limits.cpu: '40'
+    limits.memory: 80Gi
+    persistentvolumeclaims: '10'
+    requests.cpu: '20'
+    requests.memory: 40Gi
+  storage: 1Ti
+  total_cpu: '40'
+  total_memory: 80Gi
+security:
+  mtls:
+    enabled: true
+  networkPolicies:
+    enabled: true
+  podSecurityPolicy:
+    enabled: true
+serviceAccount:
+  annotations: {}
+  create: true
+  name: lamina-service-account
+services:
+  chromadb:
+    config: {}
+    enabled: true
+    env:
+      CHROMA_DB_IMPL: clickhouse
+      ENV: production
+      SIGIL: "\U0001F704"
+    image:
+      pullPolicy: IfNotPresent
+      repository: chromadb/chroma
+      tag: latest
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: '2'
+        memory: 4Gi
+      requests:
+        cpu: '1'
+        memory: 2Gi
+    service:
+      ports:
+      - name: http
+        port: 8000
+        protocol: TCP
+      type: ClusterIP
+  lamina-core:
+    config: {}
+    enabled: true
+    env:
+      ENV: production
+      LOG_LEVEL: info
+      METRICS_ENABLED: true
+      SIGIL: "\U0001F704"
+      TRACING_ENABLED: true
+    image:
+      pullPolicy: IfNotPresent
+      repository: lamina-core
+      tag: latest
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: '1'
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    service:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+      type: ClusterIP
+  lamina-llm-serve:
+    config: {}
+    enabled: true
+    env:
+      ENV: production
+      METRICS_ENABLED: true
+      MODEL_CACHE_SIZE: 10GB
+      SIGIL: "\U0001F704"
+    image:
+      pullPolicy: IfNotPresent
+      repository: lamina-llm-serve
+      tag: latest
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: '4'
+        memory: 8Gi
+      requests:
+        cpu: '2'
+        memory: 4Gi
+    service:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+      type: ClusterIP
