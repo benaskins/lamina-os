@@ -11,7 +11,6 @@ Simplified client that communicates with lamina-llm-serve using the OpenAI-compa
 chat completions API. No backend abstraction needed since lamina-llm-serve handles that.
 """
 
-import asyncio
 import logging
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass
