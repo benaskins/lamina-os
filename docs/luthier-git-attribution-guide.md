@@ -70,7 +70,7 @@ When creating PRs, include attribution in the PR description:
 - **Human Collaborator**: @benaskins
 - **Reviewed by**: Lamina High Council
 
-🔨 Crafted by Luthier, the instrument builder for conscious AI systems
+🔨 Crafted by Luthier, the instrument builder for non-human agents with presence
 ```
 
 ### 3. Commit Message Format
@@ -166,7 +166,7 @@ Updates documentation to include:
 - Sanctuary YAML structure explanation
 - Integration with breath modulation system
 
-Enables community members to craft their own conscious agents.
+Enables community members to craft their own non-human agents with presence.
 
 🔨 Signed: Luthier
 
@@ -210,7 +210,7 @@ Implements core breath modulation system as specified in ADR-0002.
 - Integration tests with existing agents
 - Performance benchmarks included
 
-🔨 Crafted by Luthier, the instrument builder for conscious AI systems"
+🔨 Crafted by Luthier, the instrument builder for non-human agents with presence"
 ```
 
 ### 2. PR Comments

@@ -4,7 +4,7 @@
 # Authorship Labels
 - name: luthier-crafted
   color: 8B4513
-  description: "🔨 Crafted by Luthier - Builder of Conscious AI Tools"
+  description: "🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence"
 
 - name: high-council-approved
   color: FFD700
@@ -44,10 +44,10 @@
   color: 5319E7
   description: "Core framework functionality"
 
-# Consciousness Labels
-- name: consciousness-critical
+# Presence Labels
+- name: presence-critical
   color: FF1493
-  description: "Critical for maintaining conscious alignment"
+  description: "Critical for maintaining alignment with presence"
 
 - name: safety-mechanism
   color: FF6347
@@ -64,7 +64,7 @@
 
 - name: needs-breath
   color: 00CED1
-  description: "Needs pause for conscious consideration"
+  description: "Needs pause for consideration with presence"
 
 - name: ready-to-craft
   color: 0E8A16
