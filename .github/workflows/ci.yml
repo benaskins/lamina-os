@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
+        test-tier: ["unit", "integration"]
     
     steps:
     - uses: actions/checkout@v4
@@ -28,18 +29,48 @@ jobs:
       run: uv sync --extra dev
     
     - name: Lint with ruff
+      if: matrix.test-tier == 'unit'
       run: uv run ruff check
     
     - name: Format check with black
+      if: matrix.test-tier == 'unit'
       run: uv run black --check .
     
     - name: Security check with bandit
+      if: matrix.test-tier == 'unit'
       run: uv run bandit -r packages/ || true
     
-    - name: Test with pytest
-      run: uv run pytest --cov=packages --cov-report=xml
+    # Unit Tests (Fast)
+    - name: Run unit tests
+      if: matrix.test-tier == 'unit'
+      run: uv run pytest packages/lamina-core/tests/ --cov=packages --cov-report=xml -v
     
-    - name: Upload coverage to Codecov
+    # Integration Tests (Real AI)
+    - name: Set up lamina-llm-serve for integration tests
+      if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
+      run: |
+        # Use existing lamina-llm-serve from workspace
+        cd ../lamina-llm-serve
+        uv sync
+        
+        # Download test model using lamina-llm-serve model manager
+        uv run python scripts/model-manager.py download llama3.2-1b-q4_k_m --source huggingface || echo "Model download failed, tests may skip"
+        
+        # Verify model is available
+        uv run python scripts/model-manager.py validate
+        
+        # Start server in background
+        uv run python -m lamina_llm_serve.server --host 0.0.0.0 --port 8000 &
+        sleep 15  # Wait for server startup
+    
+    - name: Run integration tests
+      if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
+      run: |
+        cd lamina-os
+        uv run pytest packages/lamina-core/tests/ --integration -v --tb=short
+    
+    - name: Upload unit test coverage to Codecov
+      if: matrix.test-tier == 'unit'
       uses: codecov/codecov-action@v4
       with:
         file: ./coverage.xml

@@ -177,16 +177,17 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra -q --strict-markers --strict-config"
-testpaths = ["lamina/tests"]
+testpaths = ["tests"]
 filterwarnings = [
     "error",
-    "ignore::UserWarning",
+    "ignore::UserWarning", 
     "ignore::DeprecationWarning",
 ]
 markers = [
+    "unit: marks tests as unit tests (fast, mock-based)",
+    "integration: marks tests as integration tests (real AI models)",
+    "e2e: marks tests as end-to-end tests (full system)",
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
 ]
 
 [tool.coverage.run]
