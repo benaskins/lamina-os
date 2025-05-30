@@ -1,0 +1,13 @@
+infrastructure:
+  docker_enabled: true
+  mtls_enabled: true
+  observability_enabled: true
+memory:
+  backend: chromadb
+  embedding_model: all-MiniLM-L6-v2
+  enabled: true
+system:
+  ai_model: llama3.2:3b
+  ai_provider: ollama
+  description: AI Agent Sanctuary
+  name: test-cli-sanctuary

@@ -1,0 +1,32 @@
+entities:
+  user:
+    type: human
+    trust_level: high
+    permissions:
+    - chat
+    - query
+    - memory_access
+    constraints:
+    - basic_safety
+    - privacy_protection
+  system:
+    type: system
+    trust_level: maximum
+    permissions:
+    - admin
+    - config
+    - monitoring
+    constraints: []
+groups:
+  users:
+    members:
+    - user
+    default_permissions:
+    - chat
+    - query
+  administrators:
+    members:
+    - system
+    default_permissions:
+    - admin
+    - config
