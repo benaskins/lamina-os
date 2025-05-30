@@ -191,6 +191,91 @@ class LLMServer:
                 logger.error(f"Error proxying to {model_name}: {e}")
                 return jsonify({"error": "Model server error"}), 502
 
+        @self.app.route("/v1/chat/completions", methods=["POST"])
+        def chat_completions():
+            """OpenAI-compatible chat completions endpoint"""
+            try:
+                request_data = request.get_json()
+                if not request_data:
+                    return jsonify({"error": "Invalid JSON request"}), 400
+
+                # Extract required parameters
+                model_name = request_data.get("model")
+                messages = request_data.get("messages", [])
+                stream = request_data.get("stream", False)
+
+                if not model_name:
+                    return jsonify({"error": "Missing required parameter: model"}), 400
+                
+                if not messages:
+                    return jsonify({"error": "Missing required parameter: messages"}), 400
+
+                # Validate model exists in registry
+                model_info = self.model_manager.get_model_info(model_name)
+                if not model_info:
+                    available_models = list(self.model_manager.list_models())
+                    return jsonify({
+                        "error": f"Model '{model_name}' not found",
+                        "available_models": available_models
+                    }), 404
+
+                # Auto-start model if not running (download-once pattern)
+                if model_name not in self.active_servers:
+                    logger.info(f"Model {model_name} not active, starting...")
+                    
+                    # Check if model is available on disk
+                    if not self.model_manager.is_model_available(model_name):
+                        return jsonify({
+                            "error": f"Model '{model_name}' not available on filesystem",
+                            "hint": "Use the download endpoint to fetch this model first"
+                        }), 503
+                    
+                    # Start the model server
+                    try:
+                        start_result = self._start_model_server(model_name)
+                        if "error" in start_result:
+                            return jsonify(start_result), 500
+                        logger.info(f"Successfully started model {model_name}")
+                    except Exception as e:
+                        logger.error(f"Failed to start model {model_name}: {e}")
+                        return jsonify({"error": f"Failed to start model: {str(e)}"}), 500
+
+                # Proxy to the active model server using OpenAI chat format
+                server_info = self.active_servers[model_name]
+                chat_endpoint = server_info["backend"].get_chat_endpoint(server_info["port"])
+
+                # Forward the OpenAI-compatible request
+                response = requests.post(
+                    chat_endpoint,
+                    json=request_data,
+                    headers={"Content-Type": "application/json"},
+                    timeout=60,
+                    stream=stream
+                )
+
+                if stream:
+                    # Handle streaming response
+                    return Response(
+                        response.iter_content(chunk_size=1024),
+                        status=response.status_code,
+                        headers={
+                            "Content-Type": "text/plain; charset=utf-8",
+                            "Cache-Control": "no-cache",
+                            "Connection": "keep-alive"
+                        }
+                    )
+                else:
+                    # Handle non-streaming response
+                    return Response(
+                        response.content,
+                        status=response.status_code,
+                        headers={"Content-Type": "application/json"}
+                    )
+
+            except Exception as e:
+                logger.error(f"Error in chat completions: {e}")
+                return jsonify({"error": "Internal server error"}), 500
+
     def _start_model_server(self, model_name: str) -> dict[str, Any]:
         """Start a server process for the given model"""
         if model_name in self.active_servers:

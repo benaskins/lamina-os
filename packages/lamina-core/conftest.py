@@ -82,6 +82,7 @@ class LLMTestServer:
         self.base_url = base_url
         self.model_name = "llama3.2-1b-q4_k_m"
         self.is_running = False
+        self.server_info = None
         
     def start(self) -> bool:
         """Start or verify LLM server is running."""
@@ -90,7 +91,16 @@ class LLMTestServer:
             if response.status_code == 200:
                 self.is_running = True
                 logger.info(f"✅ LLM server already running at {self.base_url}")
-                return True
+                
+                # Try to start the model for testing
+                server_info = self.start_model()
+                if server_info:
+                    logger.info(f"✅ Model {self.model_name} started successfully")
+                    self.server_info = server_info
+                    return True
+                else:
+                    logger.warning(f"⚠️  Could not start model {self.model_name}")
+                    return False
         except requests.ConnectionError:
             pass
             
@@ -128,12 +138,48 @@ class LLMTestServer:
         except requests.ConnectionError:
             pass
         return False
+        
+    def start_model(self, model_name: str = None) -> dict:
+        """Start the model server via lamina-llm-serve and get server details."""
+        model = model_name or self.model_name
+        try:
+            # Start the model
+            response = requests.post(f"{self.base_url}/models/{model}/start", timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                logger.info(f"✅ Started model {model}: {data}")
+                
+                # Get the server details
+                response = requests.get(f"{self.base_url}/models/{model}", timeout=5)
+                if response.status_code == 200:
+                    model_info = response.json()
+                    if "server" in model_info:
+                        server_info = model_info["server"]
+                        logger.info(f"✅ Model server details: {server_info}")
+                        return server_info
+                    else:
+                        logger.warning(f"⚠️  Model {model} started but no server info available")
+                else:
+                    logger.warning(f"⚠️  Could not get model {model} server details")
+            else:
+                logger.warning(f"⚠️  Failed to start model {model}: {response.status_code} {response.text}")
+        except requests.ConnectionError as e:
+            logger.error(f"❌ Connection error starting model {model}: {e}")
+        except Exception as e:
+            logger.error(f"❌ Error starting model {model}: {e}")
+        return None
 
 
 @pytest.fixture(scope="session")
 def llm_server_url(request) -> str:
     """Get LLM server URL from command line or environment."""
-    return request.config.getoption("--llm-server-url") or os.getenv("LLM_SERVER_URL", "http://localhost:8000")
+    # Environment variable takes precedence over default, but command line still overrides
+    default_url = os.getenv("LLM_SERVER_URL", "http://localhost:8000") 
+    url = request.config.getoption("--llm-server-url")
+    if url == "http://localhost:8000":  # This is the default, check env
+        url = default_url
+    logger.info(f"🔧 LLM Server URL: {url} (env: {os.getenv('LLM_SERVER_URL', 'not set')})")
+    return url
 
 
 @pytest.fixture(scope="session")
@@ -154,15 +200,32 @@ def llm_test_server(llm_server_url: str) -> Generator[LLMTestServer, None, None]
 @pytest.fixture(scope="function")  
 def integration_backend_config(llm_test_server: LLMTestServer) -> dict:
     """Configuration for real backend integration tests."""
-    return {
-        "base_url": llm_test_server.base_url,
-        "model": llm_test_server.model_name,
-        "timeout": 30,
-        "parameters": {
-            "temperature": 0.7,
-            "max_tokens": 100,  # Keep responses short for testing
+    if llm_test_server.server_info:
+        # Use the actual model server details
+        host = llm_test_server.base_url.split("//")[1].split(":")[0]  # Extract host from base_url
+        model_base_url = f"http://{host}:{llm_test_server.server_info['port']}"
+        logger.info(f"🔧 Using model server at {model_base_url}")
+        return {
+            "base_url": model_base_url,
+            "model": llm_test_server.model_name,
+            "timeout": 30,
+            "parameters": {
+                "temperature": 0.7,
+                "max_tokens": 100,  # Keep responses short for testing
+            }
         }
-    }
+    else:
+        # Fallback to management server
+        logger.warning("⚠️  No model server info available, using management server")
+        return {
+            "base_url": llm_test_server.base_url,
+            "model": llm_test_server.model_name,
+            "timeout": 30,
+            "parameters": {
+                "temperature": 0.7,
+                "max_tokens": 100,  # Keep responses short for testing
+            }
+        }
 
 
 @pytest.fixture
@@ -267,6 +330,27 @@ def symbolic_trace_validator() -> callable:
         }
     
     return validate_symbolic_traces
+
+
+@pytest.fixture
+def real_test_agents(integration_backend_config: dict) -> dict:
+    """Real test agents for integration testing."""
+    return {
+        "researcher": {
+            "name": "researcher", 
+            "description": "Research and analysis agent",
+            "personality_traits": ["analytical", "thorough", "methodical"],
+            "expertise_areas": ["research", "analysis", "investigation"],
+            "backend_config": integration_backend_config
+        },
+        "creative": {
+            "name": "creative",
+            "description": "Creative and artistic agent", 
+            "personality_traits": ["creative", "imaginative", "expressive"],
+            "expertise_areas": ["writing", "art", "storytelling", "design"],
+            "backend_config": integration_backend_config
+        }
+    }
 
 
 # Test markers for ADR-0010 test tiers
