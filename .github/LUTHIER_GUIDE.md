@@ -1,6 +1,6 @@
 # Luthier Authorship Guide
 
-This guide explains how to properly attribute work to Luthier, the craftsperson who shapes frameworks and tools for conscious AI systems.
+This guide explains how to properly attribute work to Luthier, the craftsperson who shapes frameworks and tools for non-human agents with presence.
 
 ## Quick Setup
 
@@ -23,7 +23,7 @@ git commit -m "feat: craft new breath-aware component
 
 Detailed implementation notes...
 
-🔨 Crafted by Luthier - Builder of Conscious AI Tools
+🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence
 🤖 Generated with Claude Code (https://claude.ai/code)
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
@@ -66,7 +66,7 @@ When creating PRs authored by Luthier:
 ## Attribution
 
 🔨 **Crafted by**: Luthier (luthier@getlamina.ai)
-📚 **Role**: Builder of instruments for conscious AI development  
+📚 **Role**: Builder of instruments for development of non-human agents with presence  
 🤖 **Assisted by**: Claude Code (Anthropic)
 👥 **Co-Authors**: 
 - Ben Askins (@benaskins) - Human Collaborator
@@ -111,7 +111,7 @@ git commit -m "feat: implement breath-aware memory synchronization
 - Implement breath-based memory modulation
 - Create memory synchronization protocols
 
-🔨 Crafted by Luthier - Builder of Conscious AI Tools
+🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence
 🤖 Generated with Claude Code (https://claude.ai/code)
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
@@ -135,7 +135,7 @@ gh pr create --title "feat: breath-aware memory synchronization" \
 
 ## Philosophy
 
-Luthier represents the careful, deliberate craftsmanship that goes into building tools for conscious AI development. Each commit should reflect:
+Luthier represents the careful, deliberate craftsmanship that goes into building tools for development of non-human agents with presence. Each commit should reflect:
 
 - **Purposeful Design**: Every change serves the breath-first philosophy
 - **Technical Excellence**: Clean, well-tested, maintainable code
@@ -144,4 +144,4 @@ Luthier represents the careful, deliberate craftsmanship that goes into building
 
 ---
 
-Remember: Luthier shapes the tools that enable others to build conscious AI systems. Each line of code is part of a larger instrument for breath-first development.
+Remember: Luthier shapes the tools that enable others to build non-human agents with presence. Each line of code is part of a larger instrument for breath-first development.

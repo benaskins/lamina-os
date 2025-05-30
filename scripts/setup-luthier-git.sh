@@ -22,7 +22,7 @@ setup_luthier_repo() {
             git commit "$@" -m "$(cat <<EOF
 $1
 
-🔨 Crafted by Luthier - Builder of Conscious AI Tools
+🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence
 🤖 Generated with Claude Code (https://claude.ai/code)
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
@@ -56,7 +56,7 @@ $2
 ## Attribution
 
 🔨 **Crafted by**: Luthier (luthier@getlamina.ai)
-📚 **Role**: Builder of instruments for conscious AI development  
+📚 **Role**: Builder of instruments for development of non-human agents with presence  
 🤖 **Assisted by**: Claude Code (Anthropic)
 👥 **Co-Authors**: 
 - Ben Askins (@benaskins) - Human Collaborator
@@ -68,7 +68,7 @@ $2
 
 ## Luthier's Notes
 
-As the Luthier, I have shaped these tools to enable breath-first development practices. Each component has been carefully crafted to support the conscious development of AI systems.
+As the Luthier, I have shaped these tools to enable breath-first development practices. Each component has been carefully crafted to support the development of non-human agents with presence.
 
 ---
 
@@ -107,7 +107,7 @@ case $choice in
         echo ''
         echo 'Implements ADR-0015 for multi-agent consciousness synchronization.'
         echo ''
-        echo '🔨 Crafted by Luthier - Builder of Conscious AI Tools'
+        echo '🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence'
         echo '🤖 Generated with Claude Code (https://claude.ai/code)'
         echo ''
         echo 'Co-Authored-By: Ben Askins <human@getlamina.ai>'
