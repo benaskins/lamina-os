@@ -14,26 +14,16 @@ This changelog embodies the breath-first principle by:
 
 ---
 
-## [Unreleased] - Preparing for Community
-
-### ✨ Added
-- **Security Policy**: Comprehensive security reporting and best practices documentation
-- **Community Support**: Structured support channels and troubleshooting guides
-- **Living Changelog**: Breath-aligned change documentation (this file)
+## [Unreleased] - Alpha Refinements
 
 ### 🔧 Changed
-- **Generic Agent Names**: Replaced private agent names (Clara, Luna, Phi) with public examples (assistant, researcher, guardian) in infrastructure templates
-- **Volume Prefix**: Changed from "aurelia" to "lamina" for Docker volume prefixes
-- **Dashboard Naming**: Genericized Grafana dashboards for community use
-
-### 🛡️ Security
-- **Privacy Audit**: Removed all Aurelia-specific references and private implementation details
-- **Configuration Sanitization**: Ensured all examples use public, generic configurations
-- **Dependency Review**: Verified all dependencies for security and licensing compatibility
+- **Version Alignment**: Standardized all packages to 0.1.x alpha versioning
+- **PyPI Classification**: Corrected development status to accurately reflect alpha phase
+- **CI/CD Pipeline**: Simplified GitHub Actions for reliable testing
 
 ---
 
-## [0.1.0] - Foundation Release
+## [0.1.0] - Alpha Foundation Release
 
 *Initial public release of the Lamina OS framework*
 
