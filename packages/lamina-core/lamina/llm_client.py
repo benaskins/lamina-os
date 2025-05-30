@@ -11,6 +11,7 @@ Simplified client that communicates with lamina-llm-serve using the OpenAI-compa
 chat completions API. No backend abstraction needed since lamina-llm-serve handles that.
 """
 
+import asyncio
 import logging
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass
@@ -34,7 +35,7 @@ class LaminaLLMClient:
     def __init__(self, config: dict[str, Any]):
         """
         Initialize the Lamina LLM client.
-        
+
         Args:
             config: Configuration dictionary with:
                 - base_url: URL of lamina-llm-serve instance
@@ -53,11 +54,11 @@ class LaminaLLMClient:
     ) -> AsyncGenerator[str, None]:
         """
         Generate response using lamina-llm-serve's chat completions API.
-        
+
         Args:
             messages: List of conversation messages
             stream: Whether to stream the response
-            
+
         Yields:
             Generated text chunks or complete response
         """
@@ -125,7 +126,7 @@ class LaminaLLMClient:
     async def is_available(self) -> bool:
         """
         Check if lamina-llm-serve is available and responsive.
-        
+
         Returns:
             True if the service is available, False otherwise
         """
@@ -144,9 +145,9 @@ class LaminaLLMClient:
     async def load_model(self) -> bool:
         """
         Ensure the model is loaded in lamina-llm-serve.
-        
+
         The service handles auto-loading, so this just checks if the model exists.
-        
+
         Returns:
             True if model is available, False otherwise
         """
@@ -170,7 +171,7 @@ class LaminaLLMClient:
     async def unload_model(self) -> bool:
         """
         Request to stop the model in lamina-llm-serve.
-        
+
         Returns:
             True if model stopped successfully, False otherwise
         """
