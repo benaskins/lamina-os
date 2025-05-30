@@ -206,7 +206,7 @@ class LLMServer:
 
                 if not model_name:
                     return jsonify({"error": "Missing required parameter: model"}), 400
-                
+
                 if not messages:
                     return jsonify({"error": "Missing required parameter: messages"}), 400
 
@@ -222,14 +222,14 @@ class LLMServer:
                 # Auto-start model if not running (download-once pattern)
                 if model_name not in self.active_servers:
                     logger.info(f"Model {model_name} not active, starting...")
-                    
+
                     # Check if model is available on disk
                     if not self.model_manager.is_model_available(model_name):
                         return jsonify({
                             "error": f"Model '{model_name}' not available on filesystem",
                             "hint": "Use the download endpoint to fetch this model first"
                         }), 503
-                    
+
                     # Start the model server
                     try:
                         start_result = self._start_model_server(model_name)

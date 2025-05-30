@@ -18,7 +18,7 @@ import pytest
 from lamina import get_coordinator
 
 
-@pytest.mark.unit  
+@pytest.mark.unit
 class TestAgentCoordinator:
     """Test breath-first agent coordination."""
 

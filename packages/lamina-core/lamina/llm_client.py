@@ -11,8 +11,6 @@ Simplified client that communicates with lamina-llm-serve using the OpenAI-compa
 chat completions API. No backend abstraction needed since lamina-llm-serve handles that.
 """
 
-import asyncio
-import json
 import logging
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass
@@ -69,7 +67,7 @@ class LaminaLLMClient:
                 {"role": msg.role, "content": msg.content}
                 for msg in messages
             ]
-            
+
             # Prepare request payload
             payload = {
                 "model": self.model_name,
@@ -77,19 +75,19 @@ class LaminaLLMClient:
                 "stream": stream,
                 **self.parameters,  # Include temperature, max_tokens, etc.
             }
-            
+
             url = f"{self.base_url}/v1/chat/completions"
             timeout = aiohttp.ClientTimeout(total=self.timeout)
-            
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.post(url, json=payload) as response:
-                    
+
                     if response.status != 200:
                         error_text = await response.text()
                         logger.error(f"LLM Serve error {response.status}: {error_text}")
                         yield f"Error: LLM server returned {response.status}"
                         return
-                    
+
                     if stream:
                         # Handle streaming response
                         async for line in response.content:
@@ -101,7 +99,7 @@ class LaminaLLMClient:
                     else:
                         # Handle non-streaming response
                         response_data = await response.json()
-                        
+
                         # Extract content from OpenAI-format response
                         if "choices" in response_data and len(response_data["choices"]) > 0:
                             choice = response_data["choices"][0]
@@ -113,7 +111,7 @@ class LaminaLLMClient:
                         else:
                             logger.warning("No choices in response from LLM serve")
                             yield str(response_data)
-                            
+
         except asyncio.TimeoutError:
             logger.error(f"Timeout connecting to LLM serve at {self.base_url}")
             yield "Error: Request timeout"
@@ -134,11 +132,11 @@ class LaminaLLMClient:
         try:
             url = f"{self.base_url}/health"
             timeout = aiohttp.ClientTimeout(total=5)  # Short timeout for health check
-            
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.get(url) as response:
                     return response.status == 200
-                    
+
         except Exception as e:
             logger.debug(f"LLM Serve not available: {e}")
             return False
@@ -155,7 +153,7 @@ class LaminaLLMClient:
         try:
             url = f"{self.base_url}/models/{self.model_name}"
             timeout = aiohttp.ClientTimeout(total=10)
-            
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.get(url) as response:
                     if response.status == 200:
@@ -164,7 +162,7 @@ class LaminaLLMClient:
                     else:
                         logger.warning(f"Model {self.model_name} not found in LLM serve")
                         return False
-                        
+
         except Exception as e:
             logger.error(f"Error checking model {self.model_name}: {e}")
             return False
@@ -179,7 +177,7 @@ class LaminaLLMClient:
         try:
             url = f"{self.base_url}/models/{self.model_name}/stop"
             timeout = aiohttp.ClientTimeout(total=10)
-            
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.post(url) as response:
                     if response.status == 200:
@@ -188,7 +186,7 @@ class LaminaLLMClient:
                     else:
                         logger.warning(f"Failed to stop model {self.model_name}: {response.status}")
                         return False
-                        
+
         except Exception as e:
             logger.error(f"Error stopping model {self.model_name}: {e}")
             return False
