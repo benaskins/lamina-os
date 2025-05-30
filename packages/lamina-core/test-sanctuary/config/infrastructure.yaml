@@ -1,0 +1,12 @@
+infrastructure:
+  docker:
+    compose_version: '3.8'
+    network_name: test-sanctuary_network
+  nginx:
+    enabled: true
+    mtls_enabled: true
+    port: 443
+  observability:
+    grafana_enabled: true
+    loki_enabled: true
+    vector_enabled: true

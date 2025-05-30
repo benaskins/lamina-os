@@ -13,13 +13,11 @@ Helm charts and automated CI/CD pipelines.
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import click
 
 from ..environment.config import load_environment_config, validate_environment_name
 from ..environment.helm import HelmChartGenerator, HelmError
-from ..environment.manager import EnvironmentManager
 
 logger = logging.getLogger(__name__)
 
@@ -52,11 +50,11 @@ def gitops_cli():
 def generate_charts(environment: str, output_dir: Path, validate: bool, package: bool):
     """
     Generate Helm charts for GitOps deployment.
-    
+
     Creates production-ready Helm charts with CI/CD integration for the
     specified environment. Charts include templates, values, and GitOps
     configuration for automated deployment on merge to main.
-    
+
     ENVIRONMENT: Environment name (development, test, production)
     """
     if not validate_environment_name(environment):
@@ -96,14 +94,14 @@ def generate_charts(environment: str, output_dir: Path, validate: bool, package:
         # Display next steps
         click.echo(f"\n{config.sigil} GitOps Setup Complete!")
         click.echo("\n📋 Next Steps:")
-        click.echo(f"  1. Commit the generated chart to your repository:")
+        click.echo("  1. Commit the generated chart to your repository:")
         click.echo(f"     git add {chart_dir}")
         click.echo(f"     git commit -m 'feat: add {environment} Helm chart for GitOps deployment'")
-        click.echo(f"  2. Configure your CI/CD secrets:")
-        click.echo(f"     - KUBECONFIG: Base64-encoded kubeconfig for your cluster")
-        click.echo(f"  3. Push to main branch to trigger deployment:")
-        click.echo(f"     git push origin main")
-        click.echo(f"\n🚀 Future deployments will be automated on merge to main!")
+        click.echo("  2. Configure your CI/CD secrets:")
+        click.echo("     - KUBECONFIG: Base64-encoded kubeconfig for your cluster")
+        click.echo("  3. Push to main branch to trigger deployment:")
+        click.echo("     git push origin main")
+        click.echo("\n🚀 Future deployments will be automated on merge to main!")
 
     except FileNotFoundError as e:
         click.echo(f"❌ Environment configuration not found: {e}")
@@ -148,19 +146,19 @@ def generate_charts(environment: str, output_dir: Path, validate: bool, package:
 )
 def deploy(
     environment: str,
-    chart_path: Optional[Path],
-    namespace: Optional[str],
+    chart_path: Path | None,
+    namespace: str | None,
     dry_run: bool,
     wait: bool,
     timeout: int,
 ):
     """
     Deploy environment using Helm chart.
-    
+
     Deploys the specified environment to Kubernetes using the generated
     Helm chart. This command is typically used for manual deployments
     or testing before setting up full GitOps automation.
-    
+
     ENVIRONMENT: Environment name (development, test, production)
     """
     if not validate_environment_name(environment):
@@ -170,7 +168,7 @@ def deploy(
     try:
         # Load environment configuration
         config = load_environment_config(environment)
-        
+
         # Set defaults
         if chart_path is None:
             chart_path = Path.cwd() / "charts" / f"lamina-{environment}"
@@ -188,35 +186,43 @@ def deploy(
 
         # Build helm command
         cmd = [
-            "helm", "upgrade", "--install", f"lamina-{environment}",
+            "helm",
+            "upgrade",
+            "--install",
+            f"lamina-{environment}",
             str(chart_path),
-            "--namespace", namespace,
+            "--namespace",
+            namespace,
             "--create-namespace",
         ]
 
         if dry_run:
             cmd.append("--dry-run")
             click.echo(f"{config.sigil} Performing dry run...")
-        
+
         if wait and not dry_run:
             cmd.extend(["--wait", "--timeout", f"{timeout}s"])
 
         # Add environment-specific values
-        cmd.extend([
-            "--set", f"global.environment={environment}",
-            "--set", f"global.sigil={config.sigil}",
-        ])
+        cmd.extend(
+            [
+                "--set",
+                f"global.environment={environment}",
+                "--set",
+                f"global.sigil={config.sigil}",
+            ]
+        )
 
         # Execute deployment
         import subprocess
-        
+
         click.echo(f"{config.sigil} Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, capture_output=True, text=True)
 
         if result.returncode == 0:
             click.echo(f"{config.sigil} ✅ Deployment successful!")
             if not dry_run:
-                click.echo(f"\n📋 Deployment Status:")
+                click.echo("\n📋 Deployment Status:")
                 click.echo(result.stdout)
         else:
             click.echo(f"{config.sigil} ❌ Deployment failed!")
@@ -237,13 +243,13 @@ def deploy(
     type=str,
     help="Kubernetes namespace (defaults to lamina-{environment})",
 )
-def status(environment: str, namespace: Optional[str]):
+def status(environment: str, namespace: str | None):
     """
     Check deployment status for environment.
-    
+
     Shows the current status of deployments, services, and pods
     for the specified environment in Kubernetes.
-    
+
     ENVIRONMENT: Environment name (development, test, production)
     """
     if not validate_environment_name(environment):
@@ -253,7 +259,7 @@ def status(environment: str, namespace: Optional[str]):
     try:
         # Load environment configuration
         config = load_environment_config(environment)
-        
+
         if namespace is None:
             namespace = f"lamina-{environment}"
 
@@ -263,36 +269,60 @@ def status(environment: str, namespace: Optional[str]):
         import subprocess
 
         # Check deployments
-        click.echo(f"\n📊 Deployments:")
-        result = subprocess.run([
-            "kubectl", "get", "deployments", "-n", namespace,
-            "--output=custom-columns=NAME:.metadata.name,READY:.status.readyReplicas,UP-TO-DATE:.status.updatedReplicas,AVAILABLE:.status.availableReplicas"
-        ], capture_output=True, text=True)
-        
+        click.echo("\n📊 Deployments:")
+        result = subprocess.run(
+            [
+                "kubectl",
+                "get",
+                "deployments",
+                "-n",
+                namespace,
+                "--output=custom-columns=NAME:.metadata.name,READY:.status.readyReplicas,UP-TO-DATE:.status.updatedReplicas,AVAILABLE:.status.availableReplicas",
+            ],
+            capture_output=True,
+            text=True,
+        )
+
         if result.returncode == 0:
             click.echo(result.stdout)
         else:
             click.echo(f"❌ Failed to get deployments: {result.stderr}")
 
         # Check services
-        click.echo(f"\n🌐 Services:")
-        result = subprocess.run([
-            "kubectl", "get", "services", "-n", namespace,
-            "--output=custom-columns=NAME:.metadata.name,TYPE:.spec.type,CLUSTER-IP:.spec.clusterIP,PORTS:.spec.ports[*].port"
-        ], capture_output=True, text=True)
-        
+        click.echo("\n🌐 Services:")
+        result = subprocess.run(
+            [
+                "kubectl",
+                "get",
+                "services",
+                "-n",
+                namespace,
+                "--output=custom-columns=NAME:.metadata.name,TYPE:.spec.type,CLUSTER-IP:.spec.clusterIP,PORTS:.spec.ports[*].port",
+            ],
+            capture_output=True,
+            text=True,
+        )
+
         if result.returncode == 0:
             click.echo(result.stdout)
         else:
             click.echo(f"❌ Failed to get services: {result.stderr}")
 
         # Check pods
-        click.echo(f"\n🐳 Pods:")
-        result = subprocess.run([
-            "kubectl", "get", "pods", "-n", namespace,
-            "--output=custom-columns=NAME:.metadata.name,STATUS:.status.phase,RESTARTS:.status.containerStatuses[0].restartCount,AGE:.metadata.creationTimestamp"
-        ], capture_output=True, text=True)
-        
+        click.echo("\n🐳 Pods:")
+        result = subprocess.run(
+            [
+                "kubectl",
+                "get",
+                "pods",
+                "-n",
+                namespace,
+                "--output=custom-columns=NAME:.metadata.name,STATUS:.status.phase,RESTARTS:.status.containerStatuses[0].restartCount,AGE:.metadata.creationTimestamp",
+            ],
+            capture_output=True,
+            text=True,
+        )
+
         if result.returncode == 0:
             click.echo(result.stdout)
         else:
@@ -321,11 +351,11 @@ def status(environment: str, namespace: Optional[str]):
 def setup(environment: str, repo_url: str, argocd: bool):
     """
     Complete GitOps setup for environment.
-    
+
     Generates Helm charts, CI/CD workflows, and ArgoCD applications
     for a complete GitOps deployment setup. This is the all-in-one
     command for setting up production Kubernetes deployments.
-    
+
     ENVIRONMENT: Environment name (development, test, production)
     """
     if not validate_environment_name(environment):
@@ -357,7 +387,7 @@ def setup(environment: str, repo_url: str, argocd: bool):
         package_path = generator.package_chart()
 
         click.echo(f"{config.sigil} ✅ GitOps setup complete!")
-        click.echo(f"\n📋 Generated Files:")
+        click.echo("\n📋 Generated Files:")
         click.echo(f"  📊 Helm Chart: {chart_dir}")
         click.echo(f"  📦 Package: {package_path}")
         click.echo(f"  🔄 GitHub Workflow: {chart_dir}/.github/workflows/")
@@ -365,27 +395,27 @@ def setup(environment: str, repo_url: str, argocd: bool):
             click.echo(f"  🐙 ArgoCD App: {chart_dir}/argocd-application.yaml")
 
         # Display comprehensive setup instructions
-        click.echo(f"\n🚀 Complete GitOps Deployment Setup:")
-        click.echo(f"\n1️⃣ Commit and Push Charts:")
-        click.echo(f"   git add charts/")
+        click.echo("\n🚀 Complete GitOps Deployment Setup:")
+        click.echo("\n1️⃣ Commit and Push Charts:")
+        click.echo("   git add charts/")
         click.echo(f"   git commit -m 'feat: GitOps setup for {environment} environment'")
-        click.echo(f"   git push origin main")
-        
-        click.echo(f"\n2️⃣ Configure Repository Secrets:")
-        click.echo(f"   • KUBECONFIG: Base64-encoded kubeconfig")
-        click.echo(f"   • Navigate to: Settings > Secrets and variables > Actions")
-        
-        click.echo(f"\n3️⃣ Deploy via GitOps:")
-        click.echo(f"   • Automatic: Any changes to charts/ or environments/ trigger deployment")
-        click.echo(f"   • Manual: Push to main branch or run GitHub Actions workflow")
-        
-        if argocd:
-            click.echo(f"\n4️⃣ ArgoCD Setup (Optional):")
-            click.echo(f"   kubectl apply -f {chart_dir}/argocd-application.yaml")
-            click.echo(f"   # Enables continuous deployment from main branch")
+        click.echo("   git push origin main")
 
-        click.echo(f"\n✨ Future deployments will be fully automated!")
-        click.echo(f"   Just modify charts or environment configs and merge to main.")
+        click.echo("\n2️⃣ Configure Repository Secrets:")
+        click.echo("   • KUBECONFIG: Base64-encoded kubeconfig")
+        click.echo("   • Navigate to: Settings > Secrets and variables > Actions")
+
+        click.echo("\n3️⃣ Deploy via GitOps:")
+        click.echo("   • Automatic: Any changes to charts/ or environments/ trigger deployment")
+        click.echo("   • Manual: Push to main branch or run GitHub Actions workflow")
+
+        if argocd:
+            click.echo("\n4️⃣ ArgoCD Setup (Optional):")
+            click.echo(f"   kubectl apply -f {chart_dir}/argocd-application.yaml")
+            click.echo("   # Enables continuous deployment from main branch")
+
+        click.echo("\n✨ Future deployments will be fully automated!")
+        click.echo("   Just modify charts or environment configs and merge to main.")
 
     except FileNotFoundError as e:
         click.echo(f"❌ Environment configuration not found: {e}")

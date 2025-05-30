@@ -1,0 +1,20 @@
+agent:
+  name: creative-assistant
+  display_name: Creative-Assistant
+container:
+  image_tag: creative-assistant
+  port: 8000
+  environment:
+    AGENT_NAME: creative-assistant
+    AI_PROVIDER: ollama
+    AI_MODEL: llama3.2:3b
+resources:
+  memory: 1g
+  cpu: '0.5'
+  storage: 1g
+networking:
+  expose_port: false
+  internal_only: true
+security:
+  mtls_enabled: true
+  certificate_required: true
