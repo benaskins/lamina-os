@@ -11,7 +11,7 @@ A framework for building AI agent systems with conscious, deliberate operations
 that prioritize presence and wisdom over reactive speed.
 """
 
-__version__ = "1.0.2"
+__version__ = "0.1.0"
 
 
 # Lazy imports to avoid dependency issues
