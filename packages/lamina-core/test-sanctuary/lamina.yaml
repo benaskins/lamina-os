@@ -1,0 +1,6 @@
+ai_model: llama3.2:3b
+ai_provider: ollama
+created_with: lamina-core
+description: AI Agent Sanctuary
+name: test-sanctuary
+version: 1.0.0

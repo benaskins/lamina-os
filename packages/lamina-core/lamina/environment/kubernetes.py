@@ -67,7 +67,9 @@ class KubernetesOrchestrator:
                 check=True,
             )
             client_info = json.loads(result.stdout)
-            logger.info(f"{self.config.sigil} kubectl client version: {client_info['clientVersion']['gitVersion']}")
+            logger.info(
+                f"{self.config.sigil} kubectl client version: {client_info['clientVersion']['gitVersion']}"
+            )
         except (subprocess.CalledProcessError, FileNotFoundError, json.JSONDecodeError) as e:
             raise KubernetesError(f"kubectl not available or not functional: {e}")
 
@@ -282,11 +284,13 @@ class KubernetesOrchestrator:
         finally:
             Path(manifest_file).unlink(missing_ok=True)
 
-    def _generate_deployment(self, service_name: str, service_config: dict[str, Any]) -> dict[str, Any]:
+    def _generate_deployment(
+        self, service_name: str, service_config: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate Kubernetes Deployment manifest."""
         # Extract resource requirements
         resources = service_config.get("resources", {})
-        
+
         # Convert Lamina resource format to Kubernetes format
         k8s_resources = {}
         if "requests" in resources or "limits" in resources:
@@ -305,11 +309,13 @@ class KubernetesOrchestrator:
             env_vars.append({"name": key, "value": str(value)})
 
         # Add Lamina-specific environment variables
-        env_vars.extend([
-            {"name": "LAMINA_ENVIRONMENT", "value": self.config.name},
-            {"name": "LAMINA_SIGIL", "value": self.config.sigil},
-            {"name": "LAMINA_NAMESPACE", "value": self.namespace},
-        ])
+        env_vars.extend(
+            [
+                {"name": "LAMINA_ENVIRONMENT", "value": self.config.name},
+                {"name": "LAMINA_SIGIL", "value": self.config.sigil},
+                {"name": "LAMINA_NAMESPACE", "value": self.namespace},
+            ]
+        )
 
         deployment = {
             "apiVersion": "apps/v1",
@@ -373,15 +379,19 @@ class KubernetesOrchestrator:
 
         return deployment
 
-    def _generate_service(self, service_name: str, service_config: dict[str, Any]) -> dict[str, Any]:
+    def _generate_service(
+        self, service_name: str, service_config: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate Kubernetes Service manifest."""
         ports = []
         for port in service_config.get("ports", [8080]):
-            ports.append({
-                "port": port,
-                "targetPort": port,
-                "protocol": "TCP",
-            })
+            ports.append(
+                {
+                    "port": port,
+                    "targetPort": port,
+                    "protocol": "TCP",
+                }
+            )
 
         service = {
             "apiVersion": "v1",
@@ -503,7 +513,9 @@ class KubernetesOrchestrator:
                 self._run_kubectl(["apply", "-f", hpa_file])
                 logger.info(f"{self.config.sigil} Autoscaling configured for {service_name}")
             except subprocess.CalledProcessError as e:
-                logger.error(f"{self.config.sigil} Failed to setup autoscaling for {service_name}: {e.stderr}")
+                logger.error(
+                    f"{self.config.sigil} Failed to setup autoscaling for {service_name}: {e.stderr}"
+                )
                 success = False
             finally:
                 Path(hpa_file).unlink(missing_ok=True)
@@ -518,9 +530,7 @@ class KubernetesOrchestrator:
             Dictionary with deployment status information
         """
         try:
-            result = self._run_kubectl([
-                "get", "deployments", "-n", self.namespace, "-o", "json"
-            ])
+            result = self._run_kubectl(["get", "deployments", "-n", self.namespace, "-o", "json"])
             deployments = json.loads(result.stdout)
 
             status = {
@@ -536,15 +546,17 @@ class KubernetesOrchestrator:
                 status_replicas = deployment["status"].get("replicas", 0)
                 ready_replicas = deployment["status"].get("readyReplicas", 0)
 
-                status["deployments"].append({
-                    "name": name,
-                    "replicas": {
-                        "desired": spec_replicas,
-                        "current": status_replicas,
-                        "ready": ready_replicas,
-                    },
-                    "ready": ready_replicas == spec_replicas,
-                })
+                status["deployments"].append(
+                    {
+                        "name": name,
+                        "replicas": {
+                            "desired": spec_replicas,
+                            "current": status_replicas,
+                            "ready": ready_replicas,
+                        },
+                        "ready": ready_replicas == spec_replicas,
+                    }
+                )
 
             return status
 

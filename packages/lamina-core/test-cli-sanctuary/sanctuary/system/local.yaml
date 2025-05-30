@@ -1,0 +1,8 @@
+agents: {}
+constraints:
+  basic_safety: true
+  privacy_protection: true
+  security_review: true
+coordination:
+  coordinator_agent: coordinator
+  enabled: true

@@ -1,0 +1,9 @@
+agent:
+  display_name: Assistant
+  name: assistant
+container:
+  image_tag: assistant
+  port: 8000
+resources:
+  cpu: '0.5'
+  memory: 1g
