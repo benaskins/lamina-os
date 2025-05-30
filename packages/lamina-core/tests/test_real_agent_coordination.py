@@ -16,6 +16,7 @@ import time
 import pytest
 
 from lamina import get_coordinator
+from lamina.llm_client import Message
 
 
 @pytest.mark.integration

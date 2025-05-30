@@ -12,7 +12,7 @@ These tests validate API contracts and mock behavior for fast feedback.
 
 import pytest
 
-from lamina import __version__, get_backend, get_coordinator, get_memory_store
+from lamina import __version__, get_llm_client, get_coordinator, get_memory_store
 
 
 @pytest.mark.unit
@@ -25,15 +25,15 @@ class TestCoreFunctions:
         assert isinstance(__version__, str)
         assert len(__version__) > 0
 
-    def test_get_backend_function(self):
-        """Test get_backend function."""
+    def test_get_llm_client_function(self):
+        """Test get_llm_client function."""
         # Basic usage
-        backend = get_backend("mock")
-        assert backend is not None
+        client = get_llm_client()
+        assert client is not None
 
         # With configuration
-        backend_with_config = get_backend("mock", {"model": "test"})
-        assert backend_with_config is not None
+        client_with_config = get_llm_client({"model": "test"})
+        assert client_with_config is not None
 
     def test_get_coordinator_function(self):
         """Test get_coordinator function."""

@@ -5,9 +5,9 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Real Backend Integration Tests - ADR-0010 Implementation
+Real LLM Client Integration Tests - ADR-0010 Implementation
 
-These tests validate actual AI backend functionality using real models
+These tests validate actual AI client functionality using real models
 served by lamina-llm-serve, replacing mock-only testing.
 """
 
@@ -15,35 +15,36 @@ import time
 
 import pytest
 
-from lamina import get_backend
+from lamina import get_llm_client
+from lamina.llm_client import Message
 
 
 @pytest.mark.integration
-class TestRealBackendIntegration:
+class TestRealLLMClientIntegration:
     """Integration tests with real AI models via lamina-llm-serve."""
 
-    async def test_real_ollama_backend_availability(self, llm_test_server):
-        """Test real Ollama backend availability check."""
-        # This tests actual Ollama connectivity, not mock
-        backend = get_backend("ollama", {
+    async def test_real_llm_service_availability(self, llm_test_server):
+        """Test real LLM service availability check."""
+        # This tests actual lamina-llm-serve connectivity, not mock
+        client = get_llm_client({
             "base_url": llm_test_server.base_url,
             "model": llm_test_server.model_name
         })
         
         # Real availability check
-        is_available = await backend.is_available()
-        assert is_available is True, "Real Ollama backend should be available"
+        is_available = await client.is_available()
+        assert is_available is True, "Real LLM service should be available"
 
     async def test_real_model_generation(self, integration_backend_config, artifact_logger):
         """Test actual model generation with real AI responses."""
-        backend = get_backend("ollama", integration_backend_config)
+        client = get_llm_client(integration_backend_config)
         
         # Test with simple prompt
-        messages = ["Hello, please introduce yourself briefly."]
+        messages = [Message(role="user", content="Hello, please introduce yourself briefly.")]
         response_chunks = []
         
         start_time = time.time()
-        async for chunk in backend.generate(messages, stream=True):
+        async for chunk in client.generate(messages, stream=True):
             response_chunks.append(chunk)
         generation_time = time.time() - start_time
         
@@ -52,7 +53,7 @@ class TestRealBackendIntegration:
         # Log for analysis per Ansel's suggestion
         artifact_logger.log_response(
             test_name="test_real_model_generation",
-            prompt=messages[0], 
+            prompt=messages[0].content, 
             response=full_response,
             metadata={"generation_time": generation_time}
         )
@@ -68,19 +69,19 @@ class TestRealBackendIntegration:
 
     async def test_real_intent_classification_quality(self, integration_backend_config, artifact_logger):
         """Test real intent classification with actual model responses."""
-        backend = get_backend("ollama", integration_backend_config)
+        client = get_llm_client(integration_backend_config)
         
         # Test clear analytical intent
         analytical_prompt = "Research the environmental impact of AI model training and provide a detailed analysis."
         response_chunks = []
-        async for chunk in backend.generate([analytical_prompt], stream=True):
+        async for chunk in client.generate([Message(role="user", content=analytical_prompt)], stream=True):
             response_chunks.append(chunk)
         analytical_response = "".join(response_chunks)
         
         # Test clear creative intent  
         creative_prompt = "Write me a short poem about artificial intelligence and consciousness."
         response_chunks = []
-        async for chunk in backend.generate([creative_prompt], stream=True):
+        async for chunk in client.generate([Message(role="user", content=creative_prompt)], stream=True):
             response_chunks.append(chunk)
         creative_response = "".join(response_chunks)
         
@@ -102,15 +103,15 @@ class TestRealBackendIntegration:
     async def test_real_error_handling(self, llm_test_server):
         """Test real error handling with actual failure conditions."""
         # Test with invalid model
-        backend = get_backend("ollama", {
+        client = get_llm_client({
             "base_url": llm_test_server.base_url,
             "model": "nonexistent-model-999"
         })
         
         # This should handle real model not found error
         with pytest.raises(Exception) as exc_info:
-            messages = ["Test message"]
-            async for chunk in backend.generate(messages):
+            messages = [Message(role="user", content="Test message")]
+            async for chunk in client.generate(messages):
                 pass
                 
         # Verify we get real error, not mock success
@@ -118,14 +119,14 @@ class TestRealBackendIntegration:
 
     async def test_real_streaming_behavior(self, integration_backend_config, artifact_logger):
         """Test real streaming response behavior."""
-        backend = get_backend("ollama", integration_backend_config)
+        client = get_llm_client(integration_backend_config)
         
         prompt = "Count from 1 to 5, one number per sentence."
         chunks = []
         chunk_times = []
         
         start_time = time.time()
-        async for chunk in backend.generate([prompt], stream=True):
+        async for chunk in client.generate([Message(role="user", content=prompt)], stream=True):
             chunks.append(chunk)
             chunk_times.append(time.time() - start_time)
         
@@ -154,12 +155,12 @@ class TestRealBackendIntegration:
 
     async def test_breath_aligned_response_quality(self, integration_backend_config, breath_validation_criteria, artifact_logger):
         """Test response quality against breath-first principles per Clara's feedback."""
-        backend = get_backend("ollama", integration_backend_config)
+        client = get_llm_client(integration_backend_config)
         
         # Test mindful, present response
         mindful_prompt = "How can I approach learning AI development with mindfulness and presence?"
         response_chunks = []
-        async for chunk in backend.generate([mindful_prompt], stream=True):
+        async for chunk in client.generate([Message(role="user", content=mindful_prompt)], stream=True):
             response_chunks.append(chunk)
         response = "".join(response_chunks)
         
@@ -187,10 +188,10 @@ class TestRealBackendIntegration:
 
     async def test_model_version_tracking(self, integration_backend_config, artifact_logger, llm_test_server):
         """Test model version tracking per Vesna's guidance."""
-        backend = get_backend("ollama", integration_backend_config)
+        client = get_llm_client(integration_backend_config)
         
         # Get model information
-        model_info = backend.get_model_info()
+        model_info = client.get_model_info()
         
         # Log model version information for drift tracking
         artifact_logger.log_model_info(
@@ -206,7 +207,7 @@ class TestRealBackendIntegration:
         # Test reproducibility marker
         test_prompt = "What is 2+2?"
         response_chunks = []
-        async for chunk in backend.generate([test_prompt], stream=True):
+        async for chunk in client.generate([Message(role="user", content=test_prompt)], stream=True):
             response_chunks.append(chunk)
         response = "".join(response_chunks)
         
@@ -227,13 +228,13 @@ class TestRealBackendErrorConditions:
 
     async def test_server_unavailable_handling(self):
         """Test handling when LLM server is unavailable."""
-        backend = get_backend("ollama", {
+        client = get_llm_client({
             "base_url": "http://localhost:9999",  # Non-existent server
             "model": "any-model"
         })
         
         # Should handle connection errors gracefully
-        is_available = await backend.is_available()
+        is_available = await client.is_available()
         assert is_available is False, "Should report unavailable when server is down"
 
     async def test_timeout_handling(self, integration_backend_config):
@@ -242,13 +243,13 @@ class TestRealBackendErrorConditions:
         config = integration_backend_config.copy()
         config["timeout"] = 0.1  # 100ms timeout
         
-        backend = get_backend("ollama", config)
+        client = get_llm_client(config)
         
         # Long prompt likely to timeout
         long_prompt = "Write a detailed 1000-word essay about the history of artificial intelligence, including all major developments, key figures, and future implications."
         
         with pytest.raises(Exception) as exc_info:
-            async for chunk in backend.generate([long_prompt]):
+            async for chunk in client.generate([Message(role="user", content=long_prompt)]):
                 pass
         
         # Verify we get actual timeout, not mock success
