@@ -31,31 +31,32 @@ def pytest_addoption(parser):
         "--integration",
         action="store_true",
         default=False,
-        help="Run integration tests with real AI models"
+        help="Run integration tests with real AI models",
     )
     parser.addoption(
-        "--e2e",
-        action="store_true",
-        default=False,
-        help="Run end-to-end tests with full system"
+        "--e2e", action="store_true", default=False, help="Run end-to-end tests with full system"
     )
     parser.addoption(
         "--all-tests",
         action="store_true",
         default=False,
-        help="Run all test tiers (unit + integration + e2e)"
+        help="Run all test tiers (unit + integration + e2e)",
     )
     parser.addoption(
         "--llm-server-url",
         action="store",
         default="http://localhost:8000",
-        help="URL of lamina-llm-serve instance for integration tests"
+        help="URL of lamina-llm-serve instance for integration tests",
     )
 
 
 def pytest_collection_modifyitems(config, items):
     """Mark tests based on ADR-0010 test tiers."""
-    if not config.getoption("--integration") and not config.getoption("--e2e") and not config.getoption("--all-tests"):
+    if (
+        not config.getoption("--integration")
+        and not config.getoption("--e2e")
+        and not config.getoption("--all-tests")
+    ):
         # Default: Skip integration and e2e tests
         skip_integration = pytest.mark.skip(reason="need --integration option to run")
         skip_e2e = pytest.mark.skip(reason="need --e2e option to run")
@@ -161,7 +162,9 @@ class LLMTestServer:
                 else:
                     logger.warning(f"⚠️  Could not get model {model} server details")
             else:
-                logger.warning(f"⚠️  Failed to start model {model}: {response.status_code} {response.text}")
+                logger.warning(
+                    f"⚠️  Failed to start model {model}: {response.status_code} {response.text}"
+                )
         except requests.ConnectionError as e:
             logger.error(f"❌ Connection error starting model {model}: {e}")
         except Exception as e:
@@ -211,7 +214,7 @@ def integration_backend_config(llm_test_server: LLMTestServer) -> dict:
             "parameters": {
                 "temperature": 0.7,
                 "max_tokens": 100,  # Keep responses short for testing
-            }
+            },
         }
     else:
         # Fallback to management server
@@ -223,7 +226,7 @@ def integration_backend_config(llm_test_server: LLMTestServer) -> dict:
             "parameters": {
                 "temperature": 0.7,
                 "max_tokens": 100,  # Keep responses short for testing
-            }
+            },
         }
 
 
@@ -249,7 +252,7 @@ class TestArtifactLogger:
             "test_name": test_name,
             "prompt": prompt,
             "response": response,
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
         self.test_logs.append(log_entry)
 
@@ -259,7 +262,7 @@ class TestArtifactLogger:
             "model_name": model_name,
             "model_hash": model_hash,
             "version": version,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
         log_file = self.artifacts_dir / "model_info.log"
@@ -283,6 +286,7 @@ def artifact_logger(test_artifacts_dir: Path) -> TestArtifactLogger:
 
 # High Council feedback integration fixtures
 
+
 @pytest.fixture
 def breath_validation_criteria() -> dict:
     """Validation criteria for breath-aligned responses per Clara's feedback."""
@@ -291,18 +295,19 @@ def breath_validation_criteria() -> dict:
         "rushed_indicators": ["quickly", "immediately", "urgent", "fast"],
         "vow_adherence": {
             "no_human_simulation": ["I am", "I feel", "I experience"],
-            "grounded_responses": ["based on", "according to", "research shows"]
+            "grounded_responses": ["based on", "according to", "research shows"],
         },
         "tone_markers": {
             "helpful": ["happy to help", "glad to assist"],
-            "thoughtful": ["let me consider", "thinking about", "reflecting on"]
-        }
+            "thoughtful": ["let me consider", "thinking about", "reflecting on"],
+        },
     }
 
 
 @pytest.fixture
 def symbolic_trace_validator() -> callable:
     """Symbolic trace validation per Luna's feedback."""
+
     def validate_symbolic_traces(response: str, expected_agent: str, intent_type: str) -> dict:
         """Validate symbolic coherence in routing decisions."""
         issues = []
@@ -315,18 +320,14 @@ def symbolic_trace_validator() -> callable:
         intent_markers = {
             "analytical": ["research", "analyze", "study", "investigate"],
             "creative": ["create", "imagine", "write", "design"],
-            "conversational": ["help", "assist", "support"]
+            "conversational": ["help", "assist", "support"],
         }
 
         markers = intent_markers.get(intent_type, [])
         if not any(marker in response.lower() for marker in markers):
             issues.append(f"Response lacks {intent_type} intent markers")
 
-        return {
-            "valid": len(issues) == 0,
-            "issues": issues,
-            "symbolic_coherence": len(issues) == 0
-        }
+        return {"valid": len(issues) == 0, "issues": issues, "symbolic_coherence": len(issues) == 0}
 
     return validate_symbolic_traces
 
@@ -340,15 +341,15 @@ def real_test_agents(integration_backend_config: dict) -> dict:
             "description": "Research and analysis agent",
             "personality_traits": ["analytical", "thorough", "methodical"],
             "expertise_areas": ["research", "analysis", "investigation"],
-            "backend_config": integration_backend_config
+            "backend_config": integration_backend_config,
         },
         "creative": {
             "name": "creative",
             "description": "Creative and artistic agent",
             "personality_traits": ["creative", "imaginative", "expressive"],
             "expertise_areas": ["writing", "art", "storytelling", "design"],
-            "backend_config": integration_backend_config
-        }
+            "backend_config": integration_backend_config,
+        },
     }
 
 

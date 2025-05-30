@@ -118,9 +118,10 @@ def test_chat_completions_api(base_url):
 
     # Missing model parameter
     try:
-        response = requests.post(f"{base_url}/v1/chat/completions", json={
-            "messages": [{"role": "user", "content": "Hello"}]
-        })
+        response = requests.post(
+            f"{base_url}/v1/chat/completions",
+            json={"messages": [{"role": "user", "content": "Hello"}]},
+        )
         print(f"✅ Missing model param: {response.status_code} (expected 400)")
         if response.status_code == 400:
             error_data = response.json()
@@ -130,9 +131,7 @@ def test_chat_completions_api(base_url):
 
     # Missing messages parameter
     try:
-        response = requests.post(f"{base_url}/v1/chat/completions", json={
-            "model": "test-model"
-        })
+        response = requests.post(f"{base_url}/v1/chat/completions", json={"model": "test-model"})
         print(f"✅ Missing messages param: {response.status_code} (expected 400)")
         if response.status_code == 400:
             error_data = response.json()
@@ -151,15 +150,15 @@ def test_chat_completions_api(base_url):
     print("\n📋 Testing model validation...")
 
     try:
-        response = requests.post(f"{base_url}/v1/chat/completions", json={
-            "model": "nonexistent-model",
-            "messages": [{"role": "user", "content": "Hello"}]
-        })
+        response = requests.post(
+            f"{base_url}/v1/chat/completions",
+            json={"model": "nonexistent-model", "messages": [{"role": "user", "content": "Hello"}]},
+        )
         print(f"✅ Nonexistent model: {response.status_code} (expected 404)")
         if response.status_code == 404:
             error_data = response.json()
             print(f"   Error: {error_data.get('error', 'No error message')}")
-            available = error_data.get('available_models', [])
+            available = error_data.get("available_models", [])
             print(f"   Available models: {len(available)} models listed")
     except Exception as e:
         print(f"❌ Nonexistent model test failed: {e}")
@@ -172,8 +171,11 @@ def test_chat_completions_api(base_url):
         models_response = requests.get(f"{base_url}/models")
         if models_response.status_code == 200:
             models_data = models_response.json()
-            available_models = [name for name, info in models_data.get('models', {}).items()
-                              if info.get('available', False)]
+            available_models = [
+                name
+                for name, info in models_data.get("models", {}).items()
+                if info.get("available", False)
+            ]
 
             if available_models:
                 test_model = available_models[0]
@@ -181,13 +183,17 @@ def test_chat_completions_api(base_url):
 
                 # Test chat request with available model
                 try:
-                    response = requests.post(f"{base_url}/v1/chat/completions", json={
-                        "model": test_model,
-                        "messages": [
-                            {"role": "user", "content": "Hello, please respond with just 'Hi'"}
-                        ],
-                        "stream": False
-                    }, timeout=30)
+                    response = requests.post(
+                        f"{base_url}/v1/chat/completions",
+                        json={
+                            "model": test_model,
+                            "messages": [
+                                {"role": "user", "content": "Hello, please respond with just 'Hi'"}
+                            ],
+                            "stream": False,
+                        },
+                        timeout=30,
+                    )
 
                     print(f"✅ Chat with available model: {response.status_code}")
 
@@ -196,9 +202,9 @@ def test_chat_completions_api(base_url):
                         try:
                             chat_data = response.json()
                             print("   Response format: OpenAI-compatible JSON")
-                            if 'choices' in chat_data:
+                            if "choices" in chat_data:
                                 print(f"   Choices: {len(chat_data['choices'])} choice(s)")
-                            if 'usage' in chat_data:
+                            if "usage" in chat_data:
                                 print("   Usage tracking: Present")
                         except Exception:
                             print(f"   Response format: Raw text ({len(response.text)} chars)")
@@ -219,14 +225,17 @@ def test_chat_completions_api(base_url):
                 print("   No available models found for testing")
 
                 # Test with unavailable model from registry
-                registry_models = list(models_data.get('models', {}).keys())
+                registry_models = list(models_data.get("models", {}).keys())
                 if registry_models:
                     test_model = registry_models[0]
                     try:
-                        response = requests.post(f"{base_url}/v1/chat/completions", json={
-                            "model": test_model,
-                            "messages": [{"role": "user", "content": "Hello"}]
-                        })
+                        response = requests.post(
+                            f"{base_url}/v1/chat/completions",
+                            json={
+                                "model": test_model,
+                                "messages": [{"role": "user", "content": "Hello"}],
+                            },
+                        )
                         print(f"✅ Unavailable model: {response.status_code} (expected 503)")
                         if response.status_code == 503:
                             error_data = response.json()
@@ -242,11 +251,14 @@ def test_chat_completions_api(base_url):
     print("\n📋 Testing streaming parameter...")
 
     try:
-        response = requests.post(f"{base_url}/v1/chat/completions", json={
-            "model": "llama3.2-1b-q4_k_m",  # Use known model from registry
-            "messages": [{"role": "user", "content": "Hello"}],
-            "stream": True
-        })
+        response = requests.post(
+            f"{base_url}/v1/chat/completions",
+            json={
+                "model": "llama3.2-1b-q4_k_m",  # Use known model from registry
+                "messages": [{"role": "user", "content": "Hello"}],
+                "stream": True,
+            },
+        )
         print(f"✅ Streaming request: {response.status_code}")
         if response.status_code == 200:
             print(f"   Content-Type: {response.headers.get('Content-Type', 'Not set')}")

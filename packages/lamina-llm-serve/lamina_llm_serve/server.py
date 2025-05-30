@@ -214,10 +214,15 @@ class LLMServer:
                 model_info = self.model_manager.get_model_info(model_name)
                 if not model_info:
                     available_models = list(self.model_manager.list_models())
-                    return jsonify({
-                        "error": f"Model '{model_name}' not found",
-                        "available_models": available_models
-                    }), 404
+                    return (
+                        jsonify(
+                            {
+                                "error": f"Model '{model_name}' not found",
+                                "available_models": available_models,
+                            }
+                        ),
+                        404,
+                    )
 
                 # Auto-start model if not running (download-once pattern)
                 if model_name not in self.active_servers:
@@ -225,10 +230,15 @@ class LLMServer:
 
                     # Check if model is available on disk
                     if not self.model_manager.is_model_available(model_name):
-                        return jsonify({
-                            "error": f"Model '{model_name}' not available on filesystem",
-                            "hint": "Use the download endpoint to fetch this model first"
-                        }), 503
+                        return (
+                            jsonify(
+                                {
+                                    "error": f"Model '{model_name}' not available on filesystem",
+                                    "hint": "Use the download endpoint to fetch this model first",
+                                }
+                            ),
+                            503,
+                        )
 
                     # Start the model server
                     try:
@@ -250,7 +260,7 @@ class LLMServer:
                     json=request_data,
                     headers={"Content-Type": "application/json"},
                     timeout=60,
-                    stream=stream
+                    stream=stream,
                 )
 
                 if stream:
@@ -261,15 +271,15 @@ class LLMServer:
                         headers={
                             "Content-Type": "text/plain; charset=utf-8",
                             "Cache-Control": "no-cache",
-                            "Connection": "keep-alive"
-                        }
+                            "Connection": "keep-alive",
+                        },
                     )
                 else:
                     # Handle non-streaming response
                     return Response(
                         response.content,
                         status=response.status_code,
-                        headers={"Content-Type": "application/json"}
+                        headers={"Content-Type": "application/json"},
                     )
 
             except Exception as e:
