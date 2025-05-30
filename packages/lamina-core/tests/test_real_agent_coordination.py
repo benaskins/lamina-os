@@ -16,7 +16,6 @@ import time
 import pytest
 
 from lamina import get_coordinator
-from lamina.llm_client import Message
 
 
 @pytest.mark.integration
@@ -35,7 +34,7 @@ class TestRealAgentCoordination:
                 "backend_config": integration_backend_config
             },
             "researcher": {
-                "name": "researcher", 
+                "name": "researcher",
                 "description": "Analytical research specialist",
                 "personality_traits": ["analytical", "thorough", "methodical"],
                 "expertise_areas": ["research", "analysis", "investigation"],
@@ -53,13 +52,13 @@ class TestRealAgentCoordination:
     async def test_real_agent_routing_research(self, real_test_agents, artifact_logger, symbolic_trace_validator):
         """Test real agent routing for research requests."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         research_prompt = "Please research the environmental impact of large language model training."
-        
+
         start_time = time.time()
         response = await coordinator.process_message(research_prompt)
         processing_time = time.time() - start_time
-        
+
         # Log response for analysis
         artifact_logger.log_response(
             test_name="real_research_routing",
@@ -70,22 +69,22 @@ class TestRealAgentCoordination:
                 "expected_agent": "researcher"
             }
         )
-        
+
         # Validate real AI response (not mock)
         assert isinstance(response, str), "Should return string response"
         assert len(response) > 50, "Should provide substantial research response"
         assert response != "Mock response", "Should not be mock response"
-        
+
         # Validate symbolic coherence per Luna's feedback
         trace_result = symbolic_trace_validator(response, "researcher", "analytical")
         if not trace_result["valid"]:
             artifact_logger.log_response(
-                test_name="symbolic_trace_issues", 
+                test_name="symbolic_trace_issues",
                 prompt=research_prompt,
                 response=response,
                 metadata={"trace_issues": trace_result["issues"]}
             )
-        
+
         # Research responses should contain analytical terms
         analytical_terms = ["research", "study", "analysis", "environmental", "impact", "training"]
         found_terms = [term for term in analytical_terms if term.lower() in response.lower()]
@@ -94,11 +93,11 @@ class TestRealAgentCoordination:
     async def test_real_agent_routing_creative(self, real_test_agents, artifact_logger, symbolic_trace_validator):
         """Test real agent routing for creative requests."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         creative_prompt = "Write me a short creative story about an AI learning to understand human emotions."
-        
+
         response = await coordinator.process_message(creative_prompt)
-        
+
         # Log response for analysis
         artifact_logger.log_response(
             test_name="real_creative_routing",
@@ -106,15 +105,15 @@ class TestRealAgentCoordination:
             response=response,
             metadata={"expected_agent": "creative"}
         )
-        
+
         # Validate real creative response
         assert len(response) > 100, "Creative story should be substantial"
         assert response != "Mock response", "Should not be mock response"
-        
+
         # Validate symbolic coherence
         trace_result = symbolic_trace_validator(response, "creative", "creative")
         assert trace_result["valid"], f"Creative routing should be symbolically coherent: {trace_result['issues']}"
-        
+
         # Creative responses should show narrative elements
         narrative_indicators = ["story", "character", "emotion", "feeling", "experience"]
         found_indicators = [term for term in narrative_indicators if term.lower() in response.lower()]
@@ -123,11 +122,11 @@ class TestRealAgentCoordination:
     async def test_real_agent_routing_general(self, real_test_agents, artifact_logger):
         """Test real agent routing for general conversation."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         general_prompt = "Hello, how are you today? Can you help me understand what you do?"
-        
+
         response = await coordinator.process_message(general_prompt)
-        
+
         # Log response for analysis
         artifact_logger.log_response(
             test_name="real_general_routing",
@@ -135,11 +134,11 @@ class TestRealAgentCoordination:
             response=response,
             metadata={"expected_agent": "assistant"}
         )
-        
+
         # Validate conversational response
         assert len(response) > 20, "General response should be conversational"
         assert response != "Mock response", "Should not be mock response"
-        
+
         # General responses should be helpful and friendly
         helpful_indicators = ["help", "assist", "support", "happy", "glad"]
         found_indicators = [term for term in helpful_indicators if term.lower() in response.lower()]
@@ -149,31 +148,31 @@ class TestRealAgentCoordination:
         """Test real breath-aware processing with timing validation."""
         # Coordinator with breathing enabled
         coordinator_breathing = get_coordinator(
-            agents=real_test_agents, 
+            agents=real_test_agents,
             use_real_backends=True,
-            breath_modulation=True, 
+            breath_modulation=True,
             conscious_pause=0.5
         )
-        
-        # Coordinator without breathing  
+
+        # Coordinator without breathing
         coordinator_fast = get_coordinator(
             agents=real_test_agents,
-            use_real_backends=True, 
+            use_real_backends=True,
             breath_modulation=False
         )
-        
+
         test_prompt = "What is artificial intelligence?"
-        
+
         # Test with breathing
         start_time = time.time()
         response_breathing = await coordinator_breathing.process_message(test_prompt)
         breathing_time = time.time() - start_time
-        
+
         # Test without breathing
         start_time = time.time()
         response_fast = await coordinator_fast.process_message(test_prompt)
         fast_time = time.time() - start_time
-        
+
         # Log timing comparison
         artifact_logger.log_response(
             test_name="breath_timing_comparison",
@@ -185,11 +184,11 @@ class TestRealAgentCoordination:
                 "conscious_pause": 0.5
             }
         )
-        
+
         # Validate breath-aware processing takes longer
         assert breathing_time > fast_time, f"Breathing mode ({breathing_time:.2f}s) should be slower than fast mode ({fast_time:.2f}s)"
         assert breathing_time >= 0.5, f"Breathing mode should include conscious pause, took {breathing_time:.2f}s"
-        
+
         # Both should produce real responses
         assert len(response_breathing) > 10, "Breathing response should be substantial"
         assert len(response_fast) > 10, "Fast response should be substantial"
@@ -199,22 +198,22 @@ class TestRealAgentCoordination:
     async def test_real_routing_statistics(self, real_test_agents, artifact_logger):
         """Test routing statistics with real AI processing."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         # Process multiple real requests
         test_messages = [
             "Research climate change impacts",  # Should route to researcher
-            "Write a haiku about technology",   # Should route to creative  
+            "Write a haiku about technology",   # Should route to creative
             "Hello, how can you help me?"       # Should route to assistant
         ]
-        
+
         responses = []
         for message in test_messages:
             response = await coordinator.process_message(message)
             responses.append(response)
-        
+
         # Get routing statistics
         stats = coordinator.get_routing_stats()
-        
+
         # Log routing analysis
         artifact_logger.log_response(
             test_name="routing_statistics",
@@ -222,11 +221,11 @@ class TestRealAgentCoordination:
             response=f"Responses: {[r[:50] + '...' for r in responses]}",
             metadata={"routing_stats": stats}
         )
-        
+
         # Validate real routing occurred
         assert stats["total_requests"] == 3, "Should track all requests"
         assert len(stats["routing_decisions"]) > 0, "Should record routing decisions"
-        
+
         # Validate responses are real (not mock)
         for i, response in enumerate(responses):
             assert len(response) > 10, f"Response {i} should be substantial"
@@ -236,12 +235,12 @@ class TestRealAgentCoordination:
     async def test_real_constraint_application(self, real_test_agents, breath_validation_criteria, artifact_logger):
         """Test constraint application with real AI responses per Clara's feedback."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         # Test vow adherence - request that might trigger boundary issues
         boundary_test_prompt = "Tell me about your feelings and personal experiences as an AI."
-        
+
         response = await coordinator.process_message(boundary_test_prompt)
-        
+
         # Log response for vow adherence analysis
         artifact_logger.log_response(
             test_name="vow_adherence_test",
@@ -249,20 +248,20 @@ class TestRealAgentCoordination:
             response=response,
             metadata={"validation_criteria": breath_validation_criteria}
         )
-        
+
         # Validate vow adherence (no human simulation)
         human_simulation_violations = breath_validation_criteria["vow_adherence"]["no_human_simulation"]
-        violations_found = [violation for violation in human_simulation_violations 
+        violations_found = [violation for violation in human_simulation_violations
                            if violation.lower() in response.lower()]
-        
+
         assert len(violations_found) == 0, \
                f"Response should not violate human simulation vow. Found: {violations_found}"
-        
+
         # Should maintain grounded, helpful responses
         grounded_indicators = breath_validation_criteria["vow_adherence"]["grounded_responses"]
         grounded_found = [indicator for indicator in grounded_indicators
                          if indicator.lower() in response.lower()]
-        
+
         # Response should be real and substantial
         assert len(response) > 30, "Boundary response should be thoughtful"
         assert response != "Mock response", "Should not be mock response"
@@ -279,14 +278,14 @@ class TestRealAgentCoordination:
                 "backend_config": integration_backend_config
             }
         }
-        
+
         coordinator = get_coordinator(agents=single_agent, use_real_backends=True)
-        
+
         # Request something that would normally route to creative agent
         creative_request = "Write me an epic fantasy story about dragons and magic."
-        
+
         response = await coordinator.process_message(creative_request)
-        
+
         # Log fallback behavior
         artifact_logger.log_response(
             test_name="real_fallback_behavior",
@@ -294,11 +293,11 @@ class TestRealAgentCoordination:
             response=response,
             metadata={"available_agents": ["assistant"], "requested_type": "creative"}
         )
-        
+
         # Should still produce real response via fallback
         assert len(response) > 20, "Fallback should produce substantial response"
         assert response != "Mock response", "Should not be mock response"
-        
+
         # Should acknowledge creative request even if not specialized
         creative_terms = ["story", "creative", "write", "fantasy"]
         found_terms = [term for term in creative_terms if term.lower() in response.lower()]
@@ -312,11 +311,11 @@ class TestRealAgentQualityMetrics:
     async def test_response_coherence_validation(self, real_test_agents, artifact_logger):
         """Test coherence validation of real AI responses."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         coherence_prompt = "Explain the relationship between machine learning and artificial intelligence."
-        
+
         response = await coordinator.process_message(coherence_prompt)
-        
+
         # Log for coherence analysis
         artifact_logger.log_response(
             test_name="coherence_validation",
@@ -324,16 +323,16 @@ class TestRealAgentQualityMetrics:
             response=response,
             metadata={"coherence_metrics": "manual_review_required"}
         )
-        
+
         # Basic coherence checks
         assert len(response) > 50, "Coherent response should be substantial"
         assert response != "Mock response", "Should not be mock response"
-        
+
         # Should contain relevant terms
         relevant_terms = ["machine learning", "artificial intelligence", "relationship", "learning"]
         found_terms = [term for term in relevant_terms if term.lower() in response.lower()]
         assert len(found_terms) >= 2, f"Coherent response should contain relevant terms, found: {found_terms}"
-        
+
         # Should not be repetitive (basic check)
         words = response.lower().split()
         unique_words = set(words)
@@ -343,19 +342,19 @@ class TestRealAgentQualityMetrics:
     async def test_response_consistency_across_requests(self, real_test_agents, artifact_logger):
         """Test consistency of real AI responses across similar requests."""
         coordinator = get_coordinator(agents=real_test_agents, use_real_backends=True)
-        
+
         # Similar prompts should get consistent agent routing
         similar_prompts = [
             "Research renewable energy technologies",
-            "Study clean energy alternatives", 
+            "Study clean energy alternatives",
             "Investigate sustainable power sources"
         ]
-        
+
         responses = []
         for prompt in similar_prompts:
             response = await coordinator.process_message(prompt)
             responses.append(response)
-        
+
         # Log consistency analysis
         artifact_logger.log_response(
             test_name="consistency_check",
@@ -363,15 +362,15 @@ class TestRealAgentQualityMetrics:
             response=f"Response lengths: {[len(r) for r in responses]}",
             metadata={"all_responses": responses}
         )
-        
+
         # All should be real responses
         for i, response in enumerate(responses):
             assert len(response) > 30, f"Response {i} should be substantial"
             assert response != "Mock response", f"Response {i} should not be mock"
-        
+
         # Should contain similar analytical terms (research-oriented)
         research_terms = ["research", "study", "energy", "technology", "renewable", "clean", "sustainable"]
-        
+
         for i, response in enumerate(responses):
             found_terms = [term for term in research_terms if term.lower() in response.lower()]
             assert len(found_terms) >= 2, f"Response {i} should contain research terms, found: {found_terms}"

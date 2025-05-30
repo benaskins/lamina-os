@@ -50,7 +50,7 @@ jobs:
       if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
       run: |
         # Use existing lamina-llm-serve from workspace
-        cd ../lamina-llm-serve
+        cd packages/lamina-llm-serve
         uv sync
         
         # Download test model using lamina-llm-serve model manager
@@ -66,8 +66,8 @@ jobs:
     - name: Run integration tests
       if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
       run: |
-        cd lamina-os
-        uv run pytest packages/lamina-core/tests/ --integration -v --tb=short
+        cd packages/lamina-core
+        uv run pytest tests/ --integration -v --tb=short
     
     - name: Upload unit test coverage to Codecov
       if: matrix.test-tier == 'unit'
