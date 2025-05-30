@@ -21,11 +21,8 @@ import yaml
 logger = logging.getLogger(__name__)
 
 # Breath markers for environment context
-ENVIRONMENT_SIGILS = {
-    "development": "🜂",
-    "test": "🜁",
-    "production": "🜄"
-}
+ENVIRONMENT_SIGILS = {"development": "🜂", "test": "🜁", "production": "🜄"}
+
 
 @dataclass
 class EnvironmentConfig:
@@ -61,11 +58,15 @@ class EnvironmentConfig:
         """Validate and set defaults after initialization."""
         if self.sigil not in ENVIRONMENT_SIGILS.values():
             expected_sigil = ENVIRONMENT_SIGILS.get(self.name, "❓")
-            logger.warning(f"Environment {self.name} sigil mismatch. Expected: {expected_sigil}, Got: {self.sigil}")
+            logger.warning(
+                f"Environment {self.name} sigil mismatch. Expected: {expected_sigil}, Got: {self.sigil}"
+            )
 
         # Set default logging format with sigil
         if "format" not in self.logging:
-            self.logging["format"] = f"{self.sigil} [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+            self.logging["format"] = (
+                f"{self.sigil} [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+            )
 
         # Ensure sigil is set in environment variables for all services
         for _service_name, service_config in self.services.items():
@@ -78,7 +79,9 @@ class EnvironmentConfig:
 
     def get_log_format(self) -> str:
         """Get the logging format with sigil integration."""
-        return self.logging.get("format", f"{self.sigil} [%(asctime)s] %(name)s - %(levelname)s - %(message)s")
+        return self.logging.get(
+            "format", f"{self.sigil} [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+        )
 
     def is_production(self) -> bool:
         """Check if this is a production environment."""
@@ -113,7 +116,9 @@ class EnvironmentConfig:
         return self.breath.copy()
 
 
-def load_environment_config(environment_name: str, config_path: Path | None = None) -> EnvironmentConfig:
+def load_environment_config(
+    environment_name: str, config_path: Path | None = None
+) -> EnvironmentConfig:
     """
     Load environment configuration from YAML file.
 

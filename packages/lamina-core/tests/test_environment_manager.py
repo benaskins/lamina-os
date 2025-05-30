@@ -37,20 +37,23 @@ class TestEnvironmentManager:
                 "environment": {
                     "name": env_name,
                     "sigil": ENVIRONMENT_SIGILS[env_name],
-                    "type": "docker-compose" if env_name == "development" else
-                           "containerized" if env_name == "test" else "kubernetes",
-                    "description": f"{env_name} environment"
+                    "type": (
+                        "docker-compose"
+                        if env_name == "development"
+                        else "containerized" if env_name == "test" else "kubernetes"
+                    ),
+                    "description": f"{env_name} environment",
                 },
                 "features": self._get_test_features(env_name),
                 "services": {
                     "lamina-core": {
                         "image": f"lamina-core:{env_name}",
-                        "environment": {"ENV": env_name, "SIGIL": ENVIRONMENT_SIGILS[env_name]}
+                        "environment": {"ENV": env_name, "SIGIL": ENVIRONMENT_SIGILS[env_name]},
                     }
                 },
                 "security": self._get_test_security(env_name),
                 "resources": self._get_test_resources(env_name),
-                "logging": {"format": f"{ENVIRONMENT_SIGILS[env_name]} [%(asctime)s] %(message)s"}
+                "logging": {"format": f"{ENVIRONMENT_SIGILS[env_name]} [%(asctime)s] %(message)s"},
             }
 
             # Add environment-specific sections
@@ -62,7 +65,7 @@ class TestEnvironmentManager:
                 config_data["features"]["comprehensive_monitoring"] = True
 
             config_file = env_dir / "config.yaml"
-            with open(config_file, 'w') as f:
+            with open(config_file, "w") as f:
                 yaml.dump(config_data, f)
 
             environments[env_name] = config_file
@@ -85,7 +88,7 @@ class TestEnvironmentManager:
                 "mtls": True,
                 "rbac": True,
                 "network_policies": True,
-                "secrets_encryption": True
+                "secrets_encryption": True,
             }
         else:
             return {"mtls": False, "network_policies": False}
@@ -184,11 +187,7 @@ class TestEnvironmentManager:
 
         # Valid production deployment
         result = manager.enforce_environment_boundaries(
-            "production",
-            {
-                "lamina.environment": "production",
-                "lamina.sigil": "🜄"
-            }
+            "production", {"lamina.environment": "production", "lamina.sigil": "🜄"}
         )
         assert result is True
 
@@ -200,11 +199,7 @@ class TestEnvironmentManager:
 
         # Development artifact in production
         result = manager.enforce_environment_boundaries(
-            "production",
-            {
-                "lamina.environment": "development",
-                "lamina.sigil": "🜂"
-            }
+            "production", {"lamina.environment": "development", "lamina.sigil": "🜂"}
         )
         assert result is False
 
@@ -282,20 +277,25 @@ class TestSigilOfPassage:
                 "environment": {
                     "name": env_name,
                     "sigil": ENVIRONMENT_SIGILS[env_name],
-                    "type": "docker-compose" if env_name == "development" else
-                           "containerized" if env_name == "test" else "kubernetes",
-                    "description": f"{env_name} environment"
+                    "type": (
+                        "docker-compose"
+                        if env_name == "development"
+                        else "containerized" if env_name == "test" else "kubernetes"
+                    ),
+                    "description": f"{env_name} environment",
                 },
                 "features": {},
                 "services": {
                     "lamina-core": {
                         "image": f"lamina-core:{env_name}",
-                        "environment": {"ENV": env_name, "SIGIL": ENVIRONMENT_SIGILS[env_name]}
+                        "environment": {"ENV": env_name, "SIGIL": ENVIRONMENT_SIGILS[env_name]},
                     }
                 },
                 "security": {"mtls": True if env_name == "production" else False},
-                "resources": {"total_memory": "80Gi", "total_cpu": "40"} if env_name == "production" else {},
-                "logging": {"format": f"{ENVIRONMENT_SIGILS[env_name]} [%(asctime)s] %(message)s"}
+                "resources": (
+                    {"total_memory": "80Gi", "total_cpu": "40"} if env_name == "production" else {}
+                ),
+                "logging": {"format": f"{ENVIRONMENT_SIGILS[env_name]} [%(asctime)s] %(message)s"},
             }
 
             # Add required features for validation
@@ -303,21 +303,19 @@ class TestSigilOfPassage:
                 config_data["features"] = {"ephemeral": True, "isolation": True}
             elif env_name == "production":
                 config_data["features"] = {"auto_scaling": True, "comprehensive_monitoring": True}
-                config_data["security"].update({
-                    "rbac": True,
-                    "network_policies": True,
-                    "secrets_encryption": True
-                })
+                config_data["security"].update(
+                    {"rbac": True, "network_policies": True, "secrets_encryption": True}
+                )
 
             config_file = env_dir / "config.yaml"
-            with open(config_file, 'w') as f:
+            with open(config_file, "w") as f:
                 yaml.dump(config_data, f)
 
             environments[env_name] = config_file
 
         return tmp_path, environments
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     def test_sigil_of_passage_success(self, mock_run, temp_environments):
         """Test successful sigil of passage."""
         environments_root, _ = temp_environments
@@ -330,7 +328,7 @@ class TestSigilOfPassage:
         result = manager.perform_sigil_of_passage("development", "test")
         assert result is True
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     def test_sigil_of_passage_test_failure(self, mock_run, temp_environments):
         """Test sigil of passage with test failure."""
         environments_root, _ = temp_environments
@@ -357,7 +355,7 @@ class TestSigilOfPassage:
         result = manager.perform_sigil_of_passage("development", "nonexistent")
         assert result is False
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     def test_sigil_of_passage_to_production(self, mock_run, temp_environments):
         """Test sigil of passage to production runs comprehensive tests."""
         environments_root, _ = temp_environments
@@ -373,7 +371,7 @@ class TestSigilOfPassage:
         # Should run more comprehensive tests for production
         assert mock_run.call_count > 3  # unit, integration, ruff, black, bandit
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     def test_sigil_of_passage_skip_tests(self, mock_run, temp_environments):
         """Test sigil of passage with tests skipped."""
         environments_root, _ = temp_environments
@@ -421,15 +419,13 @@ class TestEnvironmentManagerIntegration:
             if "production" in manager.get_available_environments():
                 # Test valid production boundaries
                 result = manager.enforce_environment_boundaries(
-                    "production",
-                    {"lamina.environment": "production", "lamina.sigil": "🜄"}
+                    "production", {"lamina.environment": "production", "lamina.sigil": "🜄"}
                 )
                 assert result is True
 
                 # Test invalid boundaries
                 result = manager.enforce_environment_boundaries(
-                    "production",
-                    {"lamina.environment": "development", "lamina.sigil": "🜂"}
+                    "production", {"lamina.environment": "development", "lamina.sigil": "🜂"}
                 )
                 assert result is False
 
