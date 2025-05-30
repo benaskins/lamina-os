@@ -14,7 +14,6 @@ for GitOps-driven Kubernetes deployments.
 import logging
 import subprocess
 from pathlib import Path
-from typing import Any
 
 import yaml
 
@@ -180,8 +179,12 @@ class HelmChartGenerator:
             },
             "monitoring": {
                 "enabled": self.config.supports_feature("comprehensive_monitoring"),
-                "prometheus": self.config.monitoring.get("prometheus", {}) if self.config.monitoring else {},
-                "grafana": self.config.monitoring.get("grafana", {}) if self.config.monitoring else {},
+                "prometheus": (
+                    self.config.monitoring.get("prometheus", {}) if self.config.monitoring else {}
+                ),
+                "grafana": (
+                    self.config.monitoring.get("grafana", {}) if self.config.monitoring else {}
+                ),
             },
             "security": {
                 "networkPolicies": {
@@ -211,10 +214,13 @@ class HelmChartGenerator:
                     "type": service_config.get("service_type", "ClusterIP"),
                     "ports": service_config.get("ports", [8080]),
                 },
-                "resources": service_config.get("resources", {
-                    "requests": {"memory": "512Mi", "cpu": "250m"},
-                    "limits": {"memory": "1Gi", "cpu": "500m"},
-                }),
+                "resources": service_config.get(
+                    "resources",
+                    {
+                        "requests": {"memory": "512Mi", "cpu": "250m"},
+                        "limits": {"memory": "1Gi", "cpu": "500m"},
+                    },
+                ),
                 "env": service_config.get("environment", {}),
                 "config": service_config.get("config", {}),
             }
@@ -515,7 +521,7 @@ spec:
 
     def _generate_helpers_template(self):
         """Generate _helpers.tpl template file."""
-        helpers = '''{{/*
+        helpers = """{{/*
 Expand the name of the chart.
 */}}
 {{- define "lamina.name" -}}
@@ -566,7 +572,7 @@ Selector labels
 app.kubernetes.io/name: {{ include "lamina.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-'''
+"""
         (self.chart_dir / "templates" / "_helpers.tpl").write_text(helpers)
 
     def _generate_github_workflow(self):
@@ -736,7 +742,9 @@ jobs:
             )
 
             # Extract package name from helm output
-            package_line = [line for line in result.stdout.split("\n") if "Successfully packaged chart" in line][0]
+            package_line = [
+                line for line in result.stdout.split("\n") if "Successfully packaged chart" in line
+            ][0]
             package_path = Path(package_line.split(":")[-1].strip())
 
             logger.info(f"{self.config.sigil} Chart packaged successfully: {package_path}")

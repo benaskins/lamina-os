@@ -89,9 +89,7 @@ class TestHelmChartGenerator:
     def test_helm_validation_success(self, mock_run, production_config, temp_output_dir):
         """Test successful Helm validation."""
         # Mock helm version command
-        mock_run.return_value = MagicMock(
-            returncode=0, stdout="v3.14.0+g7cc8f45", stderr=""
-        )
+        mock_run.return_value = MagicMock(returncode=0, stdout="v3.14.0+g7cc8f45", stderr="")
 
         generator = HelmChartGenerator(production_config, temp_output_dir)
         assert generator.config.name == "production"
@@ -343,7 +341,7 @@ class TestHelmChartGenerator:
     def test_chart_validation_failure(self, mock_run, production_config, temp_output_dir):
         """Test chart validation failure."""
         import subprocess
-        
+
         # Mock helm commands with lint failure - need enough calls for both generation and validation
         mock_run.side_effect = [
             MagicMock(returncode=0, stdout="v3.14.0", stderr=""),  # version check (init)
@@ -379,11 +377,13 @@ class TestHelmChartGenerator:
     def test_chart_packaging_failure(self, mock_run, production_config, temp_output_dir):
         """Test chart packaging failure."""
         import subprocess
-        
+
         # Mock helm commands with package failure
         mock_run.side_effect = [
             MagicMock(returncode=0, stdout="v3.14.0", stderr=""),  # version check (init)
-            subprocess.CalledProcessError(1, ["helm", "package"], stderr="package error"),  # package failure
+            subprocess.CalledProcessError(
+                1, ["helm", "package"], stderr="package error"
+            ),  # package failure
         ]
 
         generator = HelmChartGenerator(production_config, temp_output_dir)
@@ -413,6 +413,7 @@ class TestHelmChartIntegration:
         """Load real production configuration for testing."""
         try:
             from lamina.environment.config import load_environment_config
+
             return load_environment_config("production")
         except FileNotFoundError:
             pytest.skip("Production environment configuration not found")

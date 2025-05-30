@@ -1,0 +1,7 @@
+entities:
+  user:
+    permissions:
+    - chat
+    - query
+    trust_level: high
+    type: human

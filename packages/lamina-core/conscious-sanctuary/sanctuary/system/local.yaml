@@ -1,0 +1,13 @@
+agents:
+  creative-assistant:
+    enabled: true
+    template: conversational
+    ai_provider: ollama
+    ai_model: llama3.2:3b
+constraints:
+  basic_safety: true
+  privacy_protection: true
+  security_review: true
+coordination:
+  coordinator_agent: coordinator
+  enabled: true
