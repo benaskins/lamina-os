@@ -55,7 +55,7 @@ categories:
   reasoning:
     - llama3-8b-q4_k_m
 
-# Backend configurations
+# Backend configuration - llama.cpp only
 backends:
   llama.cpp:
     executable: "llama-server"
@@ -66,18 +66,6 @@ backends:
       - "4"
       - "--batch-size"
       - "512"
-  
-  mlc-serve:
-    executable: "mlc_serve"
-    default_args:
-      - "--device"
-      - "metal"
-  
-  vllm:
-    executable: "vllm"
-    default_args:
-      - "--device"
-      - "auto"
 
 # Default model assignments for different use cases
 defaults:

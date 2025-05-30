@@ -1,0 +1,38 @@
+# Docker Compose for ADR-0010 Integration Testing
+# Provides isolated lamina-llm-serve for real AI testing
+
+version: '3.8'
+
+services:
+  lamina-llm-serve:
+    build:
+      context: ./packages/lamina-llm-serve
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount models directory for persistent storage
+      - ./packages/lamina-llm-serve/models:/app/models:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: packages/lamina-core/Dockerfile.test
+    depends_on:
+      lamina-llm-serve:
+        condition: service_healthy
+    environment:
+      - LLM_SERVER_URL=http://lamina-llm-serve:8000
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./packages/lamina-core/test_artifacts:/app/test_artifacts
+    command: ["uv", "run", "pytest", "tests/", "--integration", "-v", "-s"]
