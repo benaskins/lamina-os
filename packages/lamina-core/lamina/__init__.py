@@ -15,11 +15,11 @@ __version__ = "0.1.0"
 
 
 # Lazy imports to avoid dependency issues
-def get_backend(provider: str, config: dict = None):
-    """Get an AI backend instance for the specified provider."""
-    from lamina.backends import get_backend as _get_backend
+def get_llm_client(config: dict = None):
+    """Get an LLM client instance for connecting to lamina-llm-serve."""
+    from lamina.llm_client import LaminaLLMClient
 
-    return _get_backend(provider, config or {})
+    return LaminaLLMClient(config or {})
 
 
 def get_coordinator(agents: dict = None, **kwargs):
@@ -45,7 +45,7 @@ def create_simple_agent(name: str, config: dict):
 
 
 __all__ = [
-    "get_backend",
+    "get_llm_client",
     "get_coordinator",
     "get_memory_store",
     "create_simple_agent",
