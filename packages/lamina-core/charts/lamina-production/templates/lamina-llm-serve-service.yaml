@@ -1,0 +1,21 @@
+{{- if .Values.services.lamina-llm-serve.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: lamina-llm-serve
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" . | nindent 4 }}
+    app.kubernetes.io/component: lamina-llm-serve
+spec:
+  type: {{ .Values.services.lamina-llm-serve.service.type }}
+  ports:
+  {{- range .Values.services.lamina-llm-serve.service.ports }}
+  - port: {{ . }}
+    targetPort: {{ . }}
+    protocol: TCP
+  {{- end }}
+  selector:
+    {{- include "lamina.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: lamina-llm-serve
+{{- end }}

@@ -1,0 +1,83 @@
+name: Deploy Production Environment
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'charts/lamina-production/**'
+      - 'environments/production/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'charts/lamina-production/**'
+      - 'environments/production/**'
+
+env:
+  CHART_PATH: charts/lamina-production
+  ENVIRONMENT: production
+  SIGIL: 🜄
+
+jobs:
+  validate:
+    name: 🜄 Validate Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v4
+      with:
+        version: '3.14.0'
+
+    - name: Lint Helm chart
+      run: |
+        helm lint ${{ env.CHART_PATH }}
+
+    - name: Validate Helm templates
+      run: |
+        helm template lamina-production ${{ env.CHART_PATH }} --dry-run
+
+  deploy:
+    name: 🜄 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v4
+      with:
+        version: '3.14.0'
+
+    - name: Configure kubectl
+      run: |
+        mkdir -p ${{ runner.temp }}/.kube
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > ${{ runner.temp }}/.kube/config
+        export KUBECONFIG=${{ runner.temp }}/.kube/config
+        kubectl cluster-info
+
+    - name: Deploy with Helm
+      run: |
+        export KUBECONFIG=${{ runner.temp }}/.kube/config
+        helm upgrade --install lamina-production ${{ env.CHART_PATH } \
+          --namespace lamina-production \
+          --create-namespace \
+          --wait \
+          --timeout 10m \
+          --set global.image.tag=${{ github.sha }} \
+          --set global.environment=production \
+          --set global.sigil="🜄"
+
+    - name: Verify deployment
+      run: |
+        export KUBECONFIG=${{ runner.temp }}/.kube/config
+        kubectl get pods -n lamina-production
+        kubectl get services -n lamina-production
+
+    - name: Post-deployment status
+      run: |
+        echo "🜄 Deployment to production completed successfully"
