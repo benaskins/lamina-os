@@ -5,7 +5,10 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Tests for AgentCoordinator - the heart of breath-first coordination.
+Unit Tests for AgentCoordinator - the heart of breath-first coordination.
+
+These tests validate coordinator API contracts and mock behavior.
+For real AI coordination testing, see test_real_agent_coordination.py.
 """
 
 import time
@@ -15,6 +18,7 @@ import pytest
 from lamina import get_coordinator
 
 
+@pytest.mark.unit  
 class TestAgentCoordinator:
     """Test breath-first agent coordination."""
 

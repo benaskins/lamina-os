@@ -5,10 +5,10 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Tests for breath-first principles integration.
+Unit Tests for breath-first principles integration.
 
-These tests verify that Lamina Core genuinely embodies breath-first development
-principles rather than just implementing technical functionality.
+These tests verify that Lamina Core API embodies breath-first development
+principles in its structure and contracts.
 """
 
 import time
@@ -18,6 +18,7 @@ import pytest
 from lamina import get_coordinator
 
 
+@pytest.mark.unit
 class TestBreathFirstPrinciples:
     """Test integration of breath-first principles."""
 
