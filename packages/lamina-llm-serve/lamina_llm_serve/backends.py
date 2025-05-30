@@ -5,10 +5,10 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Backend Management - Abstraction layer for different LLM backends
+Backend Management - llama.cpp wrapper for GGUF model serving
 
-Provides unified interface for llama.cpp, mlc-serve, vllm, and other
-backend engines while handling their specific requirements.
+Provides interface for llama.cpp server with plans to expand to other
+backends in the future.
 """
 
 import logging
@@ -94,75 +94,8 @@ class LlamaCppBackend(LLMBackend):
         return path.exists() and path.suffix.lower() == ".gguf"
 
 
-class MLCServeBackend(LLMBackend):
-    """Backend for MLC-LLM serve"""
-
-    def is_available(self) -> bool:
-        """Check if mlc_serve is available"""
-        try:
-            result = subprocess.run([self.executable, "--help"], capture_output=True, timeout=5)
-            return result.returncode == 0
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            return False
-
-    def start_server(self, model_path: str, port: int = 8080, **kwargs) -> subprocess.Popen:
-        """Start MLC serve process"""
-        args = [self.executable, model_path, "--port", str(port), "--host", "0.0.0.0"]
-
-        # Add default arguments
-        args.extend(self.default_args)
-
-        logger.info(f"Starting MLC serve: {' '.join(args)}")
-        return subprocess.Popen(args)
-
-    def get_health_endpoint(self, port: int = 8080) -> str:
-        return f"http://localhost:{port}/health"
-
-    def get_chat_endpoint(self, port: int = 8080) -> str:
-        return f"http://localhost:{port}/v1/chat/completions"
-
-
-class VLLMBackend(LLMBackend):
-    """Backend for vLLM"""
-
-    def is_available(self) -> bool:
-        """Check if vllm is available"""
-        try:
-            import vllm  # noqa: F401
-
-            return True
-        except ImportError:
-            return False
-
-    def start_server(self, model_path: str, port: int = 8080, **kwargs) -> subprocess.Popen:
-        """Start vLLM server process"""
-        args = [
-            "python",
-            "-m",
-            "vllm.entrypoints.openai.api_server",
-            "--model",
-            model_path,
-            "--port",
-            str(port),
-            "--host",
-            "0.0.0.0",
-        ]
-
-        # Add default arguments
-        args.extend(self.default_args)
-
-        logger.info(f"Starting vLLM server: {' '.join(args)}")
-        return subprocess.Popen(args)
-
-    def get_health_endpoint(self, port: int = 8080) -> str:
-        return f"http://localhost:{port}/health"
-
-    def get_chat_endpoint(self, port: int = 8080) -> str:
-        return f"http://localhost:{port}/v1/chat/completions"
-
-
-# Backend registry
-BACKENDS = {"llama.cpp": LlamaCppBackend, "mlc-serve": MLCServeBackend, "vllm": VLLMBackend}
+# Backend registry - focused on llama.cpp for now
+BACKENDS = {"llama.cpp": LlamaCppBackend}
 
 
 def get_backend_for_model(

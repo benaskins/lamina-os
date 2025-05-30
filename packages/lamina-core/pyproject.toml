@@ -178,10 +178,13 @@ ignore_missing_imports = true
 minversion = "8.0"
 addopts = "-ra -q --strict-markers --strict-config"
 testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
     "error",
     "ignore::UserWarning", 
     "ignore::DeprecationWarning",
+    "ignore::pytest.PytestDeprecationWarning",
 ]
 markers = [
     "unit: marks tests as unit tests (fast, mock-based)",
