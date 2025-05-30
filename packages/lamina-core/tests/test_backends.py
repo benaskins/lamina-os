@@ -5,7 +5,10 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Tests for AI backends and provider integrations.
+Unit Tests for AI backends and provider integrations.
+
+These tests validate API contracts and mock behavior for fast feedback.
+For real AI testing, see test_real_backends.py (integration tests).
 """
 
 import pytest
@@ -13,6 +16,7 @@ import pytest
 from lamina import get_backend
 
 
+@pytest.mark.unit
 class TestBackends:
     """Test AI backend integrations."""
 
