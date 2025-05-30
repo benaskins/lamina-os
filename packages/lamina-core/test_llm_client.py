@@ -34,7 +34,7 @@ async def test_llamaserve_client():
         "parameters": {
             "temperature": 0.7,
             "max_tokens": 50,  # Keep short for testing
-        }
+        },
     }
 
     try:
@@ -64,9 +64,7 @@ async def test_llamaserve_client():
 
         # Test chat generation (non-streaming)
         print("\n💬 Testing non-streaming chat...")
-        messages = [
-            Message(role="user", content="Hello! Please respond with just 'Hi there!'")
-        ]
+        messages = [Message(role="user", content="Hello! Please respond with just 'Hi there!'")]
 
         response_chunks = []
         async for chunk in client.generate(messages, stream=False):
@@ -78,9 +76,7 @@ async def test_llamaserve_client():
 
         # Test chat generation (streaming)
         print("\n🌊 Testing streaming chat...")
-        messages = [
-            Message(role="user", content="Count from 1 to 3, one number per word.")
-        ]
+        messages = [Message(role="user", content="Count from 1 to 3, one number per word.")]
 
         chunk_count = 0
         async for chunk in client.generate(messages, stream=True):
@@ -103,6 +99,7 @@ async def test_llamaserve_client():
     except Exception as e:
         print(f"❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()
 
 
