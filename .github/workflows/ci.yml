@@ -67,6 +67,7 @@ jobs:
       if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
       run: |
         cd packages/lamina-core
+        uv sync --extra dev
         uv run pytest tests/ --integration -v --tb=short
     
     - name: Upload unit test coverage to Codecov
