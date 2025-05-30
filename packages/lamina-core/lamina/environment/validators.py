@@ -27,10 +27,10 @@ class EnvironmentValidationError(Exception):
 def validate_environment_config(config: EnvironmentConfig) -> None:
     """
     Validate environment configuration comprehensively.
-    
+
     Args:
         config: EnvironmentConfig to validate
-        
+
     Raises:
         EnvironmentValidationError: If validation fails
     """
@@ -203,7 +203,7 @@ def _validate_resources_config(config: EnvironmentConfig) -> list[str]:
     for resource_type in ["total_memory", "total_cpu"]:
         if resource_type in config.resources:
             resource_value = config.resources[resource_type]
-            if not isinstance(resource_value, (str, int, float)):
+            if not isinstance(resource_value, str | int | float):
                 errors.append(f"Resource '{resource_type}' must be string, int, or float")
 
     # Environment-specific resource validation
@@ -302,11 +302,11 @@ def _validate_production_config(config: EnvironmentConfig) -> list[str]:
 def validate_environment_transition(from_env: str, to_env: str) -> list[str]:
     """
     Validate environment transition rules.
-    
+
     Args:
         from_env: Source environment name
         to_env: Target environment name
-        
+
     Returns:
         List of validation errors (empty if valid)
     """
