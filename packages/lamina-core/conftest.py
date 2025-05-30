@@ -11,12 +11,11 @@ This module implements the ADR-0010 comprehensive testing strategy with
 real AI model integration via lamina-llm-serve.
 """
 
-import asyncio
 import logging
 import os
 import time
+from collections.abc import Generator
 from pathlib import Path
-from typing import AsyncGenerator, Generator
 
 import pytest
 import requests
@@ -30,12 +29,12 @@ def pytest_addoption(parser):
     """Add custom pytest command line options for test tiers."""
     parser.addoption(
         "--integration",
-        action="store_true", 
+        action="store_true",
         default=False,
         help="Run integration tests with real AI models"
     )
     parser.addoption(
-        "--e2e", 
+        "--e2e",
         action="store_true",
         default=False,
         help="Run end-to-end tests with full system"
@@ -43,7 +42,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--all-tests",
         action="store_true",
-        default=False, 
+        default=False,
         help="Run all test tiers (unit + integration + e2e)"
     )
     parser.addoption(
@@ -60,13 +59,13 @@ def pytest_collection_modifyitems(config, items):
         # Default: Skip integration and e2e tests
         skip_integration = pytest.mark.skip(reason="need --integration option to run")
         skip_e2e = pytest.mark.skip(reason="need --e2e option to run")
-        
+
         for item in items:
             if "integration" in item.keywords:
                 item.add_marker(skip_integration)
             if "e2e" in item.keywords:
                 item.add_marker(skip_e2e)
-    
+
     elif config.getoption("--integration") and not config.getoption("--e2e"):
         # Integration only: Skip e2e tests
         skip_e2e = pytest.mark.skip(reason="need --e2e option to run")
@@ -77,13 +76,13 @@ def pytest_collection_modifyitems(config, items):
 
 class LLMTestServer:
     """Test server manager for lamina-llm-serve integration."""
-    
+
     def __init__(self, base_url: str = "http://localhost:8000"):
         self.base_url = base_url
         self.model_name = "llama3.2-1b-q4_k_m"
         self.is_running = False
         self.server_info = None
-        
+
     def start(self) -> bool:
         """Start or verify LLM server is running."""
         try:
@@ -91,7 +90,7 @@ class LLMTestServer:
             if response.status_code == 200:
                 self.is_running = True
                 logger.info(f"✅ LLM server already running at {self.base_url}")
-                
+
                 # Try to start the model for testing
                 server_info = self.start_model()
                 if server_info:
@@ -103,17 +102,17 @@ class LLMTestServer:
                     return False
         except requests.ConnectionError:
             pass
-            
+
         # Try to start server (this would be environment-specific)
         logger.warning(f"⚠️  LLM server not running at {self.base_url}")
         logger.info("To run integration tests, start lamina-llm-serve:")
-        logger.info(f"  cd ../lamina-llm-serve && uv run python -m lamina_llm_serve.server")
+        logger.info("  cd ../lamina-llm-serve && uv run python -m lamina_llm_serve.server")
         return False
-        
+
     def stop(self):
         """Stop the LLM server (if we started it)."""
         self.is_running = False
-        
+
     def wait_for_readiness(self, timeout: int = 30) -> bool:
         """Wait for server to be ready."""
         start_time = time.time()
@@ -126,7 +125,7 @@ class LLMTestServer:
                 pass
             time.sleep(1)
         return False
-        
+
     def is_model_available(self, model_name: str = None) -> bool:
         """Check if specific model is available."""
         model = model_name or self.model_name
@@ -138,7 +137,7 @@ class LLMTestServer:
         except requests.ConnectionError:
             pass
         return False
-        
+
     def start_model(self, model_name: str = None) -> dict:
         """Start the model server via lamina-llm-serve and get server details."""
         model = model_name or self.model_name
@@ -148,7 +147,7 @@ class LLMTestServer:
             if response.status_code == 200:
                 data = response.json()
                 logger.info(f"✅ Started model {model}: {data}")
-                
+
                 # Get the server details
                 response = requests.get(f"{self.base_url}/models/{model}", timeout=5)
                 if response.status_code == 200:
@@ -174,7 +173,7 @@ class LLMTestServer:
 def llm_server_url(request) -> str:
     """Get LLM server URL from command line or environment."""
     # Environment variable takes precedence over default, but command line still overrides
-    default_url = os.getenv("LLM_SERVER_URL", "http://localhost:8000") 
+    default_url = os.getenv("LLM_SERVER_URL", "http://localhost:8000")
     url = request.config.getoption("--llm-server-url")
     if url == "http://localhost:8000":  # This is the default, check env
         url = default_url
@@ -186,18 +185,18 @@ def llm_server_url(request) -> str:
 def llm_test_server(llm_server_url: str) -> Generator[LLMTestServer, None, None]:
     """Session-scoped LLM test server fixture."""
     server = LLMTestServer(llm_server_url)
-    
+
     if not server.start():
         pytest.skip(f"LLM server not available at {llm_server_url}")
-        
+
     if not server.wait_for_readiness():
         pytest.skip("LLM server failed to become ready")
-        
+
     yield server
     server.stop()
 
 
-@pytest.fixture(scope="function")  
+@pytest.fixture(scope="function")
 def integration_backend_config(llm_test_server: LLMTestServer) -> dict:
     """Configuration for real backend integration tests."""
     if llm_test_server.server_info:
@@ -230,7 +229,7 @@ def integration_backend_config(llm_test_server: LLMTestServer) -> dict:
 
 @pytest.fixture
 def test_artifacts_dir() -> Path:
-    """Directory for test artifacts (logs, traces, etc.).""" 
+    """Directory for test artifacts (logs, traces, etc.)."""
     artifacts_dir = Path("test_artifacts")
     artifacts_dir.mkdir(exist_ok=True)
     return artifacts_dir
@@ -238,11 +237,11 @@ def test_artifacts_dir() -> Path:
 
 class TestArtifactLogger:
     """Test artifact logging per Ansel's suggestion."""
-    
+
     def __init__(self, artifacts_dir: Path):
         self.artifacts_dir = artifacts_dir
         self.test_logs = []
-        
+
     def log_response(self, test_name: str, prompt: str, response: str, metadata: dict = None):
         """Log AI response for analysis."""
         log_entry = {
@@ -253,7 +252,7 @@ class TestArtifactLogger:
             "metadata": metadata or {}
         }
         self.test_logs.append(log_entry)
-        
+
     def log_model_info(self, model_name: str, model_hash: str = None, version: str = None):
         """Log model information per Vesna's guidance."""
         model_info = {
@@ -262,11 +261,11 @@ class TestArtifactLogger:
             "version": version,
             "timestamp": time.time()
         }
-        
+
         log_file = self.artifacts_dir / "model_info.log"
         with open(log_file, "a") as f:
             f.write(f"{model_info}\n")
-            
+
     def save_artifacts(self, test_name: str):
         """Save test artifacts to disk."""
         if self.test_logs:
@@ -301,34 +300,34 @@ def breath_validation_criteria() -> dict:
     }
 
 
-@pytest.fixture 
+@pytest.fixture
 def symbolic_trace_validator() -> callable:
     """Symbolic trace validation per Luna's feedback."""
     def validate_symbolic_traces(response: str, expected_agent: str, intent_type: str) -> dict:
         """Validate symbolic coherence in routing decisions."""
         issues = []
-        
+
         # Check for agent consistency
         if expected_agent not in response.lower():
             issues.append(f"Response missing expected agent reference: {expected_agent}")
-            
+
         # Check for intent alignment
         intent_markers = {
             "analytical": ["research", "analyze", "study", "investigate"],
-            "creative": ["create", "imagine", "write", "design"], 
+            "creative": ["create", "imagine", "write", "design"],
             "conversational": ["help", "assist", "support"]
         }
-        
+
         markers = intent_markers.get(intent_type, [])
         if not any(marker in response.lower() for marker in markers):
             issues.append(f"Response lacks {intent_type} intent markers")
-            
+
         return {
             "valid": len(issues) == 0,
             "issues": issues,
             "symbolic_coherence": len(issues) == 0
         }
-    
+
     return validate_symbolic_traces
 
 
@@ -337,7 +336,7 @@ def real_test_agents(integration_backend_config: dict) -> dict:
     """Real test agents for integration testing."""
     return {
         "researcher": {
-            "name": "researcher", 
+            "name": "researcher",
             "description": "Research and analysis agent",
             "personality_traits": ["analytical", "thorough", "methodical"],
             "expertise_areas": ["research", "analysis", "investigation"],
@@ -345,7 +344,7 @@ def real_test_agents(integration_backend_config: dict) -> dict:
         },
         "creative": {
             "name": "creative",
-            "description": "Creative and artistic agent", 
+            "description": "Creative and artistic agent",
             "personality_traits": ["creative", "imaginative", "expressive"],
             "expertise_areas": ["writing", "art", "storytelling", "design"],
             "backend_config": integration_backend_config
@@ -355,5 +354,5 @@ def real_test_agents(integration_backend_config: dict) -> dict:
 
 # Test markers for ADR-0010 test tiers
 pytest.mark.unit = pytest.mark.unit
-pytest.mark.integration = pytest.mark.integration  
+pytest.mark.integration = pytest.mark.integration
 pytest.mark.e2e = pytest.mark.e2e
