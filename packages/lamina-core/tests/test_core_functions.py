@@ -5,7 +5,9 @@
 # Copyright (c) 2025 Ben Askins
 
 """
-Tests for core Lamina functions and API.
+Unit Tests for core Lamina functions and API.
+
+These tests validate API contracts and mock behavior for fast feedback.
 """
 
 import pytest
@@ -13,6 +15,7 @@ import pytest
 from lamina import __version__, get_backend, get_coordinator, get_memory_store
 
 
+@pytest.mark.unit
 class TestCoreFunctions:
     """Test core Lamina API functions."""
 
