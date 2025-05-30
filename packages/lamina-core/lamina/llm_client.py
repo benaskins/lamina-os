@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Message:
     """Represents a chat message"""
+
     role: str  # "user", "assistant", "system"
     content: str
 
@@ -63,10 +64,7 @@ class LaminaLLMClient:
         """
         try:
             # Convert messages to OpenAI format
-            openai_messages = [
-                {"role": msg.role, "content": msg.content}
-                for msg in messages
-            ]
+            openai_messages = [{"role": msg.role, "content": msg.content} for msg in messages]
 
             # Prepare request payload
             payload = {
@@ -91,7 +89,7 @@ class LaminaLLMClient:
                     if stream:
                         # Handle streaming response
                         async for line in response.content:
-                            line_text = line.decode('utf-8').strip()
+                            line_text = line.decode("utf-8").strip()
                             if line_text:
                                 # For streaming, just yield the chunks as they come
                                 # lamina-llm-serve handles the streaming format
