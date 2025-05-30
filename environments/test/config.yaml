@@ -1,0 +1,144 @@
+# 🜁 Test Environment Configuration
+# Symbolic marker: 🜁 (breath marker for testing)
+# Focus: Automated testing, CI/CD integration, isolation
+
+environment:
+  name: test
+  sigil: "🜁"
+  type: containerized
+  description: "Automated testing environment for CI/CD with isolation and reproducibility"
+
+# Test-specific features
+features:
+  ephemeral: true
+  test_fixtures: true
+  isolation: true
+  parallel_execution: true
+  artifact_collection: true
+  performance_baseline: true
+
+# Service configuration for testing
+services:
+  lamina-core:
+    image: lamina-core:test
+    build_target: test
+    environment:
+      ENV: test
+      LOG_LEVEL: info
+      TEST_MODE: true
+      DATABASE_URL: "sqlite:///tmp/test.db"
+      SIGIL: "🜁"
+    resources:
+      memory: "1Gi"
+      cpu: "1"
+    networks:
+      - test-network
+
+  lamina-llm-serve:
+    image: lamina-llm-serve:test
+    build_target: test
+    environment:
+      ENV: test
+      MODEL_CACHE_SIZE: "1GB"
+      TEST_MODEL_PATH: "/fixtures/test-model"
+      SIGIL: "🜁"
+    volumes:
+      - "test-fixtures:/fixtures:ro"
+    resources:
+      memory: "1Gi"
+      cpu: "1"
+    networks:
+      - test-network
+
+  test-chromadb:
+    image: chromadb/chroma:latest
+    environment:
+      ENV: test
+      CHROMA_DB_IMPL: "duckdb+parquet"
+      CHROMA_PERSIST_DIRECTORY: "/tmp/test-chroma"
+      SIGIL: "🜁"
+    tmpfs:
+      - "/tmp/test-chroma"
+    resources:
+      memory: "512Mi"
+      cpu: "0.5"
+    networks:
+      - test-network
+
+  test-fixtures:
+    image: lamina-test-fixtures:latest
+    volumes:
+      - "test-fixtures:/fixtures"
+    environment:
+      ENV: test
+      SIGIL: "🜁"
+    networks:
+      - test-network
+
+# Test-specific volumes
+volumes:
+  test-fixtures:
+    driver: local
+    labels:
+      lamina.environment: "test"
+      lamina.sigil: "🜁"
+      lamina.ephemeral: "true"
+
+# Test-specific networks (isolated)
+networks:
+  test-network:
+    driver: bridge
+    internal: true  # No external internet access
+    labels:
+      lamina.environment: "test"
+      lamina.sigil: "🜁"
+      lamina.isolated: "true"
+
+# Breath-aware configuration for testing
+breath:
+  modulation: true
+  conscious_pause: 0.1  # Minimal pause for test timing
+  validation_enabled: true
+
+# Security (test-appropriate)
+security:
+  mtls: false  # Simplified for test environment
+  network_policies: true
+  secrets_encryption: false
+  test_data_isolation: true
+  
+# Logging configuration for testing
+logging:
+  level: info
+  format: "🜁 [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
+  include_sigil: true
+  capture_for_analysis: true
+  
+# Resource limits (optimized for CI)
+resources:
+  total_memory: "4Gi"
+  total_cpu: "2"
+  storage: "5Gi"  # Ephemeral, smaller allocation
+  timeout: "300s"  # 5 minute test timeout
+
+# Test execution configuration
+testing:
+  parallel_workers: 4
+  timeout_per_test: "30s"
+  retry_failed_tests: 2
+  coverage_threshold: 80
+  performance_regression_threshold: "20%"
+
+# Test data management
+test_data:
+  fixtures_path: "/fixtures"
+  seed_data: true
+  cleanup_after_run: true
+  snapshot_on_failure: true
+
+# CI/CD integration
+ci_integration:
+  artifact_collection: true
+  log_aggregation: true
+  metrics_reporting: true
+  failure_analysis: true
