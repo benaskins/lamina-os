@@ -13,6 +13,12 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
         test-tier: ["unit", "integration"]
+        exclude:
+          # Only run integration tests on Python 3.12 (most common)
+          - python-version: "3.11"
+            test-tier: "integration"
+          - python-version: "3.13"
+            test-tier: "integration"
     
     steps:
     - uses: actions/checkout@v4
@@ -47,7 +53,7 @@ jobs:
     
     # Integration Tests (Real AI)
     - name: Set up lamina-llm-serve for integration tests
-      if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
+      if: matrix.test-tier == 'integration' && matrix.python-version == '3.12'
       run: |
         # Use existing lamina-llm-serve from workspace
         cd packages/lamina-llm-serve
@@ -64,7 +70,7 @@ jobs:
         sleep 15  # Wait for server startup
     
     - name: Run integration tests
-      if: matrix.test-tier == 'integration' && matrix.python-version == '3.11'
+      if: matrix.test-tier == 'integration' && matrix.python-version == '3.12'
       run: |
         cd packages/lamina-core
         uv sync --extra dev
