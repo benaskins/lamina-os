@@ -1,0 +1,23 @@
+annotations:
+  lamina.environment: production
+  lamina.sigil: "\U0001F704"
+  lamina.type: kubernetes
+apiVersion: v2
+appVersion: 1.0.0
+description: Lamina OS production environment deployment
+home: https://github.com/benaskins/lamina-os
+keywords:
+- lamina
+- ai
+- agent
+- breath-first
+maintainers:
+- email: council@getlamina.ai
+  name: Lamina High Council
+- email: human@getlamina.ai
+  name: Ben Askins
+name: lamina-production
+sources:
+- https://github.com/benaskins/lamina-os
+type: application
+version: 1.0.0

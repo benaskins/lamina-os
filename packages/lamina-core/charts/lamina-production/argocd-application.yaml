@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    lamina.environment: production
+    lamina.sigil: "\U0001F704"
+  name: lamina-production
+  namespace: argocd
+spec:
+  destination:
+    namespace: lamina-production
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      parameters:
+      - name: global.environment
+        value: production
+      - name: global.sigil
+        value: "\U0001F704"
+      valueFiles:
+      - values.yaml
+    path: charts/lamina-production
+    repoURL: https://github.com/benaskins/lamina-os
+    targetRevision: main
+  syncPolicy:
+    automated:
+      allowEmpty: false
+      prune: true
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+      limit: 5
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true

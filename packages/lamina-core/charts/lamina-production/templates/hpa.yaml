@@ -1,0 +1,29 @@
+{{- if .Values.autoscaling.enabled }}
+{{- range $serviceName, $config := .Values.autoscaling.configs }}
+{{- if $config.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $serviceName }}-hpa
+  namespace: {{ $.Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $serviceName }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $serviceName }}
+  minReplicas: {{ $config.minReplicas }}
+  maxReplicas: {{ $config.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ $config.targetCPUUtilizationPercentage }}
+{{- end }}
+{{- end }}
+{{- end }}
