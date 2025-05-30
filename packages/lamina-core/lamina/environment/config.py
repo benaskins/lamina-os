@@ -31,7 +31,7 @@ ENVIRONMENT_SIGILS = {
 class EnvironmentConfig:
     """
     Environment configuration with breath-aware markers.
-    
+
     Represents a complete environment configuration including
     services, resources, security, and ritual aspects.
     """
@@ -68,7 +68,7 @@ class EnvironmentConfig:
             self.logging["format"] = f"{self.sigil} [%(asctime)s] %(name)s - %(levelname)s - %(message)s"
 
         # Ensure sigil is set in environment variables for all services
-        for service_name, service_config in self.services.items():
+        for _service_name, service_config in self.services.items():
             if "environment" in service_config:
                 service_config["environment"]["SIGIL"] = self.sigil
 
@@ -116,14 +116,14 @@ class EnvironmentConfig:
 def load_environment_config(environment_name: str, config_path: Path | None = None) -> EnvironmentConfig:
     """
     Load environment configuration from YAML file.
-    
+
     Args:
         environment_name: Name of environment (development, test, production)
         config_path: Optional path to config file. If None, uses default location.
-        
+
     Returns:
         EnvironmentConfig instance
-        
+
     Raises:
         FileNotFoundError: If config file doesn't exist
         ValueError: If config is invalid
@@ -179,10 +179,10 @@ def load_environment_config(environment_name: str, config_path: Path | None = No
 def get_available_environments(environments_root: Path | None = None) -> list[str]:
     """
     Get list of available environment names.
-    
+
     Args:
         environments_root: Root directory containing environment configs
-        
+
     Returns:
         List of environment names
     """
@@ -204,10 +204,10 @@ def get_available_environments(environments_root: Path | None = None) -> list[st
 def validate_environment_name(environment_name: str) -> bool:
     """
     Validate that environment name is supported.
-    
+
     Args:
         environment_name: Name to validate
-        
+
     Returns:
         True if valid, False otherwise
     """
@@ -217,10 +217,10 @@ def validate_environment_name(environment_name: str) -> bool:
 def get_environment_sigil(environment_name: str) -> str:
     """
     Get the breath marker sigil for an environment.
-    
+
     Args:
         environment_name: Environment name
-        
+
     Returns:
         Sigil character for the environment
     """

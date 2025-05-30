@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class EnvironmentManager:
     """
     Manages environment configurations and operations.
-    
+
     Provides breath-aware environment management with boundary enforcement
     and ritual integration as specified by the High Council.
     """
@@ -34,7 +34,7 @@ class EnvironmentManager:
     def __init__(self, environments_root: Path | None = None):
         """
         Initialize environment manager.
-        
+
         Args:
             environments_root: Root directory containing environment configs
         """
@@ -71,13 +71,13 @@ class EnvironmentManager:
     def get_environment_config(self, environment_name: str) -> EnvironmentConfig:
         """
         Get configuration for specified environment.
-        
+
         Args:
             environment_name: Name of environment
-            
+
         Returns:
             EnvironmentConfig instance
-            
+
         Raises:
             ValueError: If environment not found
         """
@@ -90,10 +90,10 @@ class EnvironmentManager:
     def set_current_environment(self, environment_name: str):
         """
         Set the current active environment.
-        
+
         Args:
             environment_name: Name of environment to activate
-            
+
         Raises:
             ValueError: If environment not found
         """
@@ -119,7 +119,7 @@ class EnvironmentManager:
     def validate_all_environments(self) -> dict[str, bool]:
         """
         Validate all discovered environments.
-        
+
         Returns:
             Dict mapping environment names to validation status
         """
@@ -142,10 +142,10 @@ class EnvironmentManager:
     def get_environment_status(self, environment_name: str) -> dict[str, Any]:
         """
         Get detailed status of an environment.
-        
+
         Args:
             environment_name: Name of environment
-            
+
         Returns:
             Status dictionary with validation, services, resources
         """
@@ -185,11 +185,11 @@ class EnvironmentManager:
                                      container_labels: dict[str, str] | None = None) -> bool:
         """
         Enforce environment boundary rules per Vesna's guidance.
-        
+
         Args:
             target_environment: Environment being deployed to
             container_labels: Labels from container/artifact
-            
+
         Returns:
             True if boundaries are respected, False otherwise
         """
@@ -232,12 +232,12 @@ class EnvironmentManager:
                                 run_tests: bool = True) -> bool:
         """
         Perform Luna's "sigil of passage" ritual between environments.
-        
+
         Args:
             from_env: Source environment
-            to_env: Target environment  
+            to_env: Target environment
             run_tests: Whether to run test gates
-            
+
         Returns:
             True if passage is blessed, False otherwise
         """
@@ -270,16 +270,16 @@ class EnvironmentManager:
     def _run_passage_tests(self, from_env: str, to_env: str) -> bool:
         """
         Run test gates for environment passage.
-        
+
         Args:
             from_env: Source environment
             to_env: Target environment
-            
+
         Returns:
             True if tests pass, False otherwise
         """
         from_config = self._configs[from_env]
-        to_config = self._configs[to_env]
+        self._configs[to_env]
 
         logger.info(f"{from_config.sigil} Running passage tests...")
 
@@ -322,10 +322,10 @@ class EnvironmentManager:
     def get_cli_status_message(self, environment_name: str | None = None) -> str:
         """
         Get CLI status message with breath markers.
-        
+
         Args:
             environment_name: Environment to show status for
-            
+
         Returns:
             Formatted status message with sigil
         """
