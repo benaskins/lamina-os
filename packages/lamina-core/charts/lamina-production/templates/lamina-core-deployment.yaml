@@ -1,0 +1,62 @@
+{{- if .Values.services.lamina-core.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamina-core
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" . | nindent 4 }}
+    app.kubernetes.io/component: lamina-core
+spec:
+  replicas: {{ .Values.services.lamina-core.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lamina.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: lamina-core
+  template:
+    metadata:
+      labels:
+        {{- include "lamina.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: lamina-core
+        lamina.environment: {{ .Values.global.environment }}
+        lamina.sigil: {{ .Values.global.sigil }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: lamina-core
+        image: "{{ .Values.services.lamina-core.image.repository }}:{{ .Values.services.lamina-core.image.tag }}"
+        imagePullPolicy: {{ .Values.services.lamina-core.image.pullPolicy }}
+        ports:
+        {{- range .Values.services.lamina-core.service.ports }}
+        - containerPort: {{ . }}
+        {{- end }}
+        env:
+        - name: LAMINA_ENVIRONMENT
+          value: {{ .Values.global.environment | quote }}
+        - name: LAMINA_SIGIL
+          value: {{ .Values.global.sigil | quote }}
+        - name: LAMINA_NAMESPACE
+          value: {{ .Values.namespace.name | quote }}
+        {{- range $key, $value := .Values.services.lamina-core.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- if .Values.services.lamina-core.config }}
+        envFrom:
+        - configMapRef:
+            name: lamina-core-config
+        {{- end }}
+        resources:
+          {{- toYaml .Values.services.lamina-core.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+{{- end }}

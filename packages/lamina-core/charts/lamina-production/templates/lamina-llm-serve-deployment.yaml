@@ -1,0 +1,62 @@
+{{- if .Values.services.lamina-llm-serve.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamina-llm-serve
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" . | nindent 4 }}
+    app.kubernetes.io/component: lamina-llm-serve
+spec:
+  replicas: {{ .Values.services.lamina-llm-serve.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lamina.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: lamina-llm-serve
+  template:
+    metadata:
+      labels:
+        {{- include "lamina.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: lamina-llm-serve
+        lamina.environment: {{ .Values.global.environment }}
+        lamina.sigil: {{ .Values.global.sigil }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: lamina-llm-serve
+        image: "{{ .Values.services.lamina-llm-serve.image.repository }}:{{ .Values.services.lamina-llm-serve.image.tag }}"
+        imagePullPolicy: {{ .Values.services.lamina-llm-serve.image.pullPolicy }}
+        ports:
+        {{- range .Values.services.lamina-llm-serve.service.ports }}
+        - containerPort: {{ . }}
+        {{- end }}
+        env:
+        - name: LAMINA_ENVIRONMENT
+          value: {{ .Values.global.environment | quote }}
+        - name: LAMINA_SIGIL
+          value: {{ .Values.global.sigil | quote }}
+        - name: LAMINA_NAMESPACE
+          value: {{ .Values.namespace.name | quote }}
+        {{- range $key, $value := .Values.services.lamina-llm-serve.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- if .Values.services.lamina-llm-serve.config }}
+        envFrom:
+        - configMapRef:
+            name: lamina-llm-serve-config
+        {{- end }}
+        resources:
+          {{- toYaml .Values.services.lamina-llm-serve.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+{{- end }}

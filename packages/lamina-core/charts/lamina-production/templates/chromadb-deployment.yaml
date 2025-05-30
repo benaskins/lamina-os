@@ -1,0 +1,62 @@
+{{- if .Values.services.chromadb.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromadb
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "lamina.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chromadb
+spec:
+  replicas: {{ .Values.services.chromadb.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "lamina.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: chromadb
+  template:
+    metadata:
+      labels:
+        {{- include "lamina.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: chromadb
+        lamina.environment: {{ .Values.global.environment }}
+        lamina.sigil: {{ .Values.global.sigil }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: chromadb
+        image: "{{ .Values.services.chromadb.image.repository }}:{{ .Values.services.chromadb.image.tag }}"
+        imagePullPolicy: {{ .Values.services.chromadb.image.pullPolicy }}
+        ports:
+        {{- range .Values.services.chromadb.service.ports }}
+        - containerPort: {{ . }}
+        {{- end }}
+        env:
+        - name: LAMINA_ENVIRONMENT
+          value: {{ .Values.global.environment | quote }}
+        - name: LAMINA_SIGIL
+          value: {{ .Values.global.sigil | quote }}
+        - name: LAMINA_NAMESPACE
+          value: {{ .Values.namespace.name | quote }}
+        {{- range $key, $value := .Values.services.chromadb.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- if .Values.services.chromadb.config }}
+        envFrom:
+        - configMapRef:
+            name: chromadb-config
+        {{- end }}
+        resources:
+          {{- toYaml .Values.services.chromadb.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+{{- end }}

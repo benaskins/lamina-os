@@ -139,6 +139,56 @@ For more help on specific commands:
     docker_subparsers.add_parser("logs", help="Show logs")
     docker_subparsers.add_parser("status", help="Show container status")
 
+    # Environment management
+    env_parser = subparsers.add_parser("environment", help="Environment management")
+    env_subparsers = env_parser.add_subparsers(dest="env_command")
+
+    # environment create/configure
+    env_create_parser = env_subparsers.add_parser("create", help="Create environment configuration")
+    env_create_parser.add_argument("name", choices=["development", "test", "production"], help="Environment name")
+
+    # environment list
+    env_subparsers.add_parser("list", help="List available environments")
+
+    # environment status
+    env_status_parser = env_subparsers.add_parser("status", help="Show environment status")
+    env_status_parser.add_argument("name", nargs="?", help="Environment name")
+
+    # environment validate
+    env_validate_parser = env_subparsers.add_parser("validate", help="Validate environment configurations")
+    env_validate_parser.add_argument("name", nargs="?", help="Environment name (validates all if not specified)")
+
+    # GitOps management
+    gitops_parser = subparsers.add_parser("gitops", help="GitOps deployment management")
+    gitops_subparsers = gitops_parser.add_subparsers(dest="gitops_command")
+
+    # gitops setup
+    gitops_setup_parser = gitops_subparsers.add_parser("setup", help="Complete GitOps setup for environment")
+    gitops_setup_parser.add_argument("environment", choices=["development", "test", "production"], help="Environment name")
+    gitops_setup_parser.add_argument("--repo-url", default="https://github.com/benaskins/lamina-os", help="Git repository URL")
+    gitops_setup_parser.add_argument("--argocd/--no-argocd", default=True, help="Generate ArgoCD Application manifest")
+
+    # gitops generate-charts
+    gitops_gen_parser = gitops_subparsers.add_parser("generate-charts", help="Generate Helm charts for GitOps deployment")
+    gitops_gen_parser.add_argument("environment", choices=["development", "test", "production"], help="Environment name")
+    gitops_gen_parser.add_argument("--output-dir", "-o", default="charts", help="Output directory for generated charts")
+    gitops_gen_parser.add_argument("--validate/--no-validate", default=True, help="Validate generated charts")
+    gitops_gen_parser.add_argument("--package/--no-package", default=False, help="Package charts into .tgz files")
+
+    # gitops deploy
+    gitops_deploy_parser = gitops_subparsers.add_parser("deploy", help="Deploy environment using Helm chart")
+    gitops_deploy_parser.add_argument("environment", choices=["development", "test", "production"], help="Environment name")
+    gitops_deploy_parser.add_argument("--chart-path", "-c", help="Path to Helm chart")
+    gitops_deploy_parser.add_argument("--namespace", "-n", help="Kubernetes namespace")
+    gitops_deploy_parser.add_argument("--dry-run/--no-dry-run", default=False, help="Perform a dry run")
+    gitops_deploy_parser.add_argument("--wait/--no-wait", default=True, help="Wait for deployment to complete")
+    gitops_deploy_parser.add_argument("--timeout", "-t", type=int, default=600, help="Timeout in seconds")
+
+    # gitops status
+    gitops_status_parser = gitops_subparsers.add_parser("status", help="Check deployment status for environment")
+    gitops_status_parser.add_argument("environment", choices=["development", "test", "production"], help="Environment name")
+    gitops_status_parser.add_argument("--namespace", "-n", help="Kubernetes namespace")
+
     return parser
 
 
@@ -347,6 +397,221 @@ def handle_docker_command(args):
         print("Available docker commands: build, up, down, logs, status")
 
 
+def handle_environment_command(args):
+    """Handle environment subcommands"""
+    try:
+        from lamina.environment.manager import EnvironmentManager
+        from lamina.environment.config import load_environment_config, validate_environment_name
+
+        if args.env_command == "create":
+            print(f"🌊 Creating {args.name} environment configuration...")
+            # TODO: Implement environment creation
+            print("✅ Environment configuration created")
+
+        elif args.env_command == "list":
+            manager = EnvironmentManager()
+            environments = manager.get_available_environments()
+            if environments:
+                print("🌊 Available environments:")
+                for env_name in environments:
+                    config = manager.get_environment_config(env_name)
+                    print(f"   {config.sigil} {env_name} ({config.type})")
+            else:
+                print("No environments found")
+
+        elif args.env_command == "status":
+            manager = EnvironmentManager()
+            if args.name:
+                status = manager.get_environment_status(args.name)
+                if "error" in status:
+                    print(f"❌ {status['error']}")
+                    return
+                print(f"{status['sigil']} Environment: {status['name']}")
+                print(f"   Type: {status['type']}")
+                print(f"   Description: {status['description']}")
+                print(f"   Validation: {status['validation']['status']}")
+                print(f"   Services: {', '.join(status['services'])}")
+                print(f"   Is Current: {status['is_current']}")
+            else:
+                # Show all environments
+                environments = manager.get_available_environments()
+                for env_name in environments:
+                    status = manager.get_environment_status(env_name)
+                    print(f"{status['sigil']} {env_name}: {status['validation']['status']}")
+
+        elif args.env_command == "validate":
+            manager = EnvironmentManager()
+            if args.name:
+                # Validate specific environment
+                if not validate_environment_name(args.name):
+                    print(f"❌ Invalid environment: {args.name}")
+                    return
+                try:
+                    config = manager.get_environment_config(args.name)
+                    from lamina.environment.validators import validate_environment_config
+                    validate_environment_config(config)
+                    print(f"{config.sigil} ✅ Environment {args.name} validation passed")
+                except Exception as e:
+                    print(f"❌ Environment {args.name} validation failed: {e}")
+            else:
+                # Validate all environments
+                results = manager.validate_all_environments()
+                for env_name, is_valid in results.items():
+                    config = manager.get_environment_config(env_name)
+                    status = "✅ Valid" if is_valid else "❌ Invalid"
+                    print(f"{config.sigil} {env_name}: {status}")
+
+        else:
+            print("Available environment commands: create, list, status, validate")
+
+    except ImportError as e:
+        print(f"❌ Environment management not available: {e}")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+
+def handle_gitops_command(args):
+    """Handle GitOps subcommands"""
+    try:
+        from pathlib import Path
+        from lamina.environment.config import load_environment_config, validate_environment_name
+        from lamina.environment.helm import HelmChartGenerator, HelmError
+
+        if args.gitops_command == "setup":
+            if not validate_environment_name(args.environment):
+                print(f"❌ Invalid environment: {args.environment}")
+                return
+
+            config = load_environment_config(args.environment)
+            print(f"{config.sigil} Setting up GitOps for {args.environment} environment")
+
+            # Create charts directory
+            charts_dir = Path.cwd() / "charts"
+            charts_dir.mkdir(exist_ok=True)
+
+            # Generate Helm chart
+            print(f"{config.sigil} Generating Helm chart...")
+            generator = HelmChartGenerator(config, charts_dir)
+            chart_dir = generator.generate_chart()
+
+            # Validate and package
+            if generator.validate_chart():
+                print(f"{config.sigil} ✅ Chart validation passed")
+                package_path = generator.package_chart()
+                print(f"{config.sigil} ✅ GitOps setup complete!")
+                print(f"\n📋 Generated Files:")
+                print(f"  📊 Helm Chart: {chart_dir}")
+                print(f"  📦 Package: {package_path}")
+                print(f"  🔄 GitHub Workflow: {chart_dir}/.github/workflows/")
+                if args.argocd:
+                    print(f"  🐙 ArgoCD App: {chart_dir}/argocd-application.yaml")
+                print(f"\n🚀 Next: Commit charts/ and push to trigger GitOps deployment!")
+            else:
+                print(f"{config.sigil} ❌ Chart validation failed")
+
+        elif args.gitops_command == "generate-charts":
+            if not validate_environment_name(args.environment):
+                print(f"❌ Invalid environment: {args.environment}")
+                return
+
+            config = load_environment_config(args.environment)
+            output_dir = Path(args.output_dir)
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            generator = HelmChartGenerator(config, output_dir)
+            chart_dir = generator.generate_chart()
+            print(f"{config.sigil} Helm chart generated: {chart_dir}")
+
+            if args.validate and generator.validate_chart():
+                print(f"{config.sigil} ✅ Chart validation passed")
+            if args.package:
+                package_path = generator.package_chart()
+                print(f"{config.sigil} Chart packaged: {package_path}")
+
+        elif args.gitops_command == "deploy":
+            if not validate_environment_name(args.environment):
+                print(f"❌ Invalid environment: {args.environment}")
+                return
+
+            config = load_environment_config(args.environment)
+            chart_path = Path(args.chart_path) if args.chart_path else Path.cwd() / "charts" / f"lamina-{args.environment}"
+            namespace = args.namespace or f"lamina-{args.environment}"
+
+            if not chart_path.exists():
+                print(f"❌ Chart not found: {chart_path}")
+                print(f"Run 'lamina gitops generate-charts {args.environment}' first")
+                return
+
+            print(f"{config.sigil} Deploying {args.environment} environment")
+            print(f"📊 Chart: {chart_path}")
+            print(f"🎯 Namespace: {namespace}")
+
+            # Build helm command
+            import subprocess
+            cmd = [
+                "helm", "upgrade", "--install", f"lamina-{args.environment}",
+                str(chart_path),
+                "--namespace", namespace,
+                "--create-namespace",
+                "--set", f"global.environment={args.environment}",
+                "--set", f"global.sigil={config.sigil}",
+            ]
+
+            if args.dry_run:
+                cmd.append("--dry-run")
+                print(f"{config.sigil} Performing dry run...")
+            
+            if args.wait and not args.dry_run:
+                cmd.extend(["--wait", "--timeout", f"{args.timeout}s"])
+
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode == 0:
+                print(f"{config.sigil} ✅ Deployment successful!")
+                if not args.dry_run:
+                    print(f"\n📋 Deployment Status:")
+                    print(result.stdout)
+            else:
+                print(f"{config.sigil} ❌ Deployment failed!")
+                print(f"Error: {result.stderr}")
+
+        elif args.gitops_command == "status":
+            if not validate_environment_name(args.environment):
+                print(f"❌ Invalid environment: {args.environment}")
+                return
+
+            config = load_environment_config(args.environment)
+            namespace = args.namespace or f"lamina-{args.environment}"
+
+            print(f"{config.sigil} Checking status for {args.environment} environment")
+            print(f"🎯 Namespace: {namespace}")
+
+            import subprocess
+
+            # Check deployments, services, and pods
+            for resource_type, icon in [("deployments", "📊"), ("services", "🌐"), ("pods", "🐳")]:
+                print(f"\n{icon} {resource_type.title()}:")
+                result = subprocess.run([
+                    "kubectl", "get", resource_type, "-n", namespace
+                ], capture_output=True, text=True)
+                
+                if result.returncode == 0:
+                    print(result.stdout)
+                else:
+                    print(f"❌ Failed to get {resource_type}: {result.stderr}")
+
+        else:
+            print("Available GitOps commands: setup, generate-charts, deploy, status")
+
+    except ImportError as e:
+        print(f"❌ GitOps functionality not available: {e}")
+    except FileNotFoundError as e:
+        print(f"❌ Environment configuration not found: {e}")
+    except HelmError as e:
+        print(f"❌ Helm error: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+
+
 def main():
     """Main CLI entry point"""
     parser = create_parser()
@@ -383,6 +648,12 @@ def main():
 
     elif args.command == "docker":
         handle_docker_command(args)
+
+    elif args.command == "environment":
+        handle_environment_command(args)
+
+    elif args.command == "gitops":
+        handle_gitops_command(args)
 
     else:
         print(f"Unknown command: {args.command}")

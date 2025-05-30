@@ -89,6 +89,7 @@ all = [
 
 [project.scripts]
 lamina-core = "lamina.cli.main:main"
+lamina = "lamina.cli.unified_lamina:main"
 
 [project.urls]
 Homepage = "https://github.com/benaskins/lamina-os"
