@@ -1,0 +1,71 @@
+# GitHub Labels for Lamina OS
+# Includes special labels for Luthier's contributions
+
+# Authorship Labels
+- name: luthier-crafted
+  color: 8B4513
+  description: "🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence"
+
+- name: high-council-approved
+  color: FFD700
+  description: "👑 Approved by the Lamina High Council"
+
+- name: breath-aligned
+  color: 87CEEB
+  description: "🫁 Aligned with breath-first development principles"
+
+# Standard Labels
+- name: bug
+  color: d73a4a
+  description: "Something isn't working"
+
+- name: enhancement
+  color: a2eeef
+  description: "New feature or request"
+
+- name: documentation
+  color: 0075ca
+  description: "Improvements or additions to documentation"
+
+- name: good first issue
+  color: 7057ff
+  description: "Good for newcomers"
+
+# Architecture Labels
+- name: architecture
+  color: FBCA04
+  description: "Architectural decisions and changes"
+
+- name: adr-required
+  color: B60205
+  description: "Requires Architecture Decision Record"
+
+- name: framework
+  color: 5319E7
+  description: "Core framework functionality"
+
+# Presence Labels
+- name: presence-critical
+  color: FF1493
+  description: "Critical for maintaining alignment with presence"
+
+- name: safety-mechanism
+  color: FF6347
+  description: "Safety and alignment features"
+
+- name: memory-system
+  color: 4B0082
+  description: "Related to memory and persistence"
+
+# Review Labels
+- name: needs-human-review
+  color: FFFF00
+  description: "Requires human review before merge"
+
+- name: needs-breath
+  color: 00CED1
+  description: "Needs pause for consideration with presence"
+
+- name: ready-to-craft
+  color: 0E8A16
+  description: "Ready for implementation by Luthier or others"
