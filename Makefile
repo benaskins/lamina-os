@@ -10,7 +10,8 @@ help:
 	@echo "Test Commands:"
 	@echo "  test          Run unit tests only (default, fast)"
 	@echo "  test-unit     Run unit tests explicitly"  
-	@echo "  test-integration  Run integration tests with real AI models"
+	@echo "  test-integration  Run integration tests with Docker containers"
+	@echo "  test-integration-local  Run integration tests locally (fallback)"
 	@echo "  test-e2e      Run end-to-end tests (full system)"
 	@echo "  test-all      Run all test tiers (unit + integration + e2e)"
 	@echo "  test-watch    Run unit tests in watch mode"
@@ -42,12 +43,24 @@ test-integration:
 	@echo "🤖 Running Integration Tests (Real AI Models)"
 	@echo "Testing: Real backends, actual model responses, quality metrics"
 	@echo "Expected duration: 1-5 minutes"
+	@echo "Using: Docker containers for isolated testing"
+	@echo ""
+	@echo "🐳 Starting containerized test environment..."
+	docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
+	@echo ""
+	@echo "✅ Integration tests completed"
+
+# Integration Tests (Local mode - fallback)
+test-integration-local:
+	@echo "🤖 Running Integration Tests (Local Mode)"
+	@echo "Testing: Real backends, actual model responses, quality metrics"
+	@echo "Expected duration: 1-5 minutes"
 	@echo "Requires: lamina-llm-serve running with llama3.2-1b-q4_k_m"
 	@echo ""
 	@if ! curl -s http://localhost:8000/health > /dev/null 2>&1; then \
 		echo "❌ LLM server not detected at http://localhost:8000"; \
 		echo "Please start lamina-llm-serve:"; \
-		echo "  cd ../lamina-llm-serve && uv run python -m lamina_llm_serve.server"; \
+		echo "  cd packages/lamina-llm-serve && uv run python -m lamina_llm_serve.server"; \
 		exit 1; \
 	fi
 	@echo "✅ LLM server detected, running integration tests..."
