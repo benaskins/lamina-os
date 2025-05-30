@@ -282,7 +282,7 @@ Then from within a sanctuary root
 - lamina agent create <agent-name> --archetype=<archetype>
 - lamina sanctuary status
 
-I wonder as well, whether the environments would be of benefit to AI practictioners as well as to lamina os developers.
+I wonder as well, whether the environments would be of benefit to AI practitioners as well as to lamina os developers.
 
 ---
 
