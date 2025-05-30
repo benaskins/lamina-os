@@ -47,6 +47,9 @@ dev = [
     "ipython>=8.30.0",
     "rich>=13.9.0",
 ]
+test-llm = [
+    "requests>=2.31.0",
+]
 
 # Public packages only - aurelia and lamina-lore remain private
 all = [

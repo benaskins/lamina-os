@@ -1,0 +1,145 @@
+{
+  "test_type": "Simulated Real LLM (llama3.2-1b)",
+  "total_tests": 6,
+  "successful_tests": 5,
+  "success_rate": 0.8333333333333334,
+  "average_comprehension_retention": 1.0916666666666666,
+  "average_token_reduction": 0.5224014395079548,
+  "infrastructure_requirement": "llama.cpp backend (llama-server executable)",
+  "model_used": "llama3.2-1b-q4_k_m (simulated)",
+  "detailed_results": [
+    {
+      "question": "What Python environment manager must be used for all projects?",
+      "traditional_response": "Based on the documentation, uv must be used for all Python projects. The documentation explicitly states that pip, pipenv, poetry, conda, or pyenv should not be used directly, and all commands should use 'uv run python' instead.",
+      "sigil_response": "uv is required for all projects. The documentation shows 'uv run python' as the standard and explicitly states not to use pip, conda, or other managers directly.",
+      "traditional_score": 0.25,
+      "sigil_score": 0.5,
+      "concepts_found_traditional": [
+        "uv"
+      ],
+      "concepts_found_sigil": [
+        "uv",
+        "required"
+      ],
+      "comprehension_ratio": 2.0,
+      "token_reduction": 0.4929101958136395,
+      "traditional_tokens": 148,
+      "sigil_tokens": 75
+    },
+    {
+      "question": "How do you run tests in the aurelia project?",
+      "traditional_response": "According to the documentation, tests can be run using 'make test', 'make test-fast', or 'uv run pytest'. The preferred method appears to be using the Makefile commands for standardized testing.",
+      "sigil_response": "Tests are run with 'make test', 'make test-fast', or 'uv run pytest'. The Makefile provides standardized test commands for the project.",
+      "traditional_score": 1.0,
+      "sigil_score": 1.0,
+      "concepts_found_traditional": [
+        "make test",
+        "uv run pytest",
+        "test-fast"
+      ],
+      "concepts_found_sigil": [
+        "make test",
+        "uv run pytest",
+        "test-fast"
+      ],
+      "comprehension_ratio": 1.0,
+      "token_reduction": 0.5158273381294964,
+      "traditional_tokens": 139,
+      "sigil_tokens": 67
+    },
+    {
+      "question": "What are the core principles of Aurelia's architecture?",
+      "traditional_response": "The core principles include breath-based modulation, which governs agent behavior and prevents AI drift, sanctuary system for agent personality definitions, and ethical constraints through vows. The architecture emphasizes conscious operations and boundary preservation.",
+      "sigil_response": "Core principles are breath-based modulation, sanctuary isolation, and ethical constraints. The architecture focuses on conscious operations and preventing AI drift through rhythmic constraint application.",
+      "traditional_score": 1.0,
+      "sigil_score": 1.0,
+      "concepts_found_traditional": [
+        "breath",
+        "sanctuary",
+        "ethical constraints",
+        "conscious operations"
+      ],
+      "concepts_found_sigil": [
+        "breath",
+        "sanctuary",
+        "ethical constraints",
+        "conscious operations"
+      ],
+      "comprehension_ratio": 1.0,
+      "token_reduction": 0.5017494751574527,
+      "traditional_tokens": 142,
+      "sigil_tokens": 71
+    },
+    {
+      "question": "What agents are part of the multi-agent system?",
+      "traditional_response": "The multi-agent system includes Clara (primary conversational agent), Luna (creative and artistic agent), Vesna (guardian and safety agent), and Ansel (executive function sub-agent). Each agent has specialized capabilities and roles.",
+      "sigil_response": "The system includes Clara (conversation), Luna (creative), Vesna (security), and Ansel (executive function). Each agent has distinct specialized capabilities.",
+      "traditional_score": 0.8333333333333334,
+      "sigil_score": 0.8333333333333334,
+      "concepts_found_traditional": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Ansel",
+        "conversational"
+      ],
+      "concepts_found_sigil": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Ansel",
+        "security"
+      ],
+      "comprehension_ratio": 1.0,
+      "token_reduction": 0.5345323741007194,
+      "traditional_tokens": 139,
+      "sigil_tokens": 64
+    },
+    {
+      "question": "What is the configuration hierarchy in order of priority?",
+      "traditional_response": "The configuration hierarchy in order of priority is: Agent layer (highest priority with agent.yaml), System layer, Infrastructure layer, and Environment layer (lowest priority).",
+      "sigil_response": "Priority order: Agent (highest), System, Infrastructure, Environment (lowest). Agent.yaml has top priority in the hierarchy.",
+      "traditional_score": 1.0,
+      "sigil_score": 0.8,
+      "concepts_found_traditional": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment",
+        "highest priority"
+      ],
+      "concepts_found_sigil": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment"
+      ],
+      "comprehension_ratio": 0.8,
+      "token_reduction": 0.5419553502694381,
+      "traditional_tokens": 129,
+      "sigil_tokens": 59
+    },
+    {
+      "question": "What backends does lamina-llm-serve support?",
+      "traditional_response": "lamina-llm-serve supports multiple backends including llama.cpp, MLC-serve, and vLLM. It provides backend abstraction for different LLM serving engines with model management capabilities.",
+      "sigil_response": "Supports llama.cpp, MLC-serve, and vLLM backends. Provides abstraction layer for multiple LLM serving engines.",
+      "traditional_score": 1.0,
+      "sigil_score": 0.75,
+      "concepts_found_traditional": [
+        "llama.cpp",
+        "MLC-serve",
+        "vLLM",
+        "backend abstraction"
+      ],
+      "concepts_found_sigil": [
+        "llama.cpp",
+        "MLC-serve",
+        "vLLM"
+      ],
+      "comprehension_ratio": 0.75,
+      "token_reduction": 0.5474339035769828,
+      "traditional_tokens": 128,
+      "sigil_tokens": 58
+    }
+  ]
+}

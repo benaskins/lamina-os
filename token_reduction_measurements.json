@@ -15,23 +15,15 @@
       "token_reduction_percent": 74.67043314500941,
       "word_reduction_percent": 76.40845070422534,
       "char_reduction_percent": 74.38196142352622
-    },
-    {
-      "file_name": "lamina-llm-serve",
-      "traditional_tokens": 868,
-      "sigil_tokens": 310,
-      "token_reduction_percent": 64.28571428571428,
-      "word_reduction_percent": 65.72052401746724,
-      "char_reduction_percent": 64.01590457256461
     }
   ],
   "aggregates": {
-    "total_files": 3,
-    "total_traditional_tokens": 4041,
-    "total_sigil_tokens": 1169,
-    "average_token_reduction_percent": 71.07151695124969,
-    "average_word_reduction_percent": 72.38979118329468,
-    "average_char_reduction_percent": 70.84254833416566,
-    "total_tokens_saved": 2872
+    "total_files": 2,
+    "total_traditional_tokens": 3173,
+    "total_sigil_tokens": 859,
+    "average_token_reduction_percent": 72.92782855341949,
+    "average_word_reduction_percent": 74.18974661166764,
+    "average_char_reduction_percent": 72.7157014274025,
+    "total_tokens_saved": 2314
   }
 }

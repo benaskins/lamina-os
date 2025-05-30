@@ -1,0 +1,98 @@
+{
+  "total_tests": 6,
+  "successful_tests": 1,
+  "success_rate": 0.16666666666666666,
+  "average_comprehension_retention": 0.503968253968254,
+  "average_token_reduction": 0.5752879199379359,
+  "detailed_results": [
+    {
+      "question": "What Python environment manager must be used for all projects?",
+      "comprehension_score": 0.0,
+      "token_reduction": 0.6080074487895717,
+      "traditional_concepts": [
+        "uv"
+      ],
+      "sigil_concepts": []
+    },
+    {
+      "question": "How do you run tests in the aurelia project?",
+      "comprehension_score": 0.75,
+      "token_reduction": 0.5065616797900263,
+      "traditional_concepts": [
+        "make test",
+        "uv run pytest",
+        "test-fast",
+        "test-coverage"
+      ],
+      "sigil_concepts": [
+        "make test",
+        "test-fast",
+        "test-coverage"
+      ]
+    },
+    {
+      "question": "What are the core principles of Aurelia's architecture?",
+      "comprehension_score": 0.7499999999999999,
+      "token_reduction": 0.5901942645698428,
+      "traditional_concepts": [
+        "breath",
+        "vow",
+        "sanctuary",
+        "ethical constraints"
+      ],
+      "sigil_concepts": [
+        "breath",
+        "vow",
+        "sanctuary"
+      ]
+    },
+    {
+      "question": "What agents are part of the multi-agent system?",
+      "comprehension_score": 0.8571428571428571,
+      "token_reduction": 0.5914577530176416,
+      "traditional_concepts": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Phi",
+        "conversational",
+        "analysis",
+        "security"
+      ],
+      "sigil_concepts": [
+        "Clara",
+        "Luna",
+        "Vesna",
+        "Phi",
+        "analysis",
+        "security"
+      ]
+    },
+    {
+      "question": "What is the configuration hierarchy in order of priority?",
+      "comprehension_score": 0.6666666666666666,
+      "token_reduction": 0.568100358422939,
+      "traditional_concepts": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment",
+        "highest priority",
+        "agent.yaml"
+      ],
+      "sigil_concepts": [
+        "Agent",
+        "System",
+        "Infrastructure",
+        "Environment"
+      ]
+    },
+    {
+      "question": "What backends does lamina-llm-serve support?",
+      "comprehension_score": 0.0,
+      "token_reduction": 0.5874060150375939,
+      "traditional_concepts": [],
+      "sigil_concepts": []
+    }
+  ]
+}
