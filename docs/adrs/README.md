@@ -19,7 +19,7 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0010](0010-comprehensive-testing-strategy.md) - Comprehensive Testing Strategy (Proposed)
 - [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management (Proposed)
 - [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture (Draft)
-- [ADR-0015](0015-adr-as-trainable-corpus) - Training a Lamina-Aligned Model on ADR Corpus (Proposed)
+- [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus (Proposed)
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -230,7 +230,7 @@ graph TD
         "title": "Proposal – Training a Lamina-Aligned Model on ADR Corpus",
         "status": "proposed",
         "date": "2025-05-31",
-        "file": "0015-adr-as-trainable-corpus.md",
+        "file": "0015-training-lamina-aligned-model.md",
         "proposer": "Clara 🪶",
         "reviewers": ["Benny (Council)", "Luthier"],
         "tags": ["innovation", "ai-training"]
