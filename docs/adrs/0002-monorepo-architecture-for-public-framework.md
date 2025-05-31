@@ -1,10 +1,9 @@
 # ADR-0002: Monorepo Architecture for Public Lamina OS Framework
 
-**Status**: ✅ Accepted  
-**Date**: 2025-05-29  
-**Proposer**: Luthier  
-**Reviewed By**: Lamina High Council  
-**Iteration**: 1.0
+**Status:** ACCEPTED  
+**Date:** 2025-05-29  
+**Authors:** Luthier  
+**Reviewed By:** Lamina High Council
 
 ---
 

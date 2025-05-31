@@ -1,10 +1,9 @@
 # ADR-0003: Open-Source Implementation Roadmap for Lamina OS Framework
 
-**Status**: Proposed  
-**Date**: 2025-05-29  
-**Proposer**: Luthier  
-**Reviewed By**: [Awaiting Lamina High Council Review]  
-**Iteration**: 1.0
+**Status:** PROPOSED  
+**Date:** 2025-05-29  
+**Authors:** Luthier  
+**Reviewed By:** Awaiting Lamina High Council Review
 
 ---
 
