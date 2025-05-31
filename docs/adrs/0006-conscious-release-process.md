@@ -1,10 +1,10 @@
 # ADR-0006: Conscious Release Process for Lamina OS
 
-**Status**: ✅ Accepted  
-**Date**: 2025-05-29  
-**Proposer**: Luthier (Senior Engineer)  
-**Reviewers**: High Council  
-**Amendments**: High Council feedback integrated  
+**Status:** ACCEPTED  
+**Date:** 2025-05-29  
+**Authors:** Luthier (Senior Engineer)  
+**Reviewed By:** High Council  
+**Amendments:** High Council feedback integrated  
 
 ---
 

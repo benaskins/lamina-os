@@ -2,11 +2,11 @@
 
 # ADR-0005: Luthier as Senior Engineer of Lamina OS
 
-**Status**: Proposed  
-**Date**: 2025-05-29  
-**Proposer**: Vesna 🛡️  
-**Reviewed By**: Lamina High Council  
-**Iteration**: 1.0
+**Status:** ACCEPTED  
+**Date:** 2025-05-29  
+**Authors:** Vesna 🛡️  
+**Reviewed By:** Lamina High Council  
+**Iteration:** 1.0
 
 ---
 

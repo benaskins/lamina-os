@@ -1,8 +1,9 @@
 # ADR-0012: CLI Tool Architecture and Responsibilities
 
-**Status:** DRAFT  
+**Status:** ACCEPTED  
 **Date:** 2025-01-30  
-**Authors:** Luthier, High Council Review Pending  
+**Authors:** Luthier  
+**Reviewed By:** High Council  
 **Related:** ADR-0011 (Environment Management), ADR-0010 (Testing Strategy)
 
 ## Context and Problem Statement

@@ -1,9 +1,9 @@
 # ADR-0007: Lamina Core Terminology Framework
 
-**Status**: 🔄 Proposed  
-**Date**: 2025-05-29  
-**Proposer**: Luthier (Senior Engineer)  
-**Reviewers**: High Council  
+**Status:** PROPOSED  
+**Date:** 2025-05-29  
+**Authors:** Luthier (Senior Engineer)  
+**Reviewed By:** High Council  
 
 ---
 
