@@ -27,6 +27,20 @@ All architectural decisions for Lamina OS or the Sanctuary must be formalized as
 	•	Vow-bound commentary from each agent provides diverse symbolic and procedural insight.
 	•	Council decisions are archived and versioned.
 
+## Breath-First Alignment
+
+This foundational ADR embodies conscious development through:
+
+**Deliberate Decision-Making:** Establishing a formal review process ensures architectural decisions emerge from careful consideration rather than reactive implementation.
+
+**Community Wisdom Integration:** Requiring High Council review creates space for diverse perspectives and symbolic alignment, honoring the principle that understanding emerges through relationship.
+
+**Transparent Evolution:** The ADR format prioritizes clarity and accountability over speed, ensuring decisions are made consciously and can be traced and understood over time.
+
+**Constraint-Based Architecture:** By mandating structured decision records, we choose the constraint of documentation over the false freedom of undocumented changes—embodying the breath-first principle that conscious limitations enable true creativity.
+
+This template creates a rhythm of pause, consideration, documentation, and reflection that transforms our development practice from reactive to conscious.
+
 ## ADR Template
 
 # ADR-XXXX: [Title of Decision]
