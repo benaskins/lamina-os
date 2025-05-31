@@ -223,6 +223,28 @@ lamina-core agent --help     # Specific command help
 - **Mindful Development:** Separation prevents rushed, inappropriate tool usage
 - **Sustainable Architecture:** Clear responsibilities enable long-term maintenance
 
+## Consequences
+
+### Positive Consequences
+- **User Clarity**: Clear separation reduces confusion about which tool to use for different tasks
+- **Development Efficiency**: Each CLI optimized for its specific user persona and use cases
+- **Maintainability**: Separate responsibilities make each tool easier to maintain and evolve
+- **Onboarding Improvement**: New users have clear pathways based on their role and needs
+- **Philosophical Alignment**: Three-tier structure embodies breath-first principles of conscious boundaries
+
+### Negative Consequences
+- **Learning Overhead**: Users must understand three different command interfaces and when to use each
+- **Integration Complexity**: Cross-tier workflows require coordination between multiple tools
+- **Maintenance Burden**: Three separate CLIs require individual attention and documentation
+- **Discovery Challenges**: Users may not immediately know which tier addresses their current need
+- **Transition Confusion**: Migration from existing patterns may create temporary workflow disruption
+
+### Mitigation Strategies
+- Provide clear documentation mapping tasks to appropriate tiers
+- Implement intelligent cross-tier command suggestions and help text
+- Create workflow guides that span multiple tiers for common scenarios
+- Add deprecation warnings and migration guidance for moved commands
+
 ## Migration Plan
 
 ### **Phase 1: Documentation (Immediate)**
