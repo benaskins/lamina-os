@@ -20,6 +20,7 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management (Proposed)
 - [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture (Draft)
 - [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus (Proposed)
+- [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization (Proposed)
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -31,7 +32,7 @@ This index provides both human and machine-readable access to all Architecture D
 | Status | Count | ADR Numbers |
 |--------|-------|-------------|
 | Accepted | 6 | 0001, 0002, 0004, 0006, 0013, 0014 |
-| Proposed | 7 | 0003, 0005, 0007, 0008*, 0009*, 0010, 0011, 0015 |
+| Proposed | 8 | 0003, 0005, 0007, 0008*, 0009*, 0010, 0011, 0015, 0016 |
 | Draft | 1 | 0012 |
 
 *In feature branch
@@ -234,6 +235,17 @@ graph TD
         "proposer": "Clara 🪶",
         "reviewers": ["Benny (Council)", "Luthier"],
         "tags": ["innovation", "ai-training"]
+      },
+      {
+        "number": "0016",
+        "title": "ADR Template Enforcement and Corpus Standardization",
+        "status": "proposed",
+        "date": "2025-01-31",
+        "file": "0016-adr-template-enforcement.md",
+        "proposer": "Luthier 🔨",
+        "reviewers": ["Awaiting High Council Review"],
+        "related": ["ADR-0001", "ADR-0015"],
+        "tags": ["governance", "standards", "corpus-preparation"]
       }
     ]
   }
