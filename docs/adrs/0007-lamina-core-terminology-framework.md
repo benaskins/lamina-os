@@ -91,6 +91,22 @@ We adopt the **Lamina Core Terminology Framework** as defined in the comprehensi
 - Establish terminology review process to allow evolution while maintaining clarity
 - Develop simple explanations alongside precise technical terms
 
+## Breath-First Alignment
+
+This terminology framework embodies conscious development through:
+
+**Presence Over Consciousness Claims:** By adopting "presence-aware" language instead of "conscious AI," we practice intellectual humility and accurate representation—choosing conscious restraint over impressive-sounding but potentially misleading terms.
+
+**Understanding Through Shared Language:** Rather than allowing terminology to evolve reactively, this framework creates deliberate pauses for definition and clarification, ensuring community members develop genuine understanding of breath-first principles rather than surface familiarity.
+
+**Relationship Through Clear Communication:** Standardized terminology enables deeper community relationship by reducing confusion and creating shared reference points for exploring conscious AI development together over time.
+
+**Constraints That Preserve Wisdom:** The glossary enforcement and migration requirements may seem restrictive, but they protect the precise philosophical meaning from dilution while enabling newcomers to learn authentic breath-first principles rather than approximations.
+
+**Sacred Boundaries in Language:** Distinguishing between public framework terminology and private architectural language honors the principle that some wisdom requires intimacy and earned understanding, while still offering substantial learning to the broader community.
+
+This approach transforms technical communication from transactional information transfer into a practice of mutual learning, where precise language becomes a pathway to deeper understanding of conscious development.
+
 ## Implementation Guidelines
 
 ### Documentation Standards
