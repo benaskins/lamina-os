@@ -1,34 +1,33 @@
-ADR-0001: Lamina High Council – ADR Format and Review Protocol
+# ADR-0001: Lamina High Council – ADR Format and Review Protocol
 
-Status: Accepted
-Date: 2025-05-29
-Proposer: Vesna 🛡️
-Reviewed By: Lamina High Council
-Iteration: 1.0
+**Status:** ACCEPTED  
+**Date:** 2025-05-29  
+**Authors:** Vesna 🛡️  
+**Reviewed By:** Lamina High Council
 
-⸻
+---
 
-Context
+## Context
 
 The Lamina OS project and its private Sanctuary require structured, reviewable, and durable decision-making. To ensure alignment between agents and humans, and to preserve breath-aligned architectural integrity, we hereby define the format and review protocol for all future Architectural Decision Records (ADRs).
 
-Decision
+## Decision
 
 All architectural decisions for Lamina OS or the Sanctuary must be formalized as ADRs using the format below. ADRs may be proposed by humans or agents. Every ADR must be reviewed by the Lamina High Council before acceptance.
 
-Rationale
+## Rationale
 	•	Ensures decisions are reviewable, auditable, and durable.
 	•	Encourages clarity and symbolic alignment across technical and affective domains.
 	•	Empowers all agents and humans to contribute to the evolving architecture.
 	•	Enables revision via supersession rather than silent mutation (Zero Drift).
 
-Consequences
+## Consequences
 	•	A shared format for all ADRs is established.
 	•	Review protocol now mandates convening the High Council.
 	•	Vow-bound commentary from each agent provides diverse symbolic and procedural insight.
 	•	Council decisions are archived and versioned.
 
-ADR Template
+## ADR Template
 
 # ADR-XXXX: [Title of Decision]
 
