@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lamina OS ADR Schema",
+  "description": "Validation schema for Architecture Decision Records",
+  "type": "object",
+  "required": ["metadata", "sections"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["number", "title", "status", "date", "authors", "reviewed_by"],
+      "properties": {
+        "number": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$",
+          "description": "Four-digit ADR number"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 100,
+          "description": "Clear, concise title"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["DRAFT", "PROPOSED", "ACCEPTED", "DEPRECATED", "SUPERSEDED"],
+          "description": "Current status in uppercase"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "Date in YYYY-MM-DD format"
+        },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "List of authors/proposers"
+        },
+        "reviewed_by": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of reviewers or review status"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ADR-[0-9]{4}$"
+          },
+          "description": "Related ADR references"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Architectural", "Process", "Retrospective", "Governance", "Visionary"],
+          "description": "ADR type classification"
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "required": ["context", "decision", "consequences"],
+      "properties": {
+        "context": {
+          "type": "object",
+          "required": ["problem_statement"],
+          "properties": {
+            "problem_statement": {
+              "type": "string",
+              "minLength": 50,
+              "description": "Clear problem description"
+            },
+            "key_questions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "decision_drivers": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["driver", "explanation"],
+            "properties": {
+              "driver": {
+                "type": "string"
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "considered_options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["name", "description", "pros", "cons"],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "pros": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cons": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "decision": {
+          "type": "object",
+          "required": ["summary", "rationale"],
+          "properties": {
+            "summary": {
+              "type": "string",
+              "minLength": 50
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 100
+            },
+            "implementation_details": {
+              "type": "string"
+            }
+          }
+        },
+        "consequences": {
+          "type": "object",
+          "required": ["positive", "negative"],
+          "properties": {
+            "positive": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "negative": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "neutral": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "breath_first_alignment": {
+          "type": "object",
+          "required": ["explanation", "checklist"],
+          "properties": {
+            "explanation": {
+              "type": "string",
+              "minLength": 100,
+              "description": "How this aligns with breath-first principles"
+            },
+            "checklist": {
+              "type": "object",
+              "properties": {
+                "supports_breath_first": {
+                  "type": "boolean"
+                },
+                "enhances_vows": {
+                  "type": "boolean"
+                },
+                "improves_sanctuary": {
+                  "type": "boolean"
+                },
+                "uses_symbolic_config": {
+                  "type": "boolean"
+                },
+                "prioritizes_understanding": {
+                  "type": "boolean"
+                },
+                "maintains_boundaries": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "implementation_plan": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["phase", "description"],
+            "properties": {
+              "phase": {
+                "type": "string"
+              },
+              "timeline": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "success_metrics": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["metric", "measurement"],
+            "properties": {
+              "metric": {
+                "type": "string"
+              },
+              "measurement": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "risks_and_mitigations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["risk", "mitigation"],
+            "properties": {
+              "risk": {
+                "type": "string"
+              },
+              "mitigation": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "high_council_review": {
+          "type": "object",
+          "properties": {
+            "questions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["reviewer", "verdict"],
+                "properties": {
+                  "reviewer": {
+                    "type": "string",
+                    "enum": ["Clara 🪶", "Luna 🔥", "Vesna 🛡️", "Ansel ✍️", "Luthier 🔨", "Ben"]
+                  },
+                  "focus_area": {
+                    "type": "string"
+                  },
+                  "comments": {
+                    "type": "string"
+                  },
+                  "verdict": {
+                    "type": "string",
+                    "enum": ["Accept", "Accept with modifications", "Reject", "Pending"]
+                  }
+                }
+              }
+            },
+            "final_verdict": {
+              "type": "string",
+              "enum": ["ACCEPTED", "ACCEPTED WITH MODIFICATIONS", "REJECTED", "PENDING"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "retrospective_adr": {
+      "description": "Simplified schema for retrospective ADRs",
+      "type": "object",
+      "required": ["metadata", "context", "decision", "authorization"],
+      "properties": {
+        "metadata": {
+          "$ref": "#/properties/metadata"
+        },
+        "context": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string"
+        },
+        "implementation": {
+          "type": "string"
+        },
+        "consequences": {
+          "$ref": "#/properties/sections/properties/consequences"
+        },
+        "authorization": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
