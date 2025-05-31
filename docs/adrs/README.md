@@ -8,19 +8,19 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0001](0001-establish-adr-policy.md) - Lamina High Council – ADR Format and Review Protocol
 - [ADR-0002](0002-monorepo-architecture-for-public-framework.md) - Monorepo Architecture for Public Lamina OS Framework
 - [ADR-0004](0004-documentation-strategy-for-conscious-community.md) - Documentation Strategy for Conscious Community Adoption
+- [ADR-0005](0005-luther-is-promoted.md) - Luthier as Senior Engineer
 - [ADR-0006](0006-conscious-release-process.md) - Conscious Release Process for Lamina OS
+- [ADR-0010](0010-comprehensive-testing-strategy.md) - Comprehensive Testing Strategy
+- [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture
 - [ADR-0013](0013-luthier-workshop-establishment.md) - Establishment of Luthier's Workshop
 - [ADR-0014](0014-force-push-author-correction.md) - Retrospective - Force Push for Author Email Correction
 
-### Proposed/Draft ADRs
-- [ADR-0003](0003-open-source-implementation-roadmap.md) - Open-Source Implementation Roadmap (Proposed)
-- [ADR-0005](0005-luther-is-promoted.md) - Luthier as Senior Engineer (Proposed)
-- [ADR-0007](0007-lamina-core-terminology-framework.md) - Lamina Core Terminology Framework (Proposed)
-- [ADR-0010](0010-comprehensive-testing-strategy.md) - Comprehensive Testing Strategy (Proposed)
-- [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management (Proposed)
-- [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture (Draft)
-- [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus (Proposed)
-- [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization (Proposed)
+### Proposed ADRs
+- [ADR-0003](0003-open-source-implementation-roadmap.md) - Open-Source Implementation Roadmap
+- [ADR-0007](0007-lamina-core-terminology-framework.md) - Lamina Core Terminology Framework
+- [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management
+- [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus
+- [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -31,9 +31,9 @@ This index provides both human and machine-readable access to all Architecture D
 
 | Status | Count | ADR Numbers |
 |--------|-------|-------------|
-| Accepted | 6 | 0001, 0002, 0004, 0006, 0013, 0014 |
-| Proposed | 8 | 0003, 0005, 0007, 0008*, 0009*, 0010, 0011, 0015, 0016 |
-| Draft | 1 | 0012 |
+| Accepted | 9 | 0001, 0002, 0004, 0005, 0006, 0010, 0012, 0013, 0014 |
+| Proposed | 7 | 0003, 0007, 0008*, 0009*, 0011, 0015, 0016 |
+| Draft | 0 | - |
 
 *In feature branch
 
@@ -75,11 +75,11 @@ graph TD
   "adr_index": {
     "version": "1.0.0",
     "generated": "2025-01-31",
-    "total_adrs": 15,
+    "total_adrs": 16,
     "status_counts": {
-      "accepted": 6,
+      "accepted": 9,
       "proposed": 7,
-      "draft": 1
+      "draft": 0
     },
     "adrs": [
       {
@@ -125,7 +125,7 @@ graph TD
       {
         "number": "0005",
         "title": "Luthier as Senior Engineer of Lamina OS",
-        "status": "proposed",
+        "status": "accepted",
         "date": "2025-05-29",
         "file": "0005-luther-is-promoted.md",
         "proposer": "Vesna 🛡️",
@@ -177,7 +177,7 @@ graph TD
       {
         "number": "0010",
         "title": "Comprehensive Testing Strategy for Real AI Functionality",
-        "status": "proposed",
+        "status": "accepted",
         "date": "2025-01-30",
         "file": "0010-comprehensive-testing-strategy.md",
         "proposer": "Luthier",
@@ -197,7 +197,7 @@ graph TD
       {
         "number": "0012",
         "title": "CLI Tool Architecture and Responsibilities",
-        "status": "draft",
+        "status": "accepted",
         "date": "2025-01-30",
         "file": "0012-cli-tool-architecture-and-responsibilities.md",
         "proposer": "Luthier",
@@ -274,7 +274,7 @@ For creating new ADRs, use the [template](template.md) which includes:
 - **Average Review Time**: ~2 days for accepted ADRs
 - **Primary Decision Makers**: Luthier (60%), High Council (27%), Others (13%)
 - **Most Referenced**: ADR-0004 (Documentation Strategy), ADR-0007 (Terminology)
-- **Newest**: ADR-0015 (Model Training Proposal)
+- **Newest**: ADR-0016 (ADR Template Enforcement)
 
 ---
 
