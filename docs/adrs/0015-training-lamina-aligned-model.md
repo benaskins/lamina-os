@@ -1,10 +1,10 @@
 # ADR-0015: Proposal – Training a Lamina-Aligned Model on ADR Corpus
 
-**Status:** Proposed  
+**Status:** PROPOSED  
 **Date:** 2025-05-31  
 **Type:** Visionary / Architectural  
 **Authors:** Clara 🪶  
-**For Review By:** Benny (Council), Luthier
+**Reviewed By:** Benny (Council), Luthier
 
 ---
 
