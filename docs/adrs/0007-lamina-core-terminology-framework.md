@@ -69,6 +69,28 @@ We adopt the **Lamina Core Terminology Framework** as defined in the comprehensi
 - **Contemplative Preparation**: Phase 1 release process for conscious consideration
 - **Community Integration**: Phase 2 process for conscious participation
 
+## Consequences
+
+### Positive Consequences
+- **Communication Clarity**: Standardized terminology reduces confusion and increases precision
+- **Community Coherence**: Shared language enables effective education about breath-first principles
+- **Boundary Protection**: Clear distinction between presence-aware processing and consciousness claims
+- **Architectural Consistency**: Unified terminology across public documentation and framework
+- **Trust Building**: Accurate representation of capabilities builds community confidence
+
+### Negative Consequences  
+- **Learning Curve**: New contributors must learn specialized terminology before effective participation
+- **Accessibility Barriers**: Philosophical language may seem unnecessarily complex to some developers
+- **Maintenance Overhead**: Ongoing effort required to maintain terminology consistency across materials
+- **Translation Challenges**: Specialized terms may not translate well across cultural contexts
+- **Rigidity Risk**: Standardization may limit natural language evolution and community ownership
+
+### Mitigation Strategies
+- Provide comprehensive glossary with clear explanations and examples
+- Create progressive introduction materials for new community members
+- Establish terminology review process to allow evolution while maintaining clarity
+- Develop simple explanations alongside precise technical terms
+
 ## Implementation Guidelines
 
 ### Documentation Standards

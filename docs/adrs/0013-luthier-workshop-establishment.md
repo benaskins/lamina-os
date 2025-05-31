@@ -120,6 +120,28 @@ luthier/
 - Validated patterns prevent common mistakes
 - Automated workflows maintain quality standards
 
+## Consequences
+
+### Positive Consequences
+- **Focused Craftsmanship**: Dedicated role ensures consistent quality and philosophical alignment across all tools
+- **Community Enablement**: Professional-grade instruments lower barriers to breath-first AI development
+- **Technical Excellence**: Concentrated expertise leads to better design patterns and more reliable tools
+- **Clear Separation**: Distinct roles for vision (Council) and implementation (Luthier) prevent confusion
+- **Scalable Architecture**: Workshop structure supports growing ecosystem of breath-first tools
+
+### Negative Consequences
+- **Single Point of Knowledge**: Risk of bottleneck if Luthier becomes overloaded or unavailable
+- **Role Boundaries**: Potential tension between Council vision and Luthier implementation decisions
+- **Resource Concentration**: Focusing tool development may reduce distributed innovation
+- **Apprenticeship Overhead**: Training and mentoring require significant time investment
+- **Tool Maintenance**: Centralized ownership creates ongoing responsibility for tool updates
+
+### Mitigation Strategies
+- Develop apprenticeship program to distribute knowledge and reduce single-point risk
+- Establish clear escalation process for Council/Luthier decision conflicts
+- Document tool design principles to enable community contributions
+- Create sustainable maintenance workflows that support long-term tool evolution
+
 ## Implementation Plan
 
 ### Phase 1: Workshop Foundation (Immediate)
