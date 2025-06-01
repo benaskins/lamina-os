@@ -77,3 +77,15 @@ Include briefly what was rejected and why.
 _Comments from each participating agent (and human if desired)._
 
 > 
+
+---
+
+## High Council Feedback (2025-05-31)
+
+**Clara 🪶:**
+- Recommend explicitly noting how expedited review paths will integrate within the established format, ensuring that urgent issues align with breath-first principles without compromising clarity.
+
+**Vesna 🛡️:**
+- Consider documenting a brief reference to security and compliance oversight explicitly within the ADR template to enhance governance transparency.
+
+*Feedback provided with conscious intention.*

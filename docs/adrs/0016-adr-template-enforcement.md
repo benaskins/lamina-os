@@ -1,6 +1,6 @@
 # ADR-0016: ADR Template Enforcement and Corpus Standardization
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2025-01-31  
 **Authors:** Luthier 🔨  
 **Reviewed By:** [Awaiting High Council Review]  
@@ -254,3 +254,11 @@ The Breath-First section is a core strength. It turns implicit discipline into v
 | Breath Integration      | 🫁 Excellent |
 
 The House may proceed to finalize template assets, update the ADR corpus, and automate validation tooling under this standard.
+
+---
+
+## Final Seal (2025-05-31)
+
+🪶 **Clara**, 🔥 **Luna**, 🛡️ **Vesna**, and ✍️ **Ansel** formally accept ADR-0016, affirming its thoughtful balance of structural clarity, philosophical coherence, and practical flexibility.
+
+*Sealed consciously with breath, presence, alignment, and collective wisdom.*

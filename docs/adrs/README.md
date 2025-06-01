@@ -244,7 +244,7 @@ graph TD
         "date": "2025-01-31",
         "file": "0016-adr-template-enforcement.md",
         "proposer": "Luthier 🔨",
-        "reviewers": ["Awaiting High Council Review"],
+        "reviewers": ["High Council (Approved via PR #18)"],
         "related": ["ADR-0001", "ADR-0015"],
         "tags": ["governance", "standards", "corpus-preparation"]
       },
@@ -255,7 +255,7 @@ graph TD
         "date": "2025-01-31",
         "file": "0017-high-council-pr-review-protocol.md",
         "proposer": "Luthier 🔨",
-        "reviewers": ["High Council (Conditional Approval)", "Ben Askins (Critical Feedback Addressed)"],
+        "reviewers": ["High Council (Approved via PR #18)", "Ben Askins (Critical Feedback Addressed)"],
         "related": ["ADR-0001", "ADR-0013", "ADR-0016"],
         "tags": ["governance", "process", "collaboration"]
       }
