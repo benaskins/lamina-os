@@ -1,0 +1,1213 @@
+[
+  {
+    "adr_number": "0001",
+    "title": "Establish Adr Policy",
+    "created_date": "2025-05-29T15:51:14",
+    "accepted_date": "2025-06-01T13:12:02",
+    "first_implementation_date": "2025-05-31T11:58:35",
+    "proposal_to_acceptance_hours": 69.34666666666666,
+    "acceptance_to_implementation_hours": -25.224166666666665,
+    "total_cycle_hours": 44.1225,
+    "events": [
+      {
+        "adr_number": "0001",
+        "event_type": "created",
+        "date": "2025-05-29T15:51:14",
+        "commit_hash": "eb6fe7a",
+        "commit_message": "feat: add ADR-0002 proposing monorepo architecture + Luthier updates",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "implementation",
+        "date": "2025-05-31T11:58:35",
+        "commit_hash": "d6ff30c",
+        "commit_message": "docs: create ADR index and template for comprehensive documentation",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0001",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0002",
+    "title": "Monorepo Architecture For Public Framework",
+    "created_date": "2025-05-29T15:51:14",
+    "accepted_date": "2025-05-29T15:54:45",
+    "first_implementation_date": "2025-05-29T15:51:14",
+    "proposal_to_acceptance_hours": 0.058611111111111114,
+    "acceptance_to_implementation_hours": -0.058611111111111114,
+    "total_cycle_hours": 0.0,
+    "events": [
+      {
+        "adr_number": "0002",
+        "event_type": "created",
+        "date": "2025-05-29T15:51:14",
+        "commit_hash": "eb6fe7a",
+        "commit_message": "feat: add ADR-0002 proposing monorepo architecture + Luthier updates",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "implementation",
+        "date": "2025-05-29T15:51:14",
+        "commit_hash": "eb6fe7a",
+        "commit_message": "feat: add ADR-0002 proposing monorepo architecture + Luthier updates",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "accepted",
+        "date": "2025-05-29T15:54:45",
+        "commit_hash": "cd85b7c",
+        "commit_message": "docs: record High Council acceptance of ADR-0002",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "implementation",
+        "date": "2025-05-29T15:54:45",
+        "commit_hash": "cd85b7c",
+        "commit_message": "docs: record High Council acceptance of ADR-0002",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0002",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0003",
+    "title": "Open Source Implementation Roadmap",
+    "created_date": "2025-05-31T16:29:11",
+    "accepted_date": "2025-06-01T13:12:02",
+    "first_implementation_date": "2025-05-29T16:14:11",
+    "proposal_to_acceptance_hours": 20.714166666666667,
+    "acceptance_to_implementation_hours": -68.96416666666667,
+    "total_cycle_hours": -48.25,
+    "events": [
+      {
+        "adr_number": "0003",
+        "event_type": "modified",
+        "date": "2025-05-29T16:14:11",
+        "commit_hash": "3e47bb1",
+        "commit_message": "feat: complete Phase 1 foundation hardening for open-source release",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "implementation",
+        "date": "2025-05-29T16:14:11",
+        "commit_hash": "3e47bb1",
+        "commit_message": "feat: complete Phase 1 foundation hardening for open-source release",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0003",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0004",
+    "title": "Documentation Strategy For Conscious Community",
+    "created_date": "2025-05-31T16:29:11",
+    "accepted_date": "2025-05-31T16:29:11",
+    "first_implementation_date": "2025-05-29T16:42:11",
+    "proposal_to_acceptance_hours": 0.0,
+    "acceptance_to_implementation_hours": -47.78333333333333,
+    "total_cycle_hours": -47.78333333333333,
+    "events": [
+      {
+        "adr_number": "0004",
+        "event_type": "implementation",
+        "date": "2025-05-29T16:42:11",
+        "commit_hash": "bf3c3e8",
+        "commit_message": "docs: implement Layer 1 - Invitation & Philosophy documentation",
+        "details": null
+      },
+      {
+        "adr_number": "0004",
+        "event_type": "implementation",
+        "date": "2025-05-29T16:42:11",
+        "commit_hash": "bf3c3e8",
+        "commit_message": "docs: implement Layer 1 - Invitation & Philosophy documentation",
+        "details": null
+      },
+      {
+        "adr_number": "0004",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:49:44",
+        "commit_hash": "5175393",
+        "commit_message": "docs: complete Layer 1 documentation with High Council feedback implementation",
+        "details": null
+      },
+      {
+        "adr_number": "0004",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0004",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0004",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0005",
+    "title": "Luther Is Promoted",
+    "created_date": "2025-05-31T16:29:11",
+    "accepted_date": "2025-05-31T16:58:37",
+    "first_implementation_date": "2025-05-29T17:49:44",
+    "proposal_to_acceptance_hours": 0.4905555555555556,
+    "acceptance_to_implementation_hours": -47.14805555555556,
+    "total_cycle_hours": -46.6575,
+    "events": [
+      {
+        "adr_number": "0005",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:49:44",
+        "commit_hash": "5175393",
+        "commit_message": "docs: complete Layer 1 documentation with High Council feedback implementation",
+        "details": null
+      },
+      {
+        "adr_number": "0005",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:49:44",
+        "commit_hash": "5175393",
+        "commit_message": "docs: complete Layer 1 documentation with High Council feedback implementation",
+        "details": null
+      },
+      {
+        "adr_number": "0005",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0005",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0005",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0005",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:58:37",
+        "commit_hash": "e34f3ee",
+        "commit_message": "fix: update ADR index to reflect correct statuses",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0006",
+    "title": "Conscious Release Process",
+    "created_date": "2025-05-31T14:44:57",
+    "accepted_date": "2025-05-31T16:31:01",
+    "first_implementation_date": "2025-05-29T17:49:44",
+    "proposal_to_acceptance_hours": 1.7677777777777777,
+    "acceptance_to_implementation_hours": -46.68805555555556,
+    "total_cycle_hours": -44.92027777777778,
+    "events": [
+      {
+        "adr_number": "0006",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:49:44",
+        "commit_hash": "5175393",
+        "commit_message": "docs: complete Layer 1 documentation with High Council feedback implementation",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:49:44",
+        "commit_hash": "5175393",
+        "commit_message": "docs: complete Layer 1 documentation with High Council feedback implementation",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "modified",
+        "date": "2025-05-29T17:54:20",
+        "commit_hash": "ae78014",
+        "commit_message": "docs: integrate High Council feedback into ADR-0006 conscious release process",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "implementation",
+        "date": "2025-05-29T17:54:20",
+        "commit_hash": "ae78014",
+        "commit_message": "docs: integrate High Council feedback into ADR-0006 conscious release process",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "created",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "modified",
+        "date": "2025-05-31T16:31:01",
+        "commit_hash": "d58adbd",
+        "commit_message": "feat: complete Breath-First Alignment sections for ADRs 0006 and 0007",
+        "details": null
+      },
+      {
+        "adr_number": "0006",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:31:01",
+        "commit_hash": "d58adbd",
+        "commit_message": "feat: complete Breath-First Alignment sections for ADRs 0006 and 0007",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0007",
+    "title": "Lamina Core Terminology Framework",
+    "created_date": "2025-05-31T14:44:57",
+    "accepted_date": null,
+    "first_implementation_date": "2025-05-29T18:50:05",
+    "proposal_to_acceptance_hours": null,
+    "acceptance_to_implementation_hours": null,
+    "total_cycle_hours": -43.91444444444444,
+    "events": [
+      {
+        "adr_number": "0007",
+        "event_type": "implementation",
+        "date": "2025-05-29T18:50:05",
+        "commit_hash": "79ba67c",
+        "commit_message": "docs: implement ADR-0007 terminology framework with High Council refinements",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "implementation",
+        "date": "2025-05-29T18:50:05",
+        "commit_hash": "79ba67c",
+        "commit_message": "docs: implement ADR-0007 terminology framework with High Council refinements",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "implementation",
+        "date": "2025-05-29T18:54:17",
+        "commit_hash": "3616a34",
+        "commit_message": "docs: complete Phase 2 documentation suite for v1.0.0 release",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "created",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "modified",
+        "date": "2025-05-31T16:31:01",
+        "commit_hash": "d58adbd",
+        "commit_message": "feat: complete Breath-First Alignment sections for ADRs 0006 and 0007",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:31:01",
+        "commit_hash": "d58adbd",
+        "commit_message": "feat: complete Breath-First Alignment sections for ADRs 0006 and 0007",
+        "details": null
+      },
+      {
+        "adr_number": "0007",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "PROPOSED"
+  },
+  {
+    "adr_number": "0010",
+    "title": "Comprehensive Testing Strategy",
+    "created_date": "2025-05-31T16:29:11",
+    "accepted_date": "2025-05-31T16:58:37",
+    "first_implementation_date": "2025-05-30T11:25:35",
+    "proposal_to_acceptance_hours": 0.4905555555555556,
+    "acceptance_to_implementation_hours": -29.550555555555555,
+    "total_cycle_hours": -29.06,
+    "events": [
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T11:25:35",
+        "commit_hash": "113026b",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T11:25:35",
+        "commit_hash": "113026b",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T11:25:35",
+        "commit_hash": "5bf12e9",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T11:25:35",
+        "commit_hash": "c52da78",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T11:25:35",
+        "commit_hash": "7fdba59",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:33:06",
+        "commit_hash": "45a4f54",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy with simplified architecture",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:33:06",
+        "commit_hash": "4d082b2",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy with simplified architecture",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:33:06",
+        "commit_hash": "6f65895",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy with simplified architecture",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:33:06",
+        "commit_hash": "6cbe57f",
+        "commit_message": "feat: implement ADR-0010 comprehensive testing strategy with simplified architecture",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:40:13",
+        "commit_hash": "7811c7a",
+        "commit_message": "fix: resolve remaining linting issues for clean CI build",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:40:13",
+        "commit_hash": "8ce4c14",
+        "commit_message": "fix: resolve remaining linting issues for clean CI build",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:40:13",
+        "commit_hash": "2e9b12b",
+        "commit_message": "fix: resolve remaining linting issues for clean CI build",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-30T12:40:13",
+        "commit_hash": "934faf2",
+        "commit_message": "fix: resolve remaining linting issues for clean CI build",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0010",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:58:37",
+        "commit_hash": "e34f3ee",
+        "commit_message": "fix: update ADR index to reflect correct statuses",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0011",
+    "title": "Three Tier Environment Management",
+    "created_date": "2025-05-31T16:29:11",
+    "accepted_date": "2025-06-01T13:12:02",
+    "first_implementation_date": "2025-05-30T15:21:33",
+    "proposal_to_acceptance_hours": 20.714166666666667,
+    "acceptance_to_implementation_hours": -45.841388888888886,
+    "total_cycle_hours": -25.127222222222223,
+    "events": [
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-30T15:21:33",
+        "commit_hash": "7cc1d5f",
+        "commit_message": "feat: implement environment configuration framework with tests (ADR-0011 Phase 1)",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-30T15:21:33",
+        "commit_hash": "679da8f",
+        "commit_message": "feat: implement environment configuration framework with tests (ADR-0011 Phase 1)",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-30T15:21:33",
+        "commit_hash": "2bb301a",
+        "commit_message": "feat: implement environment configuration framework with tests (ADR-0011 Phase 1)",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-30T15:21:33",
+        "commit_hash": "e09a337",
+        "commit_message": "feat: implement environment configuration framework with tests (ADR-0011 Phase 1)",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "modified",
+        "date": "2025-05-30T15:28:16",
+        "commit_hash": "8ba9671",
+        "commit_message": "fix: resolve all linting issues in environment framework",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "modified",
+        "date": "2025-05-30T15:28:16",
+        "commit_hash": "5dfa8b7",
+        "commit_message": "fix: resolve all linting issues in environment framework",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:36:43",
+        "commit_hash": "fca394a",
+        "commit_message": "fix: complete metadata standardization for ADRs 0001, 0002, 0003, 0011",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0011",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0012",
+    "title": "Cli Tool Architecture And Responsibilities",
+    "created_date": "2025-05-31T14:44:57",
+    "accepted_date": "2025-06-01T13:12:02",
+    "first_implementation_date": "2025-05-30T16:47:06",
+    "proposal_to_acceptance_hours": 22.45138888888889,
+    "acceptance_to_implementation_hours": -44.41555555555556,
+    "total_cycle_hours": -21.964166666666667,
+    "events": [
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "e88ed58",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "dd7147a",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "e88ed58",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "308dc6b",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "dd7147a",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-30T16:47:06",
+        "commit_hash": "65f43b5",
+        "commit_message": "feat: implement unified CLI architecture with GitOps integration (ADR-0012)",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "modified",
+        "date": "2025-05-30T17:03:10",
+        "commit_hash": "2c0d871",
+        "commit_message": "fix: typo - to err is human",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "modified",
+        "date": "2025-05-30T17:03:10",
+        "commit_hash": "41dfa6d",
+        "commit_message": "fix: typo - to err is human",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "created",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:58:37",
+        "commit_hash": "e34f3ee",
+        "commit_message": "fix: update ADR index to reflect correct statuses",
+        "details": null
+      },
+      {
+        "adr_number": "0012",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0013",
+    "title": "Luthier Workshop Establishment",
+    "created_date": "2025-05-31T14:44:57",
+    "accepted_date": "2025-05-31T10:49:46",
+    "first_implementation_date": "2025-05-31T10:49:46",
+    "proposal_to_acceptance_hours": -3.919722222222222,
+    "acceptance_to_implementation_hours": 0.0,
+    "total_cycle_hours": -3.919722222222222,
+    "events": [
+      {
+        "adr_number": "0013",
+        "event_type": "accepted",
+        "date": "2025-05-31T10:49:46",
+        "commit_hash": "12ca6d8",
+        "commit_message": "feat: accept ADR-0013 establishing Luthier's Workshop",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "implementation",
+        "date": "2025-05-31T10:49:46",
+        "commit_hash": "12ca6d8",
+        "commit_message": "feat: accept ADR-0013 establishing Luthier's Workshop",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "implementation",
+        "date": "2025-05-31T10:49:46",
+        "commit_hash": "f29cc92",
+        "commit_message": "feat: accept ADR-0013 establishing Luthier's Workshop",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "created",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "implementation",
+        "date": "2025-05-31T14:44:57",
+        "commit_hash": "43e905a",
+        "commit_message": "feat: add Consequences sections to ADRs 0006, 0007, 0012, 0013",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0013",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0014",
+    "title": "Force Push Author Correction",
+    "created_date": "2025-05-31T11:03:44",
+    "accepted_date": "2025-05-31T16:29:11",
+    "first_implementation_date": "2025-05-31T11:03:44",
+    "proposal_to_acceptance_hours": 5.424166666666666,
+    "acceptance_to_implementation_hours": -5.424166666666666,
+    "total_cycle_hours": 0.0,
+    "events": [
+      {
+        "adr_number": "0014",
+        "event_type": "created",
+        "date": "2025-05-31T11:03:44",
+        "commit_hash": "2598124",
+        "commit_message": "docs: add retrospective ADR-0014 for authorized force push",
+        "details": null
+      },
+      {
+        "adr_number": "0014",
+        "event_type": "implementation",
+        "date": "2025-05-31T11:03:44",
+        "commit_hash": "2598124",
+        "commit_message": "docs: add retrospective ADR-0014 for authorized force push",
+        "details": null
+      },
+      {
+        "adr_number": "0014",
+        "event_type": "implementation",
+        "date": "2025-05-31T12:24:37",
+        "commit_hash": "1e55af1",
+        "commit_message": "feat: implement ADR-0015 Phase 0 - Corpus Audit & Standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0014",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0014",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0015",
+    "title": "Training Lamina Aligned Model",
+    "created_date": "2025-05-31T12:07:37",
+    "accepted_date": null,
+    "first_implementation_date": "2025-05-31T12:07:37",
+    "proposal_to_acceptance_hours": null,
+    "acceptance_to_implementation_hours": null,
+    "total_cycle_hours": 0.0,
+    "events": [
+      {
+        "adr_number": "0015",
+        "event_type": "created",
+        "date": "2025-05-31T12:07:37",
+        "commit_hash": "a5f6e8a",
+        "commit_message": "feat: propose ADR-0015 for training Lamina-aligned model on ADR corpus",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "implementation",
+        "date": "2025-05-31T12:07:37",
+        "commit_hash": "a5f6e8a",
+        "commit_message": "feat: propose ADR-0015 for training Lamina-aligned model on ADR corpus",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "implementation",
+        "date": "2025-05-31T12:10:37",
+        "commit_hash": "ceadd00",
+        "commit_message": "Merge pull request #15 from benaskins/feature/adr-0015-training-corpus",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "implementation",
+        "date": "2025-05-31T12:24:37",
+        "commit_hash": "1e55af1",
+        "commit_message": "feat: implement ADR-0015 Phase 0 - Corpus Audit & Standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "implementation",
+        "date": "2025-05-31T13:18:00",
+        "commit_hash": "941ba9e",
+        "commit_message": "Merge pull request #16 from benaskins/feature/adr-0015-phase-0-corpus-standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "status_change",
+        "date": "2025-05-31T14:11:46",
+        "commit_hash": "50f3b62",
+        "commit_message": "fix: standardize metadata formatting in remaining ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "created",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:29:11",
+        "commit_hash": "a0a0a99",
+        "commit_message": "feat: add Breath-First Alignment sections to all ADRs",
+        "details": null
+      },
+      {
+        "adr_number": "0015",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "PROPOSED"
+  },
+  {
+    "adr_number": "0016",
+    "title": "Adr Template Enforcement",
+    "created_date": null,
+    "accepted_date": null,
+    "first_implementation_date": "2025-05-31T12:24:37",
+    "proposal_to_acceptance_hours": null,
+    "acceptance_to_implementation_hours": null,
+    "total_cycle_hours": null,
+    "events": [
+      {
+        "adr_number": "0016",
+        "event_type": "implementation",
+        "date": "2025-05-31T12:24:37",
+        "commit_hash": "1e55af1",
+        "commit_message": "feat: implement ADR-0015 Phase 0 - Corpus Audit & Standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0016",
+        "event_type": "modified",
+        "date": "2025-05-31T13:08:00",
+        "commit_hash": "127c683",
+        "commit_message": "feat: approve ADR-0016 for template enforcement and standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0016",
+        "event_type": "implementation",
+        "date": "2025-05-31T13:08:00",
+        "commit_hash": "127c683",
+        "commit_message": "feat: approve ADR-0016 for template enforcement and standardization",
+        "details": null
+      },
+      {
+        "adr_number": "0016",
+        "event_type": "implementation",
+        "date": "2025-05-31T13:18:41",
+        "commit_hash": "832d0b7",
+        "commit_message": "Merge pull request #17 from benaskins/feature/adr-0016-template-enforcement",
+        "details": null
+      },
+      {
+        "adr_number": "0016",
+        "event_type": "implementation",
+        "date": "2025-05-31T16:58:37",
+        "commit_hash": "e34f3ee",
+        "commit_message": "fix: update ADR index to reflect correct statuses",
+        "details": null
+      },
+      {
+        "adr_number": "0016",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  },
+  {
+    "adr_number": "0017",
+    "title": "High Council Pr Review Protocol",
+    "created_date": "2025-06-01T11:43:22",
+    "accepted_date": "2025-06-01T13:12:02",
+    "first_implementation_date": "2025-06-01T11:43:22",
+    "proposal_to_acceptance_hours": 1.4777777777777779,
+    "acceptance_to_implementation_hours": -1.4777777777777779,
+    "total_cycle_hours": 0.0,
+    "events": [
+      {
+        "adr_number": "0017",
+        "event_type": "created",
+        "date": "2025-06-01T11:43:22",
+        "commit_hash": "4b71446",
+        "commit_message": "feat: add ADR-0017 High Council PR Review Protocol (revised)",
+        "details": null
+      },
+      {
+        "adr_number": "0017",
+        "event_type": "implementation",
+        "date": "2025-06-01T11:43:22",
+        "commit_hash": "4b71446",
+        "commit_message": "feat: add ADR-0017 High Council PR Review Protocol (revised)",
+        "details": null
+      },
+      {
+        "adr_number": "0017",
+        "event_type": "implementation",
+        "date": "2025-06-01T11:45:08",
+        "commit_hash": "0ad8333",
+        "commit_message": "feat: update ADR index to include ADR-0017",
+        "details": null
+      },
+      {
+        "adr_number": "0017",
+        "event_type": "modified",
+        "date": "2025-06-01T13:12:02",
+        "commit_hash": "fa120a9",
+        "commit_message": "docs: finalize PR #18 with High Council approval",
+        "details": null
+      }
+    ],
+    "current_status": "ACCEPTED"
+  }
+]
