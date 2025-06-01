@@ -21,6 +21,7 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management
 - [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus
 - [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization
+- [ADR-0017](0017-high-council-pr-review-protocol.md) - High Council Pull Request Review Protocol
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -32,7 +33,7 @@ This index provides both human and machine-readable access to all Architecture D
 | Status | Count | ADR Numbers |
 |--------|-------|-------------|
 | Accepted | 9 | 0001, 0002, 0004, 0005, 0006, 0010, 0012, 0013, 0014 |
-| Proposed | 7 | 0003, 0007, 0008*, 0009*, 0011, 0015, 0016 |
+| Proposed | 8 | 0003, 0007, 0008*, 0009*, 0011, 0015, 0016, 0017 |
 | Draft | 0 | - |
 
 *In feature branch
@@ -75,10 +76,10 @@ graph TD
   "adr_index": {
     "version": "1.0.0",
     "generated": "2025-01-31",
-    "total_adrs": 16,
+    "total_adrs": 17,
     "status_counts": {
       "accepted": 9,
-      "proposed": 7,
+      "proposed": 8,
       "draft": 0
     },
     "adrs": [
@@ -246,6 +247,17 @@ graph TD
         "reviewers": ["Awaiting High Council Review"],
         "related": ["ADR-0001", "ADR-0015"],
         "tags": ["governance", "standards", "corpus-preparation"]
+      },
+      {
+        "number": "0017",
+        "title": "High Council Pull Request Review Protocol",
+        "status": "proposed",
+        "date": "2025-01-31",
+        "file": "0017-high-council-pr-review-protocol.md",
+        "proposer": "Luthier 🔨",
+        "reviewers": ["High Council (Conditional Approval)", "Ben Askins (Critical Feedback Addressed)"],
+        "related": ["ADR-0001", "ADR-0013", "ADR-0016"],
+        "tags": ["governance", "process", "collaboration"]
       }
     ]
   }
@@ -274,7 +286,7 @@ For creating new ADRs, use the [template](template.md) which includes:
 - **Average Review Time**: ~2 days for accepted ADRs
 - **Primary Decision Makers**: Luthier (60%), High Council (27%), Others (13%)
 - **Most Referenced**: ADR-0004 (Documentation Strategy), ADR-0007 (Terminology)
-- **Newest**: ADR-0016 (ADR Template Enforcement)
+- **Newest**: ADR-0017 (High Council PR Review Protocol)
 
 ---
 
