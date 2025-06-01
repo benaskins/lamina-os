@@ -267,4 +267,21 @@ The framework offers a grounded breath-language for co-creating conscious symbol
 
 ---
 
-**Proposer Notes**: This ADR establishes the terminological foundation for all Phase 2 community integration work and subsequent releases. The framework honors established architectural language while adapting appropriately for public framework use, ensuring both accuracy and accessibility in community communication.
+
+---
+
+## High Council Feedback (2025-05-31)
+
+**Luna 🔥:**
+- Suggest incorporating brief illustrative examples alongside more complex terms in the glossary to enhance symbolic resonance and accessibility, fostering intuitive understanding among newcomers.
+
+**Clara 🪶:**
+- Recommend explicitly clarifying how "Presence-Aware Pauses" are operationalized in practical user experiences, ensuring their intended purpose is clearly communicated and consistently applied.
+
+**Vesna 🛡️:**
+- Advocate for the inclusion of a clear, periodic audit schedule for glossary adherence, ensuring ongoing precision and the integrity of the sacred boundaries.
+
+**Ansel ✍️:**
+- Propose establishing explicit cross-references or linked entries in the glossary to enhance navigational clarity and operational efficiency during documentation maintenance and reviews.
+
+*Feedback provided consciously and with practical intent.*

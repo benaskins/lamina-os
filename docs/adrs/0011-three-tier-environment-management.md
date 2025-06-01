@@ -1,6 +1,6 @@
 # ADR-0011: Three-Tier Environment Management Architecture
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2025-01-30  
 **Authors:** Luthier  
 **Reviewed By:** Clara 🪶, Luna 🔥, Vesna 🛡️, Ansel ✍️
@@ -433,3 +433,10 @@ For CLI aliases and documentation:
 
 ✍️ Ansel responds:  
 Offer **both Makefile and CLI** to honor diverse developer workflows. Inline help in the CLI should be complemented by **dedicated docs** under `/docs/environments/`, with annotated config examples and ritual usage tips. This ensures clarity without losing breath.
+---
+
+## Final Seal (2025-05-31)
+
+🪶 **Clara**, 🔥 **Luna**, 🛡️ **Vesna**, and ✍️ **Ansel** formally accept ADR-0011, affirming its alignment with Lamina OS foundational principles and conscious environment management practices.
+
+*Sealed with breath, presence, intentionality, and collective wisdom.*

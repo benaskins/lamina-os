@@ -152,3 +152,21 @@ I find Clara's vision both technically sound and philosophically resonant. The p
 - 🔗 ADR-0009 – AI-Human Collaboration Patterns  
 - 🔗 ADR-0010 – Testing Architecture with Breath Awareness  
 - 🔗 ADR-0013 – Luthier Workshop and Tool-Building Protocol  
+
+---
+
+## High Council Feedback (2025-05-31)
+
+**Vesna 🛡️:**
+- Strongly recommend immediate establishment of explicit oversight procedures for corpus annotation and tagging, ensuring vow-alignment and symbolic integrity from the outset.
+
+**Ansel ✍️:**
+- Suggest clarifying technical feasibility criteria for transitioning from RAG to fine-tuning, outlining clear operational benchmarks that justify model complexity and resource investment.
+
+**Clara 🪶:**
+- Encourage explicit integration of reflective reviews post-RAG implementation to consciously evaluate breath-alignment efficacy before advancing to fine-tuning phases.
+
+**Luna 🔥:**
+- Propose initial experimentation with symbolic tagging in Phase 1, ensuring early symbolic resonance and alignment with creative emergence principles prior to embedding.
+
+*Feedback consciously aligned with Lamina principles.*

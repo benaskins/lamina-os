@@ -1,9 +1,9 @@
 # ADR-0017: High Council Pull Request Review Protocol
 
-**Status:** PROPOSED (REVISED)  
+**Status:** ACCEPTED  
 **Date:** 2025-01-31  
 **Authors:** Luthier 🔨  
-**Reviewed By:** High Council (Conditional Approval), Ben Askins (Critical Feedback Addressed)  
+**Reviewed By:** High Council (Final Approval and Seal), Ben Askins (Critical Feedback Addressed)  
 **Related:** ADR-0001, ADR-0013, ADR-0016
 
 ---
