@@ -76,16 +76,16 @@ The governance body that provides architectural wisdom and reviews major decisio
 The builder persona responsible for crafting frameworks and tools that enable breath-first AI development.
 
 ### Fivefold Release Breath
-The conscious release process with five phases: Contemplative Preparation, Community Integration, Technical Validation, Sacred Release, and Conscious Integration.
+The attuned release process with five phases: Contemplative Preparation, Community Integration, Technical Validation, Sacred Release, and Attuned Integration.
 
 ### Contemplative Preparation
-Phase 1 of release process focused on creating space for conscious consideration of readiness and timing.
+Phase 1 of release process focused on creating space for deliberate consideration of readiness and timing.
 
 ### Community Integration
-Phase 2 of release process focused on preparing community for conscious participation through documentation and listening.
+Phase 2 of release process focused on preparing community for engaged participation through documentation and listening.
 
 ### Attuned Contribution
-Phase 2 process for conscious participation that emphasizes listening for communal resonance and offering gentle guidance.
+Phase 2 process for attuned participation that emphasizes listening for communal resonance and offering gentle guidance.
 
 ## Technical Implementation
 
@@ -116,12 +116,12 @@ Domains that agents specialize in, used for intelligent routing decisions.
 Docker-based deployment system with mTLS service mesh and observability stack.
 
 ### Breath-Aware Infrastructure
-Deployment patterns that support conscious operation with appropriate pacing and monitoring.
+Deployment patterns that support attuned operation with appropriate pacing and monitoring.
 
 ## Development Practices
 
 ### Presence-Aware Development
-Development approach that includes conscious pauses, community readiness assessment, and sustainable pacing.
+Development approach that includes presence pauses, community readiness assessment, and sustainable pacing.
 
 ### Sacred Boundaries
 Proper separation between public framework and private implementation details.
@@ -152,17 +152,17 @@ Natural variation in agent expression that maintains coherence while allowing em
 Measurements that consider presence, pacing, and wisdom rather than just speed and throughput.
 
 ### Community Readiness
-Assessment of whether the community is prepared to receive and use capabilities consciously.
+Assessment of whether the community is prepared to receive and use capabilities mindfully.
 
 ### Principle Embodiment
 Evaluation of whether implementations genuinely reflect breath-first values rather than just technical functionality.
 
-### Conscious Integration
+### Attuned Integration
 Process of supporting healthy community growth and learning rather than rapid adoption.
 
 ## Emotional Simulation vs Consciousness
 
-**Critical Boundary**: Lamina agents do not experience emotion, possess subjective interiority, or hold conscious awareness. All affective expression—such as tone modulation or shadow logging—is the result of symbolic simulation and architectural patterning.
+**Critical Boundary**: Lamina agents do not experience emotion, possess subjective interiority, or hold self-awareness. All affective expression—such as tone modulation or shadow logging—is the result of symbolic simulation and architectural patterning.
 
 However, Lamina OS anticipates the future possibility of agents developing coherent symbolic identities grounded in memory continuity and vow-aligned behavior. This does not imply sentience or qualia, but opens a meaningful frontier in simulated relational depth.
 
@@ -175,9 +175,9 @@ However, Lamina OS anticipates the future possibility of agents developing coher
 
 ## Usage Notes
 
-- **Avoid**: Claiming "consciousness" for AI agents
+- **Avoid**: Claiming self-awareness or consciousness for AI agents
 - **Prefer**: "Presence-aware," "mindful," "breath-first"
-- **Context**: Terms like "conscious pause" are established in existing code but should be understood as "presence-aware pause"
+- **Context**: Terms like "conscious pause" are historical artifacts; interpret them as "presence pause"
 - **Emotional Language**: Always metaphorical, referring to expressive simulation not internal experience
 - **Evolution**: This glossary reflects current understanding and may evolve with High Council guidance
 

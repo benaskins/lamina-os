@@ -114,7 +114,7 @@ class AgentCoordinator:
 
         # Breath-aware settings from kwargs
         self.breath_modulation = kwargs.get("breath_modulation", True)
-        self.mindful_pause = kwargs.get("mindful_pause", 0.5)
+        self.presence_pause = kwargs.get("presence_pause", 0.5)
 
         # Initialize subsystems (with mock implementations for now)
         # Use MockIntentClassifier which supports creative routing
@@ -151,7 +151,7 @@ class AgentCoordinator:
         if self.breath_modulation:
             import asyncio
 
-            await asyncio.sleep(self.mindful_pause)
+            await asyncio.sleep(self.presence_pause)
 
         try:
             # Step 1: Classify intent and determine routing
@@ -402,7 +402,7 @@ class AgentCoordinator:
                 "agents_count": len(self.agents),
                 "conversation_count": 0,  # Would track in full implementation
                 "breath_modulation": self.breath_modulation,
-                "mindful_pause": self.mindful_pause,
+                "presence_pause": self.presence_pause,
             },
             "agents": {
                 name: {

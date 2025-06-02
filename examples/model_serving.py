@@ -123,7 +123,7 @@ class BreathAwareServer:
         self.model_manager = MockModelManager()
         self.request_queue = []
         self.processing = False
-        self.stats = {"total_requests": 0, "breath_aware_requests": 0, "mindful_pauses": 0}
+        self.stats = {"total_requests": 0, "breath_aware_requests": 0, "presence_pauses": 0}
 
     async def start_server(self):
         """Start the breath-aware serving loop."""
@@ -173,7 +173,7 @@ class BreathAwareServer:
 
         if request["breath_aware"]:
             self.stats["breath_aware_requests"] += 1
-            self.stats["mindful_pauses"] += 1
+            self.stats["presence_pauses"] += 1
 
             print("   🧘 Taking mindful pause before processing...")
             await asyncio.sleep(0.3)
@@ -254,7 +254,7 @@ async def demonstrate_breath_aware_serving():
     print(f"   Total requests: {stats['total_requests']}")
     print(f"   Breath-aware requests: {stats['breath_aware_requests']}")
     print(f"   Breath-aware percentage: {stats['breath_aware_percentage']:.1f}%")
-    print(f"   Mindful pauses taken: {stats['mindful_pauses']}")
+    print(f"   Mindful pauses taken: {stats['presence_pauses']}")
 
     await server.stop_server()
 

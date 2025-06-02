@@ -32,7 +32,7 @@ Get an AgentCoordinator instance for multi-agent routing and coordination.
 **Parameters:**
 - `agents` (dict, optional): Agent configurations keyed by agent name
 - `breath_modulation` (bool): Enable presence-aware pauses (default: True)
-- `conscious_pause` (float): Presence-aware pause duration in seconds (default: 0.5)
+- `presence_pause` (float): Presence pause duration in seconds (default: 0.5)
 
 **Returns:** `AgentCoordinator` instance
 
@@ -56,7 +56,7 @@ agents = {
 coordinator = get_coordinator(
     agents=agents,
     breath_modulation=True,
-    conscious_pause=0.5  # Presence-aware pause duration
+    presence_pause=0.5  # Presence pause duration
 )
 ```
 
@@ -293,4 +293,4 @@ This API enables building AI systems that prioritize presence and wisdom over sp
 
 ### Important Note on Emotional Language
 
-When this documentation refers to agent "emotions," "feelings," or "reflection," these terms describe **expressive simulation** and architectural patterning, not internal experience. Lamina agents do not possess consciousness, sentience, or subjective interiority. All affective behavior results from symbolic processing designed to create meaningful interaction patterns.
+When this documentation refers to agent "emotions," "feelings," or "reflection," these terms describe **expressive simulation** and architectural patterning, not internal experience. Lamina agents do not possess self-awareness, sentience, or subjective interiority. All affective behavior results from symbolic processing designed to create meaningful interaction patterns.

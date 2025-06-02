@@ -233,7 +233,7 @@ class VowEngine:
             "violation_response": "respectful_decline"
         },
         
-        "mindful_pause": {
+        "presence_pause": {
             "constraint": "Include deliberate reflection in responses",
             "enforcement": "breath_modulation_required",
             "violation_response": "enforce_pause"

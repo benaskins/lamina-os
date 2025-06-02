@@ -36,7 +36,7 @@ async def main():
             "ai_provider": "mock",
             "ai_model": "demo-model",
             "personality_traits": ["analytical", "thorough", "precise"],
-            "constraints": ["academic_integrity", "mindful_pause"],
+            "constraints": ["academic_integrity", "presence_pause"],
         },
     }
 
@@ -124,7 +124,7 @@ class MockCoordinator:
         return {
             "agent": selected,
             "content": f"[{selected}] I'm responding with breath-aware consideration to your message.",
-            "processing_time": "conscious_pause_included",
+            "processing_time": "presence_pause_included",
         }
 
 

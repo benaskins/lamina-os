@@ -97,7 +97,7 @@ networks:
 # Breath-aware configuration for testing
 breath:
   modulation: true
-  awareness_pause: 0.1  # Minimal pause for test timing
+  presence_pause: 0.1  # Minimal pause for test timing
   validation_enabled: true
 
 # Security (test-appropriate)

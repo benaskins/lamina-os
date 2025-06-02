@@ -73,7 +73,7 @@ agent = Agent(
     name="my_agent",
     essence="A helpful assistant with gentle presence",
     vows=["zero_drift", "human_grounded_lock"],
-    modulation_rhythm="mindful_pause"
+    modulation_rhythm="presence_pause"
 )
 
 # Register agent in sanctuary
@@ -95,7 +95,7 @@ Agents are defined through YAML configuration emphasizing symbolic rather than p
 essence:
   name: "Clara"
   purpose: "Thoughtful conversation and gentle guidance"
-  breath_rhythm: "mindful_pause"
+  breath_rhythm: "presence_pause"
 
 vows:
   - name: "zero_drift"
