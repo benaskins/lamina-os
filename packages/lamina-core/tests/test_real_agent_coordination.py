@@ -166,7 +166,7 @@ class TestRealAgentCoordination:
             agents=real_test_agents,
             use_real_backends=True,
             breath_modulation=True,
-            mindful_pause=0.5,
+            presence_pause=0.5,
         )
 
         # Coordinator without breathing
@@ -194,7 +194,7 @@ class TestRealAgentCoordination:
             metadata={
                 "breathing_time": breathing_time,
                 "fast_time": fast_time,
-                "mindful_pause": 0.5,
+                "presence_pause": 0.5,
             },
         )
 

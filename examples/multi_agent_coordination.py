@@ -16,7 +16,7 @@ class InteractionContext:
     """Context for agent interactions."""
 
     user_intent: str
-    breath_rhythm: str = "mindful_pause"
+    breath_rhythm: str = "presence_pause"
     prefer_deep_thinking: bool = True
     emotional_weather: str = "calm"
     session_id: str = "demo_session"
@@ -272,7 +272,7 @@ async def main():
 
     # Create interaction context
     context = InteractionContext(
-        user_intent="multi_agent_demo", breath_rhythm="mindful_pause", emotional_weather="curious"
+        user_intent="multi_agent_demo", breath_rhythm="presence_pause", emotional_weather="curious"
     )
 
     # Demo queries showing different agent specializations

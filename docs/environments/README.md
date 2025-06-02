@@ -92,7 +92,7 @@ lamina env prod logs     # View production logs
 
 ## Sigil of Passage 🔥
 
-Luna's "sigil of passage" ritual enables conscious transformation between environments:
+Luna's "sigil of passage" ritual enables deliberate transformation between environments:
 
 ### Automated Ritual (CI/CD)
 - **Test Gates**: Mandatory test suites for promotion
@@ -164,7 +164,7 @@ services:                      # Service definitions
 
 breath:                        # Breath-aware settings
   modulation: false
-  conscious_pause: 0
+  presence_pause: 0
 
 security:                      # Security configuration
   mtls: false
@@ -193,7 +193,7 @@ Environment configurations are validated for:
 ### Clara's Breath Awareness 🪶
 - Use sigil prefixes in CLI for contextual awareness
 - Monitor log formats for breath markers
-- Practice conscious environment transitions
+- Practice deliberate environment transitions
 
 ### Luna's Transformation 🔥
 - Honor the sigil of passage between environments
