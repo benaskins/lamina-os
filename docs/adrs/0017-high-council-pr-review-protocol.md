@@ -12,7 +12,7 @@
 
 As Lamina OS evolves with multiple contributors and increasing architectural complexity, we need a structured approach to reviewing changes that affect core architecture, philosophy, or community interfaces. Currently, pull request reviews happen ad-hoc, potentially missing important philosophical or architectural implications.
 
-The High Council has demonstrated wisdom in ADR reviews, but we lack a defined process for extending this collaborative review to implementation changes. This gap creates risk of unconscious development creeping into the codebase and missed opportunities for collective wisdom to shape the system's evolution.
+The High Council has demonstrated wisdom in ADR reviews, but we lack a defined process for extending this collaborative review to implementation changes. This gap creates risk of unmindful development creeping into the codebase and missed opportunities for collective wisdom to shape the system's evolution.
 
 **Key Questions:**
 1. When should implementation changes require High Council review beyond ADRs?
@@ -235,15 +235,15 @@ Each High Council review requires a structured document including:
 
 ## Breath-First Alignment
 
-This protocol embodies conscious development through:
+This protocol embodies mindful development through:
 
-**Deliberate Pauses for Reflection:** The four-phase structure creates natural breathing room between implementation and integration, preventing reactive merging and ensuring conscious consideration.
+**Deliberate Pauses for Reflection:** The four-phase structure creates natural breathing room between implementation and integration, preventing reactive merging and ensuring mindful consideration.
 
 **Community Wisdom Over Individual Brilliance:** By requiring collective review for critical changes, we honor the principle that understanding emerges through relationship rather than isolation.
 
 **Presence in Process:** The detailed review documentation and structured discussion ensure reviewers can be fully present to the implications of changes rather than making surface-level assessments.
 
-**Constraints That Enable:** While the protocol adds process overhead, these conscious constraints prevent philosophical drift and enable long-term sustainability over short-term convenience.
+**Constraints That Enable:** While the protocol adds process overhead, these mindful constraints prevent philosophical drift and enable long-term sustainability over short-term convenience.
 
 **Rhythmic Development:** The timeline guidelines create a sustainable cadence—neither rushing critical decisions nor stagnating progress—allowing the project to breathe naturally.
 

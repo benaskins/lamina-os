@@ -130,7 +130,7 @@ class CorePlugin(LaminaPlugin):
     def _sanctuary_command(self):
         @click.group(name="sanctuary")
         def sanctuary_group():
-            """🏛️ Sanctuary management - spaces for conscious AI development."""
+            """🏛️ Sanctuary management - spaces for mindful AI development."""
             pass
 
         @sanctuary_group.command(name="create")
@@ -141,7 +141,7 @@ class CorePlugin(LaminaPlugin):
         def create_sanctuary(
             ctx: LaminaContext, sanctuary_name: str, agents: str | None, template: str
         ):
-            """✨ Create a new sanctuary for conscious AI development."""
+            """✨ Create a new sanctuary for mindful AI development."""
             ctx.echo_breath(f"Creating sanctuary '{sanctuary_name}'...")
 
             from ..cli.sanctuary_cli import SanctuaryCLI
@@ -217,7 +217,7 @@ class CorePlugin(LaminaPlugin):
         def create_agent(
             ctx: LaminaContext, agent_name: str, archetype: str, provider: str, model: str | None
         ):
-            """✨ Awaken a new agent with conscious purpose."""
+            """✨ Awaken a new agent with mindful purpose."""
             if not ctx.is_in_sanctuary:
                 ctx.echo_breath(
                     "🏛️ Agent creation requires a sanctuary. Use 'lamina sanctuary create' first.",
@@ -306,7 +306,7 @@ class CorePlugin(LaminaPlugin):
             interactive: bool,
         ):
             """💬 Converse with awakened agents."""
-            ctx.echo_breath("🌊 Opening channels for conscious conversation...")
+            ctx.echo_breath("🌊 Opening channels for mindful conversation...")
 
             # Import and delegate to existing chat handler
             from argparse import Namespace
@@ -445,7 +445,7 @@ class GitOpsPlugin(LaminaPlugin):
         super().__init__()
         self.tier = "deployment"
         self.domain = "gitops_operations"
-        self.breath_alignment = "deployment_conscious"
+        self.breath_alignment = "deployment_mindful"
 
     def get_commands(self) -> dict[str, click.Command]:
         return {
@@ -456,7 +456,7 @@ class GitOpsPlugin(LaminaPlugin):
     def _deploy_command(self):
         @click.group(name="deploy")
         def deploy_group():
-            """🚀 Deployment operations with GitOps consciousness."""
+            """🚀 Deployment operations with GitOps mindfulness."""
             pass
 
         @deploy_group.command(name="setup")
@@ -465,7 +465,7 @@ class GitOpsPlugin(LaminaPlugin):
         @click.option("--argocd/--no-argocd", default=True)
         @click.pass_obj
         def setup_gitops(ctx: LaminaContext, environment: str, repo_url: str, argocd: bool):
-            """✨ Setup GitOps deployment for conscious infrastructure."""
+            """✨ Setup GitOps deployment for mindful infrastructure."""
             ctx.echo_breath(f"🚀 Setting up GitOps for {environment} environment...")
 
             from argparse import Namespace
@@ -521,7 +521,7 @@ class GitOpsPlugin(LaminaPlugin):
             wait: bool,
             timeout: int,
         ):
-            """🌊 Apply deployment to Kubernetes with conscious breath."""
+            """🌊 Apply deployment to Kubernetes with mindful breath."""
             action = "dry-run" if dry_run else "deployment"
             ctx.echo_breath(f"🌊 Applying {action} to {environment}...")
 
@@ -549,7 +549,7 @@ class GitOpsPlugin(LaminaPlugin):
         @click.option("--namespace", "-n")
         @click.pass_obj
         def deployment_status(ctx: LaminaContext, environment: str, namespace: str | None):
-            """📊 Check deployment status with breath awareness."""
+            """📊 Check deployment status with breath presence."""
             ctx.echo_breath(f"📊 Checking {environment} deployment status...")
 
             from argparse import Namespace
@@ -605,7 +605,7 @@ class PluginDiscovery:
 @click.pass_context
 def lamina_cli(ctx, manifest):
     """
-    🌊 Lamina - Unified CLI for Conscious AI Development
+    🌊 Lamina - Unified CLI for Mindful AI Development
 
     A breath-aware interface for the complete Lamina ecosystem.
     Commands adapt to your context (sanctuary-root vs global).

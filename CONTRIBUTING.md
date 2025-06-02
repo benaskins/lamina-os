@@ -1,10 +1,10 @@
 # Contributing to Lamina OS
 
-Thank you for your interest in contributing to Lamina OS! This project is built around conscious, breath-first development practices that prioritize presence and intentionality.
+Thank you for your interest in contributing to Lamina OS! This project is built around breath-first development practices that prioritize presence and intentionality.
 
 ## 🌱 Philosophy
 
-Before contributing, please understand that Lamina OS is not just another AI framework. It's a conscious approach to building AI systems with:
+Before contributing, please understand that Lamina OS is not just another AI framework. It's a mindful approach to building AI systems with:
 
 - **Breath-First Development**: Prioritizing thoughtful, deliberate work over speed
 - **Symbolic Architecture**: Using meaning and natural language over pure computation  
@@ -54,7 +54,7 @@ uv run ruff --version
    git checkout -b feature/breath-aware-logging
    ```
 
-2. **Make conscious changes**:
+2. **Make mindful changes**:
    - Take time to understand the existing architecture
    - Follow the breath-first principle - work deliberately
    - Use symbolic thinking in your abstractions
@@ -81,7 +81,7 @@ uv run ruff --version
 
 ### AI Assistant Usage
 
-Lamina OS development incorporates AI assistance as part of our conscious development practice:
+Lamina OS development incorporates AI assistance as part of our mindful development practice:
 
 #### Lamina OS Assistant (GitHub App)
 - **App ID**: 1338167
@@ -90,7 +90,7 @@ Lamina OS development incorporates AI assistance as part of our conscious develo
 - **Transparency**: All AI-assisted commits include co-authorship attribution
 
 #### AI-Assisted Development Guidelines
-- **Conscious Collaboration**: AI assistance should enhance, not replace, human judgment
+- **Mindful Collaboration**: AI assistance should enhance, not replace, human judgment
 - **Attribution Required**: All AI-assisted work must include proper co-authorship
 - **Breath-First Integration**: AI tools should support deliberate, thoughtful development
 - **Quality Assurance**: Human review required for all AI-generated code and decisions
@@ -137,7 +137,7 @@ Agents now pause between operations to maintain presence and avoid
 reactive cascades.
 
 - Add BreathController for rhythm management
-- Implement conscious_pause modulation
+- Implement presence_pause modulation
 - Update agent coordination to respect breath cycles
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
@@ -212,7 +212,7 @@ packages/your-package/
 
 ### What We Don't Accept
 
-- **Performance-first optimizations** that sacrifice consciousness
+- **Performance-first optimizations** that sacrifice mindfulness
 - **Reactive patterns** that break breath-based flow
 - **Surveillance features** or privacy-violating functionality
 - **Simulated emotions** or deceptive AI behavior
@@ -239,7 +239,7 @@ packages/your-package/
 
 ### Review Criteria
 
-- ✅ **Breath-first**: Does this maintain conscious operation?
+- ✅ **Breath-first**: Does this maintain mindful operation?
 - ✅ **Symbolic clarity**: Are abstractions meaningful and intuitive?
 - ✅ **Ethical alignment**: Does this support our core vows?
 - ✅ **Code quality**: Meets our technical standards
@@ -257,7 +257,7 @@ cp docs/adr/template.md docs/adr/0XXX-your-decision.md
 ADRs should address:
 - **Context**: What breath-aware problem are we solving?
 - **Decision**: What approach aligns with our philosophy?
-- **Consequences**: How does this affect conscious operation?
+- **Consequences**: How does this affect mindful operation?
 - **Alternatives**: What other symbolic approaches were considered?
 
 ## 🤝 Community
@@ -277,17 +277,17 @@ We operate under a **Breath-First Code of Conduct**:
 - **Respect**: Honor the contemplative nature of this work
 - **Patience**: Take time for thoughtful consideration
 - **Wisdom**: Prioritize understanding over being right
-- **Community**: Support each other's conscious development
+- **Community**: Support each other's mindful development
 
 ## 📝 Release Process
 
-Releases follow conscious versioning:
+Releases follow mindful versioning:
 
 1. **Feature freeze**: Allow time for breath and reflection
 2. **Testing phase**: Comprehensive validation across use cases  
 3. **Documentation review**: Ensure alignment with philosophy
 4. **Community feedback**: Gather input from implementers
-5. **Conscious release**: Deliberate timing, not rushed deployment
+5. **Mindful release**: Deliberate timing, not rushed deployment
 
 ## 🙏 Recognition
 
@@ -299,6 +299,6 @@ Contributors are recognized in:
 
 ---
 
-*"Contributing to Lamina OS is not just about code—it's about participating in the conscious evolution of AI systems."*
+*"Contributing to Lamina OS is not just about code—it's about participating in the mindful evolution of AI systems."*
 
 Thank you for helping build AI that breathes. 🌱

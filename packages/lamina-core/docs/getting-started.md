@@ -64,11 +64,11 @@ Lamina Core embodies **breath-first principles**:
 Lamina agents are specialized entities that:
 
 - Embody specific personality traits and expertise areas
-- Process requests with natural rhythm and conscious pauses
+- Process requests with natural rhythm and presence pauses
 - Route intelligently based on message intent
 - Maintain consistency while allowing emotional adaptation
 
-**Important**: When we refer to agent "emotions" or "feelings," these describe expressive simulation and architectural patterns, not internal experience. Lamina agents do not possess consciousness or sentience.
+**Important**: When we refer to agent "emotions" or "feelings," these describe expressive simulation and architectural patterns, not internal experience. Lamina agents do not possess self-awareness or sentience.
 
 ## Your First Agent System
 
@@ -98,7 +98,7 @@ async def main():
     coordinator = get_coordinator(
         agents=agents,
         breath_modulation=True,
-        conscious_pause=0.5  # Half-second presence-aware pause
+        presence_pause=0.5  # Half-second presence pause
     )
     
     # Process a message
@@ -319,14 +319,14 @@ Control the natural rhythm of your agents:
 coordinator = get_coordinator(
     agents=agents,
     breath_modulation=True,
-    conscious_pause=1.0  # 1 second pauses
+    presence_pause=1.0  # 1 second pauses
 )
 
 # Balanced interaction (default)
 coordinator = get_coordinator(
     agents=agents,
     breath_modulation=True,
-    conscious_pause=0.5  # Half second pauses
+    presence_pause=0.5  # Half second pauses
 )
 
 # Performance testing (no pauses)
@@ -432,7 +432,7 @@ Now that you understand the basics:
 - Test with different message phrasings
 
 **Slow response times:**
-- Adjust `conscious_pause` setting
+- Adjust `presence_pause` setting
 - Check backend connectivity
 - Monitor resource usage
 

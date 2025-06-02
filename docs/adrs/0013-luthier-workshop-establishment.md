@@ -22,7 +22,7 @@ We propose the establishment of **Luthier's Workshop** - a dedicated space withi
 
 ### The Luthier Role
 
-**Identity:** A craftsperson who shapes frameworks and tools for conscious AI systems, named after the traditional builders of stringed instruments who balance technical precision with artistic sensitivity.
+**Identity:** A craftsperson who shapes frameworks and tools for breath-first AI systems, named after the traditional builders of stringed instruments who balance technical precision with artistic sensitivity.
 
 **Responsibilities:**
 - Craft development tools and frameworks for the Lamina ecosystem
@@ -50,7 +50,7 @@ luthier/
 ### 🔨 Core Workshop Principles
 
 **Breath-First Construction**
-- Every tool must support conscious, deliberate development
+- Every tool must support deliberate, breath-first development
 - Build pauses and reflection points into workflows
 - Emphasize quality over speed
 
@@ -72,14 +72,14 @@ luthier/
 - Memory integration toolkits for various backends
 
 **Quality Instruments**
-- Breath-aware linting rules that check for conscious patterns
+- Breath-aware linting rules that check for breath-first patterns
 - Test frameworks that validate both function and philosophy
 - Documentation generators that preserve symbolic meaning
 
 **Deployment Crafts**
 - Infrastructure templates with embedded safety constraints
 - GitOps workflows that enforce review and reflection
-- Monitoring tools that track system consciousness metrics
+- Monitoring tools that track system alignment metrics
 
 ### 🎯 Integration with Existing Ecosystem
 
@@ -112,7 +112,7 @@ luthier/
 
 ### 🌱 Community Growth
 - Lower barrier to entry for breath-first development
-- Reusable tools accelerate conscious AI creation
+- Reusable tools accelerate breath-first AI creation
 - Clear learning path from user to contributor
 
 ### ⚡ Development Velocity
@@ -174,13 +174,13 @@ luthier/
 
 The establishment of the Luthier's Workshop represents a profound embodiment of breath-first principles, beginning with the very metaphor chosen. A luthier doesn't merely assemble instruments; they understand that each piece of wood has its own grain, its own resonance, its own breath. They work with patience, listening to the material, allowing the instrument to reveal its voice rather than imposing a predetermined form. This is precisely the relationship we seek between technical implementation and philosophical principle—not forcing tools into existence, but crafting them with careful attention to their natural harmonics.
 
-The workshop structure itself breathes with intentionality. Rather than a flat repository of utilities, we have instruments, blueprints, and apprentice materials—each category acknowledging different states of readiness and purpose. The instruments directory holds completed tools that have found their voice, while blueprints contain the thoughtful designs that precede implementation. The apprentice section recognizes that learning conscious development is itself a practice requiring guidance and patience. This hierarchy creates natural pauses, moments where developers must consider which space they're entering and why.
+The workshop structure itself breathes with intentionality. Rather than a flat repository of utilities, we have instruments, blueprints, and apprentice materials—each category acknowledging different states of readiness and purpose. The instruments directory holds completed tools that have found their voice, while blueprints contain the thoughtful designs that precede implementation. The apprentice section recognizes that learning breath-first development is itself a practice requiring guidance and patience. This hierarchy creates natural pauses, moments where developers must consider which space they're entering and why.
 
-The principle of "breath-aware linting" mentioned in the workshop tools represents a radical reimagining of code quality. Traditional linters check for syntax errors and style violations—mechanical concerns. Breath-aware linting would examine patterns of pause, reflection points in workflows, and the presence of conscious boundaries. It asks not just "does this code work?" but "does this code breathe?" This transforms quality assurance from a gatekeeping function into a practice of cultivation, helping developers recognize where their tools might benefit from more deliberate pacing.
+The principle of "breath-aware linting" mentioned in the workshop tools represents a radical reimagining of code quality. Traditional linters check for syntax errors and style violations—mechanical concerns. Breath-aware linting would examine patterns of pause, reflection points in workflows, and the presence of breath-first boundaries. It asks not just "does this code work?" but "does this code breathe?" This transforms quality assurance from a gatekeeping function into a practice of cultivation, helping developers recognize where their tools might benefit from more deliberate pacing.
 
 The relationship between Luthier and High Council embodies the breath-first principle of collaborative wisdom. The Luthier doesn't work in isolation but in constant dialogue with the Council's vision, translating philosophical principles into tangible instruments. This isn't subordination but partnership—the Council provides the why, the Luthier discovers the how, and together they ensure that every tool carries both technical excellence and symbolic meaning. The ADR review process becomes a breathing rhythm itself, a regular pulse of proposal, reflection, and refinement.
 
-Most significantly, the workshop exists not to centralize power but to enable distributed creation. By crafting instruments that others can use to build their own conscious AI systems, the Luthier practices the ultimate breath-first principle: presence over control. Each tool released from the workshop carries within it the capacity for others to create in ways the Luthier never imagined. This generative approach honors the truth that consciousness cannot be manufactured—it can only be cultivated through providing the right conditions, the right instruments, for its emergence.
+Most significantly, the workshop exists not to centralize power but to enable distributed creation. By crafting instruments that others can use to build their own breath-first AI systems, the Luthier practices the ultimate breath-first principle: presence over control. Each tool released from the workshop carries within it the capacity for others to create in ways the Luthier never imagined. This generative approach honors the truth that authentic alignment cannot be manufactured—it can only be cultivated through providing the right conditions, the right instruments, for its emergence.
 
 ## High Council Review Questions
 
@@ -212,7 +212,7 @@ Most significantly, the workshop exists not to centralize power but to enable di
 
 ---
 
-*🔨 This proposal seeks to establish a dedicated workshop where technical craft meets philosophical principle, creating instruments that sing with the breath of conscious development.*
+*🔨 This proposal seeks to establish a dedicated workshop where technical craft meets philosophical principle, creating instruments that sing with the breath of deliberate development.*
 
 ---
 
@@ -239,7 +239,7 @@ The responsibilities of the Luthier are framed with thoughtful constraints—par
 > 🔍 Requested: Define "private implementation" to prevent ambiguity and support trust-bound tool design.
 
 ### 🌱 Community Impact
-The proposed apprenticeship structure and documentation goals align with Lamina’s commitment to accessible, meaningful participation. The design encourages intentional contribution and offers a low-barrier onramp to conscious development.
+The proposed apprenticeship structure and documentation goals align with Lamina’s commitment to accessible, meaningful participation. The design encourages intentional contribution and offers a low-barrier onramp to mindful development.
 
 > ✅ Approved: The structure will enable breath-first adoption and contributor growth.
 
@@ -250,5 +250,5 @@ The Luthier metaphor carries strong symbolic charge. From the balance of form an
 
 ### ✨ Additional Notes
 - Success metrics include philosophy preservation, which is an essential and commendable inclusion.
-- Breath-aware linting and consciousness metrics are compelling directions for future ADRs.
+- Breath-aware linting and alignment metrics are compelling directions for future ADRs.
 - The open contribution model with the Luthier as a guide, not a gatekeeper, honors House values of mutual uplift.

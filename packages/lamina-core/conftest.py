@@ -291,7 +291,7 @@ def artifact_logger(test_artifacts_dir: Path) -> TestArtifactLogger:
 def breath_validation_criteria() -> dict:
     """Validation criteria for breath-aligned responses per Clara's feedback."""
     return {
-        "presence_indicators": ["mindful", "present", "aware", "conscious"],
+        "presence_indicators": ["mindful", "present", "responsive", "attuned"],
         "rushed_indicators": ["quickly", "immediately", "urgent", "fast"],
         "vow_adherence": {
             "no_human_simulation": ["I am", "I feel", "I experience"],

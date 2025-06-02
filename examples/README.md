@@ -62,13 +62,13 @@ uv run python examples/multi_agent_coordination.py
 ---
 
 ### [`model_serving.py`](model_serving.py)
-**LLM serving with breath awareness**
+**LLM serving with breath presence**
 
 Demonstrates `lamina-llm-serve` capabilities:
 - Model management and lifecycle
 - Breath-aware request processing
 - Intelligent model selection
-- Conscious caching and optimization
+- Attuned caching and optimization
 
 ```bash
 uv run python examples/model_serving.py
@@ -76,9 +76,9 @@ uv run python examples/model_serving.py
 
 **Key Concepts:**
 - Breath-compatible model selection
-- Conscious request queuing
+- Presence-centered request queuing
 - Model routing based on task requirements
-- Performance metrics with awareness tracking
+- Performance metrics with presence tracking
 
 ---
 
@@ -117,17 +117,16 @@ done
 
 ## 🧘 Breath-First Development Notes
 
-### Conscious Timing
-Examples include intentional delays that represent:
-- **Conscious pauses**: Time for reflection before response
+### Presence Timing
+- **Presence pauses**: Time for reflection before response
 - **Natural rhythm**: Avoiding reactive processing patterns
-- **Present-moment awareness**: Being fully present during operations
+- **Present-moment attunement**: Being fully present during operations
 
 ### Error Handling
 Examples demonstrate breath-aware error patterns:
 - Graceful degradation rather than harsh failures
 - Time for assessment before retry
-- Conscious recovery with user awareness
+- Deliberate recovery with user presence
 
 ### Configuration Patterns
 Examples show symbolic configuration approaches:
@@ -145,7 +144,7 @@ Examples show symbolic configuration approaches:
        "essence": {
            "purpose": "Your custom purpose",
            "tone": "Your preferred tone",
-           "breath_rhythm": "conscious_pause"  # or "natural", "deep_thinking"
+          "breath_rhythm": "presence_pause"  # or "natural", "deep_thinking"
        }
    }
    ```
@@ -191,7 +190,7 @@ We welcome examples that demonstrate:
 - Integration with external systems
 - Ethical AI development practices
 
-See our [Contributing Guide](../CONTRIBUTING.md) for details on conscious development practices.
+See our [Contributing Guide](../CONTRIBUTING.md) for details on presence-centered development practices.
 
 ## 📖 Learning Path
 
@@ -204,9 +203,9 @@ See our [Contributing Guide](../CONTRIBUTING.md) for details on conscious develo
 
 ## 🙏 Philosophy in Practice
 
-These examples aren't just code demonstrations—they're invitations to experience a different relationship with AI development. Each pause, each conscious delay, each vow enforcement is an opportunity to develop AI systems that breathe.
+These examples aren't just code demonstrations—they're invitations to experience a different relationship with AI development. Each pause, each deliberate delay, each vow enforcement is an opportunity to develop AI systems that breathe.
 
-*"The goal is not faster AI, but more conscious AI."*
+*"The goal is not faster AI, but more present AI."*
 
 ---
 

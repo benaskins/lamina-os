@@ -4,7 +4,7 @@ Multi-Agent Coordination Example
 
 Demonstrates how multiple specialized agents coordinate through
 breath-aware patterns in Lamina OS. Shows intent routing, constraint
-enforcement, and conscious handoffs between agents.
+enforcement, and mindful handoffs between agents.
 """
 
 import asyncio
@@ -16,7 +16,7 @@ class InteractionContext:
     """Context for agent interactions."""
 
     user_intent: str
-    breath_rhythm: str = "conscious_pause"
+    breath_rhythm: str = "presence_pause"
     prefer_deep_thinking: bool = True
     emotional_weather: str = "calm"
     session_id: str = "demo_session"
@@ -41,7 +41,7 @@ class AgentCoordinator:
 
         print(f"\n🧭 Routing intent: '{query[:50]}...'")
 
-        # Conscious pause for intent classification
+        # Mindful pause for intent classification
         await asyncio.sleep(0.5)
 
         # Simple intent classification (would use sophisticated NLP in practice)
@@ -63,9 +63,9 @@ class AgentCoordinator:
 
         print(f"   → Routing to {chosen_agent} ({reason})")
 
-        # Conscious handoff if switching agents
+        # Mindful handoff if switching agents
         if self.active_agent and self.active_agent != chosen_agent:
-            await self._conscious_handoff(self.active_agent, chosen_agent, context)
+            await self._mindful_handoff(self.active_agent, chosen_agent, context)
 
         self.active_agent = chosen_agent
 
@@ -80,9 +80,9 @@ class AgentCoordinator:
 
         return response
 
-    async def _conscious_handoff(self, from_agent: str, to_agent: str, context: InteractionContext):
-        """Perform conscious handoff between agents."""
-        print(f"   🤝 Conscious handoff: {from_agent} → {to_agent}")
+    async def _mindful_handoff(self, from_agent: str, to_agent: str, context: InteractionContext):
+        """Perform mindful handoff between agents."""
+        print(f"   🤝 Mindful handoff: {from_agent} → {to_agent}")
 
         # Handoff pause for presence
         await asyncio.sleep(0.3)
@@ -108,7 +108,7 @@ class BreathAwareAgent:
         """Process query with breath-aware response."""
         self.response_count += 1
 
-        # Conscious pause before responding
+        # Mindful pause before responding
         await asyncio.sleep(0.8)
 
         print(f"   💭 {self.name} reflecting... (attempt {self.response_count})")
@@ -272,7 +272,7 @@ async def main():
 
     # Create interaction context
     context = InteractionContext(
-        user_intent="multi_agent_demo", breath_rhythm="conscious_pause", emotional_weather="curious"
+        user_intent="multi_agent_demo", breath_rhythm="presence_pause", emotional_weather="curious"
     )
 
     # Demo queries showing different agent specializations

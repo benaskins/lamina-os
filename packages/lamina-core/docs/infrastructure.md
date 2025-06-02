@@ -48,9 +48,8 @@ uv run python examples/working_coordination_demo.py
 
 ### Core Services
 
-**Agent Coordinator:**
 - Multi-agent routing and coordination
-- Breath-aware processing with conscious pauses
+- Breath-aware processing with presence pauses
 - Intent classification and intelligent routing
 
 **Backend Providers:**
@@ -350,7 +349,7 @@ class LaminaConfig:
     
     # Breath-first settings
     breath_modulation: bool = True
-    conscious_pause: float = 0.5
+    presence_pause: float = 0.5
     
     # Backend configuration
     ollama_base_url: str = "http://localhost:11434"
@@ -364,9 +363,8 @@ class LaminaConfig:
 
 ### Environment-Specific Configs
 
-**Development:**
 - Verbose logging
-- Longer conscious pauses for introspection
+- Longer presence pauses for introspection
 - Hot reloading enabled
 - Mock backends available
 
@@ -410,8 +408,7 @@ services:
 
 ### Performance Tuning
 
-**Breath-Aware Optimization:**
-- Adjust conscious pause for load conditions
+- Adjust presence pause for load conditions
 - Dynamic breathing based on system health
 - Graceful degradation under high load
 
@@ -500,8 +497,7 @@ curl -X POST http://localhost:8000/chat \
   -d '{"message": "test routing"}'
 ```
 
-**Performance Issues:**
-- Check conscious pause settings
+- Check presence pause settings
 - Monitor resource usage
 - Verify backend connectivity
 - Review routing statistics
@@ -519,4 +515,4 @@ export LOG_LEVEL=TRACE
 export BREATH_DEBUGGING=true
 ```
 
-This infrastructure setup provides a solid foundation for deploying conscious, breath-aware AI systems that scale gracefully while maintaining their contemplative nature.
+This infrastructure setup provides a solid foundation for deploying attuned, breath-aware AI systems that scale gracefully while maintaining their contemplative nature.

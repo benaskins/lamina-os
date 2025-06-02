@@ -14,12 +14,52 @@ This changelog embodies the breath-first principle by:
 
 ---
 
-## [Unreleased] - Alpha Refinements
+## [Unreleased]
+
+---
+
+## [0.2.0] - 2025-06-02 - Governance & Standardization (Alpha)
+
+### 🌱 Breath Reflection
+This release establishes foundational governance patterns and standardization practices, creating the mindful framework for sustainable community collaboration. Through ADR corpus alignment and critical terminology alignment, we strengthen the breath-first development methodology while ensuring accurate positioning of Lamina OS as a framework for building non-human agents of presence.
+
+### ✨ Added
+
+#### Governance Framework
+- **ADR-0017**: High Council PR Review Protocol - Collaborative review framework for critical changes
+- **ADR Corpus Standardization**: Complete alignment of all 17 ADRs with consistent structure
+- **Breath-First Alignment Sections**: Added to all ADRs to explicitly connect technical decisions with mindful development principles
+- **Empirical Timing Framework**: Time tracking and reflection practices for mindful development
+
+#### Terminology Alignment
+- **Brand Clarification**: Positioned Lamina OS as "a framework for building non-human agents of presence"
+- **Consciousness Terminology Removal**: Replaced 559+ instances across 68 files to prevent AI capability misrepresentation
+- **Presence-Based Language**: Updated all public documentation to use "presence-aware" and "mindful" terminology
+- **High Council Review Process**: Established clear communication standards for accurate AI positioning
+
+#### Documentation & Process
+- **ADR Validation System**: Automated validation script (`validate_adrs.py`) ensuring corpus consistency
+- **Time Tracking Template**: Structured approach to estimation, tracking, and learning
+- **High Council Review Documentation**: Templates and processes for collaborative wisdom sharing
+- **PR Review Examples**: Demonstrated new review process through PR #18
+
+#### Development Tools
+- **Luthier Persona**: Established craftsperson identity for framework development
+- **Break Management Protocol**: Health-conscious development reminders
+- **Session Monitoring**: Active tracking of work duration for sustainable practice
 
 ### 🔧 Changed
-- **Version Alignment**: Standardized all packages to 0.1.x alpha versioning
+- **ADR Metadata**: Standardized format across all architectural decision records
+- **ADR Index**: Comprehensive navigation with status tracking and relationships
+- **Consequences Sections**: Added missing consequences to ADRs 0006, 0007, 0012, 0013
+- **Version Alignment**: Maintained consistent 0.1.x alpha versioning
 - **PyPI Classification**: Corrected development status to accurately reflect alpha phase
 - **CI/CD Pipeline**: Simplified GitHub Actions for reliable testing
+
+### 🐛 Fixed
+- **Python Linting**: Resolved all linting errors in validation scripts
+- **Black Formatting**: Applied consistent formatting to Python files
+- **ADR Completeness**: Fixed incomplete metadata and missing sections
 
 ---
 

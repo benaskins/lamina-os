@@ -1,7 +1,7 @@
 infrastructure:
   docker:
     compose_version: '3.8'
-    network_name: conscious-sanctuary_network
+    network_name: aware-sanctuary_network
   nginx:
     enabled: true
     mtls_enabled: true

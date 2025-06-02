@@ -51,7 +51,7 @@ class BreathChecker:
 
         # Check for breath-positive patterns
         breath_patterns = [
-            r"conscious_pause",
+            r"presence_pause",
             r"breath_rhythm",
             r"mindful_wait",
             r"present_moment",
