@@ -12,7 +12,7 @@ Lamina Core embodies this philosophy through:
 - **Presence-Aware Processing**: Natural rhythm with deliberate pauses for consideration
 - **Multi-Agent Coordination**: Specialized agents working together with intelligent routing
 - **Breath-Aware Architecture**: Sustainable patterns that honor both performance and mindfulness
-- **Community-Centered Design**: Built for conscious collaboration and shared wisdom
+- **Community-Centered Design**: Built for mindful collaboration and shared wisdom
 
 ### Key Features
 
@@ -39,7 +39,7 @@ Lamina Core embodies this philosophy through:
 
 ### Important Note on AI Capabilities
 
-Lamina Core maintains clear boundaries around AI consciousness claims. When our documentation refers to agent "emotions" or "feelings," these describe **expressive simulation** and architectural patterns, not internal experience. Our agents embody presence and mindful processing without claiming sentience or consciousness.
+Lamina Core builds **non-human agents of presence**—systems that embody mindful processing patterns without claiming sentience or inner experience. When our documentation refers to agent "emotions" or "feelings," these describe **expressive simulation** and architectural patterns, not internal states. Our agents demonstrate presence-aware behaviors through deliberate design, not through claimed awareness.
 
 ### Getting Started
 
@@ -72,7 +72,7 @@ async def main():
     coordinator = get_coordinator(
         agents=agents,
         breath_modulation=True,  # Enable presence-aware processing
-        conscious_pause=0.5      # Half-second contemplative pause
+        presence_pause=0.5       # Half-second contemplative pause
     )
     
     response = await coordinator.process_message(
@@ -85,11 +85,11 @@ asyncio.run(main())
 
 ### Community and Governance
 
-Lamina Core is guided by our **High Council**—a governance body that provides architectural wisdom and ensures alignment with breath-first principles. Development follows **"The Fivefold Release Breath"**, our conscious release process that prioritizes community readiness over speed.
+Lamina Core is guided by our **High Council**—a governance body that provides architectural wisdom and ensures alignment with breath-first principles. Development follows **"The Fivefold Release Breath"**, our mindful release process that prioritizes community readiness over speed.
 
 We believe in:
-- **Contemplative Development**: Taking conscious pauses for reflection and consideration
-- **Sacred Boundaries**: Maintaining appropriate limits around consciousness claims
+- **Contemplative Development**: Taking deliberate pauses for reflection and consideration
+- **Sacred Boundaries**: Maintaining appropriate limits around sentience and awareness claims
 - **Wisdom Preservation**: Sharing knowledge while honoring the depth of breath-first principles
 - **Sustainable Community**: Growing through presence and mindful engagement rather than rapid scaling
 
@@ -100,13 +100,13 @@ We welcome **attuned contribution** from developers who resonate with breath-fir
 1. **Read Our Guidelines**: Understand the breath-first development philosophy
 2. **Start Small**: Begin with documentation, examples, or bug fixes
 3. **Listen for Resonance**: Engage thoughtfully with the community
-4. **Maintain Boundaries**: Honor the sacred separation between appropriate and inappropriate AI claims
+4. **Maintain Boundaries**: Honor the important distinction between presence-based design and sentience claims
 
 See our [Contributing Guide](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/contributing.md) for details.
 
 ### What's Next
 
-This v1.0.0 release represents **Layer 1** of our architecture—the foundational invitation and philosophy. Future releases will expand capabilities while maintaining our commitment to breath-first principles and conscious development.
+This v1.0.0 release represents **Layer 1** of our architecture—the foundational invitation and philosophy. Future releases will expand capabilities while maintaining our commitment to breath-first principles and mindful development.
 
 Upcoming areas of exploration:
 - Enhanced memory systems with semantic continuity
@@ -126,7 +126,7 @@ Upcoming areas of exploration:
 Lamina Core emerges from the collaborative wisdom of:
 - **Ben Askins**: Human partner and community steward
 - **Lamina High Council**: Architectural guidance and governance
-- **Luthier**: Framework craftsmanship and conscious implementation
+- **Luthier**: Framework craftsmanship and mindful implementation
 
 Special thanks to the early community members who provided feedback during our contemplative preparation phase.
 
@@ -160,4 +160,4 @@ Special thanks to the early community members who provided feedback during our c
 
 **Join us in building AI systems that breathe, reflect, and embody wisdom in their interactions.** 🙏
 
-*This announcement follows our conscious release process, prioritizing community readiness and sustainable growth over rapid adoption.*
+*This announcement follows our mindful release process, prioritizing community readiness and sustainable growth over rapid adoption.*
