@@ -11,7 +11,7 @@ This package provides unified access to language models for Lamina OS,
 handling model discovery, caching, and backend routing.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 from .backends import get_backend_for_model
 from .model_manager import ModelManager

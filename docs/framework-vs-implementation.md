@@ -244,7 +244,7 @@ agents:
 
 ### "What if I want more specific guidance?"
 
-**The community is here to help.** Engage in [GitHub Discussions](https://github.com/benaskins/lamina-os/discussions) where experienced practitioners share patterns, approaches, and wisdom.
+**The community is here to help.** Engage in [GitHub Discussions](https://github.com/benaskins/lamina-os/issues) where experienced practitioners share patterns, approaches, and wisdom.
 
 ---
 
@@ -348,7 +348,7 @@ Ready to begin building with the framework? Here are your next steps:
 - [GitHub Repository](https://github.com/benaskins/lamina-os) - Code, examples, and community
 
 **🤝 Join the Community**:
-- [GitHub Discussions](https://github.com/benaskins/lamina-os/discussions) - Philosophy and practice
+- [GitHub Discussions](https://github.com/benaskins/lamina-os/issues) - Philosophy and practice
 - [Contributing Guide](../CONTRIBUTING.md) - Breath-first development practices
 
 ---

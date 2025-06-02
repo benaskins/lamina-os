@@ -112,4 +112,4 @@ python -c "import lamina; print(f'Lamina Core v{lamina.__version__} - Ready to m
 
 - Check the documentation: `docs/`
 - Run with verbose output: `lamina --verbose <command>`
-- Report issues: [GitHub Issues](https://github.com/your-org/lamina-core/issues)
+- Report issues: [GitHub Issues](https://github.com/benaskins/lamina-os/issues)
