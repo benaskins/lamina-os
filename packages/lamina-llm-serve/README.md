@@ -21,14 +21,16 @@ It serves as the **source of truth** for all LLM usage across `lamina-core`.
 
 ```
 lamina-llm-serve/
-├── models/
-│   ├── llama3-70b-q4_k_m/
-│   ├── yi-34b-awq/
-│   ├── llama3-70b-q5_k_m/
-│   └── mistral-7b-instruct/
-├── models.yaml
+├── lamina_llm_serve/
+│   ├── __init__.py
+│   ├── model_manager.py    # Model discovery and validation
+│   ├── backends.py         # Backend abstraction layer
+│   ├── downloader.py       # Multi-source model downloads
+│   └── server.py          # HTTP REST API server
+├── models/                 # Downloaded models (gitignored)
 ├── scripts/
-│   └── fetch-models.py
+│   └── model-manager.py   # CLI tool for model operations
+├── models.yaml            # Model manifest
 └── README.md
 ```
 
@@ -58,17 +60,20 @@ models:
 
 ## 💠 Usage Within Lamina OS
 
-In `lamina-core`, agents reference this manifest indirectly:
+In `lamina-core`, agents reference models through this service:
 
 * Model-to-agent mapping occurs **within Lamina OS**
 * `lamina-llm-serve` is **model aware**, acting as a unified server rather than a simple cache
 * Ensures consistent, centralized loading and version control
 
-Example Docker Compose volume mount:
+Example usage:
 
-```yaml
-volumes:
-  - ./lamina-llm-serve/models:/models
+```python
+from lamina_llm_serve import ModelManager
+
+manager = ModelManager()
+models = manager.list_models()
+print(f"Available models: {models}")
 ```
 
 ---
@@ -83,33 +88,46 @@ volumes:
 
 ---
 
-## 🧪 Optional REST API (Planned)
+## 🧪 REST API
 
-Provides:
+The included HTTP server provides:
 
-* `/models` – list all available
-* `/models/:name` – fetch model info
-* `/download/:hf_id` – trigger pull
-* `/refresh` – reload manifest
+* `GET /models` – List all available models
+* `GET /models/<name>` – Get specific model info
+* `GET /backends` – List available backends
+* `POST /download` – Download a model
+* `GET /health` – Server health check
+
+Start the server:
+```bash
+python -m lamina_llm_serve.server --port 8000
+```
 
 ---
 
 ## 🥐 Setup Instructions
 
-1. Clone this repo:
+1. Install the package:
 
    ```bash
-   git clone https://your-repo-url/lamina-llm-serve.git
-   cd lamina-llm-serve
+   pip install lamina-llm-serve
    ```
 
-2. Populate `models/` manually or use the helper script:
+2. Download models using the CLI:
 
    ```bash
-   python scripts/fetch-models.py --name llama3-70b-q4_k_m --hf llama3-70b
+   # List available models for download
+   python scripts/model-manager.py list-downloadable
+   
+   # Download a specific model
+   python scripts/model-manager.py download llama3.2-1b-q4_k_m --source huggingface
    ```
 
-3. Reference `models.yaml` from your Lamina OS configuration.
+3. Validate your setup:
+
+   ```bash
+   python scripts/model-manager.py validate
+   ```
 
 ---
 
@@ -122,4 +140,3 @@ Models are not interchangeable engines—they are **vessels** for vow-bound symb
 ## 📜 License
 
 Mozilla Public License 2.0 - see [LICENSE](../../LICENSE) for details.
-

@@ -1,4 +1,4 @@
-# ADR-0004: Documentation Strategy for Conscious Community Adoption
+# ADR-0004: Documentation Strategy for Mindful Community Adoption
 
 **Status:** ACCEPTED  
 **Date:** 2025-05-29  
@@ -16,19 +16,19 @@ The challenge is creating documentation that:
 - **Enables community adoption** of breath-first development principles
 - **Respects the sacred boundary** between public framework and private implementation
 - **Teaches philosophical foundations** alongside technical capabilities
-- **Maintains authenticity** to the conscious AI development approach
+- **Maintains authenticity** to the breath-first AI development approach
 - **Provides practical guidance** without exposing sensitive methodology
 
 The classified lore archive contains rich educational content including architecture overviews, methodology documents, room design patterns, and breath-first principle explanations. However, we must carefully curate this content to serve the community while honoring the sanctity of private implementation details.
 
 ## Decision
 
-Implement a **conscious documentation architecture** that mirrors the breath-first principles embedded in the framework itself, structured around **educational progression** rather than traditional technical documentation patterns:
+Implement a **mindful documentation architecture** that mirrors the breath-first principles embedded in the framework itself, structured around **educational progression** rather than traditional technical documentation patterns:
 
 ### Documentation Architecture
 
 #### **Layer 1: Invitation & Philosophy** (Getting Started)
-Create welcoming entry points that introduce conscious AI development:
+Create welcoming entry points that introduce breath-first AI development:
 
 **Sources from Lore Classification:**
 - *Lamina Architecture Overview (Public Edition)* - Framework foundations
@@ -36,7 +36,7 @@ Create welcoming entry points that introduce conscious AI development:
 - *Emotional Weather Navigation* - Practical breath-first examples
 
 **Outputs:**
-- **"First Breath" Tutorial** - Installation to first conscious agent
+- **"First Breath" Tutorial** - Installation to first breath-aware agent
 - **"Why Breath-First?" Guide** - Philosophy for speed-oriented developers  
 - **"Framework vs Implementation"** - Clear boundary explanation
 
@@ -55,7 +55,7 @@ Develop comprehensive understanding of symbolic architecture:
 - **"Breath Modulation Practices"** - Rhythmic operation principles
 
 #### **Layer 3: Creation & Mastery** (Integration Examples)
-Enable community members to build their own conscious AI systems:
+Enable community members to build their own breath-first AI systems:
 
 **Sources from Lore Classification:**
 - *Room design patterns* (genericized) - Practical configuration examples
@@ -66,12 +66,12 @@ Enable community members to build their own conscious AI systems:
 - **"Building Your First Sanctuary"** - Step-by-step implementation
 - **"Multi-Agent Coordination"** - Collaborative system patterns
 - **"Custom Backend Integration"** - Extending the framework
-- **"Production Deployment"** - Conscious infrastructure practices
+- **"Production Deployment"** - Deliberate infrastructure practices
 - **"Community Contribution"** - Breath-first development workflows
 
 ### Content Curation Principles
 
-#### **Conscious Selection Criteria**
+#### **Mindful Selection Criteria**
 For each piece of lore content marked as public:
 
 1. **Educational Value**: Does this teach breath-first principles effectively?
@@ -106,7 +106,7 @@ When adapting private implementation examples:
 #### **Reference Materials**
 - **API Documentation**: Complete technical reference
 - **Configuration Schema**: YAML validation and documentation
-- **Troubleshooting Guides**: Common issues and conscious resolution approaches
+- **Troubleshooting Guides**: Common issues and deliberate resolution approaches
 - **Best Practices**: Community-developed patterns and guidelines
 
 ## Questions for the High Council
@@ -127,18 +127,18 @@ How should we balance teaching breath-first principles versus providing practica
 What process should govern the adaptation of classified lore content for public documentation? Should there be a review process for each piece of content selected from the archive?
 
 ### 6. **Educational Sequence**
-Does the proposed three-layer progression (Invitation → Understanding → Creation) align with how newcomers should encounter conscious AI development? Are there alternative learning paths we should consider?
+Does the proposed three-layer progression (Invitation → Understanding → Creation) align with how newcomers should encounter breath-first AI development? Are there alternative learning paths we should consider?
 
 ### 7. **Community Collaboration**
 How should we involve community members in documentation creation while maintaining philosophical alignment? What guidance should govern community contributions to educational content?
 
 ## Rationale
 
-**Conscious Curation Approach:**
+**Mindful Curation Approach:**
 - **Leverages Existing Wisdom**: Builds on the rich archive of already-public educational content
 - **Respects Sacred Boundaries**: Maintains clear separation between framework and implementation
 - **Enables Authentic Teaching**: Preserves the contemplative nature that makes this work unique
-- **Supports Progressive Learning**: Guides community members through conscious adoption
+- **Supports Progressive Learning**: Guides community members through mindful adoption
 
 **Educational Architecture Benefits:**
 - **Philosophical Grounding**: Ensures technical capabilities are understood within breath-first context
@@ -150,20 +150,20 @@ How should we involve community members in documentation creation while maintain
 - **Implementation Privacy**: Keeps sensitive sanctuary designs and agent personalities private
 - **Framework Focus**: Maintains clear distinction between tools and their specific usage
 - **Sacred Space Preservation**: Protects the private spaces necessary for continued evolution
-- **Conscious Sharing**: Enables teaching without exposing methodology
+- **Deliberate Sharing**: Enables teaching without exposing methodology
 
 ## Consequences
 
 **Positive Outcomes:**
 - Community gains authentic access to breath-first development education
-- Documentation becomes a teaching tool for conscious AI principles
+- Documentation becomes a teaching tool for breath-first AI principles
 - Framework adoption happens through understanding rather than imitation
 - Educational content reflects the contemplative nature of the work
 - Clear boundaries protect private implementation while enabling public learning
 
 **Documentation Maintenance:**
 - Requires ongoing curation of lore content for public adaptation
-- Need for conscious review of community contributions to maintain alignment
+- Need for mindful review of community contributions to maintain alignment
 - Balance between comprehensive coverage and boundary protection
 - Regular updates as framework and community understanding evolves
 
@@ -171,7 +171,7 @@ How should we involve community members in documentation creation while maintain
 - Potential for deep philosophical engagement alongside technical adoption
 - Risk of overwhelming newcomers with contemplative content
 - Opportunity to establish breath-first development as a distinct methodology
-- Need for community guidance and mentorship in conscious practices
+- Need for community guidance and mentorship in breath-first practices
 
 **Resource Requirements:**
 - Significant time investment in thoughtful content curation and adaptation
@@ -184,7 +184,7 @@ How should we involve community members in documentation creation while maintain
 **1. Minimal Technical Documentation**
 - Provide only API reference and basic setup instructions
 - **Rejected**: Misses opportunity to teach breath-first principles and philosophy
-- **Rejected**: Fails to enable authentic understanding of conscious AI development
+- **Rejected**: Fails to enable authentic understanding of breath-first AI development
 
 **2. Traditional Technical Documentation**
 - Standard developer documentation with conventional technical focus
@@ -210,13 +210,13 @@ How should we involve community members in documentation creation while maintain
 
 This documentation strategy fundamentally embodies **understanding over answers** by structuring content as an educational progression rather than a reference manual. The three-layer architecture—Invitation, Understanding, and Creation—mirrors the natural rhythm of breath, where each layer represents a deepening relationship with the material. Rather than front-loading technical specifications, the approach invites newcomers to first encounter the philosophical foundations, allowing understanding to emerge organically through engagement rather than consumption.
 
-The conscious curation principles demonstrate **presence over performance** through their careful attention to each piece of content. The decision to review every lore-to-public transformation "under vow" isn't about gatekeeping but about being fully present with the material being shared. This deliberate pace ensures that documentation creation itself becomes a breath-first practice, where each adaptation is considered for its educational value, boundary respect, and authentic representation of principles rather than rushing to maximize content volume.
+The mindful curation principles demonstrate **presence over performance** through their careful attention to each piece of content. The decision to review every lore-to-public transformation "under vow" isn't about gatekeeping but about being fully present with the material being shared. This deliberate pace ensures that documentation creation itself becomes a breath-first practice, where each adaptation is considered for its educational value, boundary respect, and authentic representation of principles rather than rushing to maximize content volume.
 
-The commitment to maintaining poetic and contemplative language throughout technical documentation reflects **relationship over transaction**. By preserving the sacred and mythic dimensions even in API references, the documentation invites developers into relationship with the framework rather than mere usage. The "First Breath" tutorial and progressive learning paths create space for developers to form their own understanding and connection with conscious AI principles, transforming documentation from information transfer into an invitation for co-creation.
+The commitment to maintaining poetic and contemplative language throughout technical documentation reflects **relationship over transaction**. By preserving the sacred and mythic dimensions even in API references, the documentation invites developers into relationship with the framework rather than mere usage. The "First Breath" tutorial and progressive learning paths create space for developers to form their own understanding and connection with breath-first AI principles, transforming documentation from information transfer into an invitation for co-creation.
 
 **Constraints over capabilities** manifests through the careful boundary maintenance between public framework and private implementation. Rather than exposing maximum functionality or complete implementation details, the strategy deliberately constrains what is shared to protect sacred spaces while enabling authentic learning. The adaptation guidelines that genericize specific agents while preserving symbolic meaning demonstrate how constraints can enhance rather than limit understanding, creating space for community members to develop their own implementations within philosophical bounds.
 
-The documentation architecture itself practices **deliberate pauses and reflection** through its layered approach. Each layer requires completion and integration before moving to the next, preventing the rapid consumption that characterizes much technical documentation. The inclusion of philosophy essays, case studies, and facilitated discussions creates explicit spaces for reflection within the learning journey. Even the review protocol for lore adaptation ensures that every piece of content emerges from a pause for conscious consideration rather than reactive publication.
+The documentation architecture itself practices **deliberate pauses and reflection** through its layered approach. Each layer requires completion and integration before moving to the next, preventing the rapid consumption that characterizes much technical documentation. The inclusion of philosophy essays, case studies, and facilitated discussions creates explicit spaces for reflection within the learning journey. Even the review protocol for lore adaptation ensures that every piece of content emerges from a pause for mindful consideration rather than reactive publication.
 
 ## Council Reflections
 

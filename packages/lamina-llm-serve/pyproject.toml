@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "lamina-llm-serve"
-version = "0.1.0"
+version = "0.2.0"
 description = "Centralized model caching and serving layer for Lamina OS"
 readme = "README.md"
 requires-python = ">=3.11"

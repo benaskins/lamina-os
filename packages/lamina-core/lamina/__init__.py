@@ -7,11 +7,11 @@
 """
 Lamina Core - Breath-First AI Agent Framework
 
-A framework for building AI agent systems with conscious, deliberate operations
+A framework for building AI agent systems with mindful, deliberate operations
 that prioritize presence and wisdom over reactive speed.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 # Lazy imports to avoid dependency issues

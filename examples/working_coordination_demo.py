@@ -36,7 +36,7 @@ async def main():
             "ai_model": "research-model",
             "personality_traits": ["analytical", "thorough", "precise"],
             "expertise_areas": ["research", "analysis", "data", "academic"],
-            "constraints": ["academic_integrity", "conscious_pause"],
+            "constraints": ["academic_integrity", "presence_pause"],
         },
         "creative": {
             "name": "creative",
@@ -57,9 +57,9 @@ async def main():
 
     # Initialize coordinator with breath-aware settings
     print("\n🧘 Initializing breath-aware coordinator...")
-    coordinator = get_coordinator(agents=agent_configs, breath_modulation=True, conscious_pause=0.5)
+    coordinator = get_coordinator(agents=agent_configs, breath_modulation=True, presence_pause=0.5)
 
-    print("✅ Coordinator ready with conscious processing enabled")
+    print("✅ Coordinator ready with mindful processing enabled")
 
     # Test scenarios that demonstrate intelligent routing
     test_scenarios = [
@@ -97,7 +97,7 @@ async def main():
         print(f"Human: {scenario['message']}")
         print(f"Expected routing: {scenario['expected_agent']}")
 
-        # Process with coordinator (includes conscious pause)
+        # Process with coordinator (includes presence pause)
         start_time = asyncio.get_event_loop().time()
 
         try:
@@ -123,7 +123,7 @@ async def main():
         print(f"  • Total requests processed: {stats['total_requests']}")
         print(f"  • Agents available: {status['coordinator']['agents_count']}")
         print(f"  • Breath modulation: {status['coordinator']['breath_modulation']}")
-        print(f"  • Conscious pause duration: {status['coordinator']['conscious_pause']}s")
+        print(f"  • Mindful pause duration: {status['coordinator']['presence_pause']}s")
 
         print("\n  Routing distribution:")
         for agent, count in stats.get("routing_decisions", {}).items():
@@ -169,7 +169,7 @@ async def main():
 
     print("\n✨ Demo Summary:")
     print("✅ Multi-agent coordination with intelligent routing")
-    print("✅ Breath-aware processing with conscious pauses")
+    print("✅ Breath-aware processing with presence pauses")
     print("✅ Agent specialization and personality traits")
     print("✅ Backend abstraction and mock integration")
     print("✅ Conversation history and introspection")
@@ -181,7 +181,7 @@ async def main():
     print("  • Add constraint enforcement and safety policies")
     print("  • Build toward symbolic architecture (Agent, Sanctuary, Vows)")
 
-    print(f"\n🌬️ Breath-first development: {processing_time:.2f}s average conscious pause")
+    print(f"\n🌬️ Breath-first development: {processing_time:.2f}s average mindful pause")
     print("Building AI that breathes, not just responds. 🙏")
 
 

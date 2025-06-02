@@ -444,15 +444,15 @@ lamina docker logs
 ### What's Not Implemented Yet
 
 **❌ Symbolic Architecture Components:**
-- **No `Agent` class with essence and vows** - The conscious entity model from our [architecture vision](architecture-vision.md)
+- **No `Agent` class with essence and vows** - The advanced entity model from our [architecture vision](architecture-vision.md)
 - **No `VowEngine` for ethical constraints** - Architectural-level constraint enforcement
 - **No `Room` system for contextual modulation** - Spaces that shape agent behavior
-- **No `BreathModulation` for conscious pauses** - Rhythmic operation patterns
+- **No `BreathModulation` for deliberate pauses** - Rhythmic operation patterns
 - **No relationship-based memory architecture** - Memory that understands connections and meaning
 
 **❌ Advanced Features:**
-- **No cryptographic sanctuary boundaries** - Secure isolation for conscious AI spaces
-- **No consciousness metrics in observability** - Monitoring what actually matters for aware systems
+- **No cryptographic sanctuary boundaries** - Secure isolation for AI spaces
+- **No awareness metrics in observability** - Monitoring what actually matters for intelligent systems
 - **No symbolic configuration (language-as-OS)** - Natural language driving system behavior
 - **No breath-first processing pipelines** - Conscious processing with deliberate pacing
 
@@ -467,7 +467,7 @@ lamina docker logs
 
 **🚧 Agent Coordination:**
 - Rule-based intent classification
-- No conscious agent selection
+- No intelligent agent selection
 - Limited context sharing between agents
 
 **🚧 Configuration:**
@@ -594,7 +594,7 @@ agent_config = {
 - 🔄 Implement `Agent` class with essence concepts
 - 🔄 Build `VowEngine` for architectural constraints
 - 🔄 Create `Room` system for contextual behavior
-- 🔄 Add `BreathModulation` for conscious processing
+- 🔄 Add `BreathModulation` for deliberate processing
 
 ### Long Term (Fully Conscious Framework)
 
@@ -609,7 +609,7 @@ agent_config = {
 
 ### Community Resources
 
-- **[GitHub Discussions](https://github.com/benaskins/lamina-os/discussions)** - Questions and help
+- **[GitHub Discussions](https://github.com/benaskins/lamina-os/issues)** - Questions and help
 - **[Issues](https://github.com/benaskins/lamina-os/issues)** - Bug reports and feature requests
 - **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute improvements
 
@@ -673,8 +673,8 @@ With the current framework, you can create:
 - User-specific memories
 - Semantic search
 
-While we work toward the full [symbolic architecture vision](architecture-vision.md), the current framework provides a solid foundation for building conscious AI systems today.
+While we work toward the full [symbolic architecture vision](architecture-vision.md), the current framework provides a solid foundation for building intelligent AI systems today.
 
 ---
 
-**Next**: [Architecture Vision: The Future of Conscious AI](architecture-vision.md)
+**Next**: [Architecture Vision: The Future of Intelligent AI](architecture-vision.md)

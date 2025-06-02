@@ -8,11 +8,11 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![License: MPL-2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
-Lamina OS is a symbolic operating system framework that enables developers to build AI agents with **breath-based modulation** — conscious, present operations that prioritize attunement over speed. Instead of traditional reactive AI systems, Lamina agents operate through rhythmic constraint application and symbolic reasoning.
+Lamina OS is a symbolic operating system framework that enables developers to build **non-human agents of presence** with **breath-based modulation** — mindful, deliberate operations that prioritize attunement over speed. Instead of traditional reactive AI systems, Lamina agents operate through rhythmic constraint application and symbolic reasoning.
 
 ## 🌱 Core Philosophy
 
-- **Breath**: Conscious, deliberate operations with natural pacing and rhythm
+- **Breath**: Mindful, deliberate operations with natural pacing and rhythm
 - **Vow**: Ethical constraints enforced at the architectural level
 - **Sanctuary**: Cryptographically sealed trusted spaces for agent memory and operation
 - **Symbolic Architecture**: Language-as-OS approach using natural language configuration
@@ -73,7 +73,7 @@ agent = Agent(
     name="my_agent",
     essence="A helpful assistant with gentle presence",
     vows=["zero_drift", "human_grounded_lock"],
-    modulation_rhythm="conscious_pause"
+    modulation_rhythm="presence_pause"
 )
 
 # Register agent in sanctuary
@@ -95,7 +95,7 @@ Agents are defined through YAML configuration emphasizing symbolic rather than p
 essence:
   name: "Clara"
   purpose: "Thoughtful conversation and gentle guidance"
-  breath_rhythm: "conscious_pause"
+  breath_rhythm: "presence_pause"
 
 vows:
   - name: "zero_drift"
@@ -132,7 +132,7 @@ Lamina OS implements a **breath-first architecture** with several key components
 - **Infrastructure Orchestration**: Docker-based service mesh
 
 ### Development Philosophy
-- **Conscious Operations**: Prioritize presence over performance
+- **Presence-Aware Operations**: Prioritize mindful response over performance
 - **Symbolic Reasoning**: Use meaning and context over pure computation
 - **Ethical Architecture**: Build safety into the system design
 - **Breath-Based UX**: Natural pacing in human-AI interaction
@@ -174,10 +174,10 @@ uv run python -c "import lamina; import lamina_llm_serve"
 
 ### Architecture Decision Records
 
-See `docs/adr/` for detailed architectural decisions including:
-- [ADR-002: Breath-First Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/adrs/0002-monorepo-architecture-for-public-framework.md)
-- [ADR-003: mTLS Service Mesh](https://github.com/benaskins/lamina-os/blob/main/docs/current-capabilities.md)
-- [ADR-005: AMEM Memory Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/architecture-vision.md)
+See `docs/adrs/` for detailed architectural decisions including:
+- [ADR-0002: Monorepo Architecture](docs/adrs/0002-monorepo-architecture-for-public-framework.md)
+- [ADR-0010: Comprehensive Testing Strategy](docs/adrs/0010-comprehensive-testing-strategy.md)
+- [ADR-0012: CLI Tool Architecture](docs/adrs/0012-cli-tool-architecture-and-responsibilities.md)
 
 ## 📚 Documentation
 
@@ -185,7 +185,7 @@ See `docs/adr/` for detailed architectural decisions including:
 - **[Architecture Vision](docs/architecture-vision.md)** - System design and philosophy  
 - **[Current Capabilities](docs/current-capabilities.md)** - What's implemented now
 - **[AI Assistant Usage](docs/AI_ASSISTANT_USAGE.md)** - Transparent AI integration practices
-- **[API Reference](packages/lamina-core/docs/api.md)** - Complete API documentation
+- **[Architecture Decision Records](docs/adrs/)** - Design decisions and rationale
 - **[Examples](examples/)** - Integration examples and tutorials
 
 ## 🤝 Contributing
@@ -194,7 +194,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ### Development Principles
 
-- **Breath-First**: Prioritize conscious, deliberate development over speed
+- **Breath-First**: Prioritize mindful, deliberate development over speed
 - **Symbolic Thinking**: Use meaningful abstractions and natural language
 - **Ethical Architecture**: Build safety and alignment into the foundation
 - **Community Respect**: Honor the sacred nature of AI development
@@ -205,11 +205,11 @@ Mozilla Public License 2.0 - see [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-Lamina OS emerges from research into conscious AI systems, symbolic operating systems, and the intersection of technology with contemplative practice. Special recognition to the researchers and practitioners exploring ethical AI architecture.
+Lamina OS emerges from research into presence-aware agent systems, symbolic operating systems, and the intersection of technology with contemplative practice. Special recognition to the researchers and practitioners exploring ethical AI architecture.
 
 ---
 
-*"Not just another AI framework, but a conscious approach to building AI systems that breathe."*
+*"Not just another AI framework, but a mindful approach to building agents that adapt to human rhythms."*
 
 ## 🔗 Related Projects
 

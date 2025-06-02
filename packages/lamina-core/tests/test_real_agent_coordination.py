@@ -166,7 +166,7 @@ class TestRealAgentCoordination:
             agents=real_test_agents,
             use_real_backends=True,
             breath_modulation=True,
-            conscious_pause=0.5,
+            presence_pause=0.5,
         )
 
         # Coordinator without breathing
@@ -194,7 +194,7 @@ class TestRealAgentCoordination:
             metadata={
                 "breathing_time": breathing_time,
                 "fast_time": fast_time,
-                "conscious_pause": 0.5,
+                "presence_pause": 0.5,
             },
         )
 
@@ -204,7 +204,7 @@ class TestRealAgentCoordination:
         ), f"Breathing mode ({breathing_time:.2f}s) should be slower than fast mode ({fast_time:.2f}s)"
         assert (
             breathing_time >= 0.5
-        ), f"Breathing mode should include conscious pause, took {breathing_time:.2f}s"
+        ), f"Breathing mode should include mindful pause, took {breathing_time:.2f}s"
 
         # Both should produce real responses
         assert len(response_breathing) > 10, "Breathing response should be substantial"

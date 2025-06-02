@@ -143,7 +143,7 @@ We adopt **Option 2: Flexible Template with Core Requirements**, with targeted u
 
 ## Breath-First Alignment
 
-This standardization embodies conscious development through:
+This standardization embodies mindful development through:
 
 **Deliberate Structure:** Like breath rhythm, consistent patterns enable flow while allowing variation within the pattern.
 
