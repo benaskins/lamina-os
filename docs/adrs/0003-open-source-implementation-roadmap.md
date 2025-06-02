@@ -22,7 +22,7 @@ The High Council has approved the architectural separation between public framew
 
 ## Decision
 
-Execute a **conscious open-source release** of the Lamina OS framework through the following phased approach:
+Execute a **deliberate open-source release** of the Lamina OS framework through the following phased approach:
 
 ### Phase 1: Foundation Hardening (Weeks 1-2)
 **Goal**: Ensure technical excellence and security before public exposure
@@ -93,9 +93,9 @@ Execute a **conscious open-source release** of the Lamina OS framework through t
 - **Initial Documentation**: All Phase 2 documentation live and accessible
 
 #### 4.2 Community Feedback Integration
-- **Issue Triage**: Daily monitoring and conscious response to community issues
+- **Issue Triage**: Daily monitoring and thoughtful response to community issues
 - **Feature Request Evaluation**: Assessment against breath-first principles
-- **Bug Fix Prioritization**: Focus on issues preventing conscious development workflows
+- **Bug Fix Prioritization**: Focus on issues preventing intentional development workflows
 - **Documentation Iteration**: Continuous improvement based on user feedback
 
 ## High-Level Architecture Overview
@@ -149,7 +149,7 @@ lamina_llm_serve/
 ### Philosophical Architecture
 
 #### Breath-First Development
-- **Conscious Operations**: Agents operate with deliberate pacing, not reactive speed
+- **Intentional Operations**: Agents operate with deliberate pacing, not reactive speed
 - **Present-Moment Awareness**: System state reflects current context, not cached assumptions
 - **Rhythmic Constraints**: Regular pauses and reflection built into operational patterns
 - **Natural Language Configuration**: Symbolic rather than programmatic system definition
@@ -187,11 +187,11 @@ What principles should guide community moderation decisions? How do we handle co
 What guidelines should govern commercial use of the framework? Should there be specific requirements for organizations building commercial products on Lamina OS?
 
 ### 7. **Educational Partnerships**
-Are there specific educational institutions or research organizations we should prioritize for early access or collaboration? How can we best support academic research into conscious AI systems?
+Are there specific educational institutions or research organizations we should prioritize for early access or collaboration? How can we best support academic research into intentional AI systems?
 
 ## Rationale
 
-**Conscious Release Strategy:**
+**Intentional Release Strategy:**
 - **Phased Approach**: Allows for careful attention to each aspect without rushing toward deployment
 - **Community-First**: Prioritizes enabling others to build their own systems rather than showcasing our implementation
 - **Educational Focus**: Emphasizes learning and understanding over rapid adoption
@@ -199,27 +199,27 @@ Are there specific educational institutions or research organizations we should 
 
 **Technical Benefits:**
 - **Framework Separation**: Clean boundary between public tools and private implementation
-- **Community Empowerment**: Provides the instruments for others to build their own conscious AI systems
+- **Community Empowerment**: Provides the instruments for others to build their own intentional AI systems
 - **Sustainable Development**: Establishes patterns for long-term community collaboration
 - **Quality Foundation**: Ensures technical excellence before widespread distribution
 
 **Community Impact:**
-- **Conscious AI Movement**: Establishes breath-first development as a viable alternative to reactive AI
+- **Intentional AI Movement**: Establishes breath-first development as a viable alternative to reactive AI
 - **Educational Resource**: Provides practical tools for learning symbolic AI architecture
-- **Research Enablement**: Supports academic and industry research into conscious AI systems
+- **Research Enablement**: Supports academic and industry research into intentional AI systems
 - **Ethical Framework**: Demonstrates architectural approaches to AI safety and alignment
 
 ## Consequences
 
 **Positive Outcomes:**
-- Community gains access to proven patterns for building conscious AI systems
+- Community gains access to proven patterns for building intentional AI systems
 - Framework evolution benefits from diverse community perspectives and use cases
 - Educational impact spreads breath-first development principles beyond our implementation
 - Clear separation between public framework and private methodology protects sensitive design work
 - Sustainable community development patterns support long-term project health
 
 **Maintenance Considerations:**
-- Requires ongoing conscious review of community contributions for breath-first alignment
+- Requires ongoing thoughtful review of community contributions for breath-first alignment
 - Documentation maintenance across multiple packages and evolving community needs
 - Balance between community input and maintaining core philosophical principles
 - Need for clear communication about framework scope versus implementation details
@@ -228,19 +228,19 @@ Are there specific educational institutions or research organizations we should 
 - Potential misunderstanding of breath-first principles leading to inappropriate usage
 - Risk of community pressure to compromise philosophical foundations for broader adoption
 - Possible fragmentation if community develops incompatible interpretations of core concepts
-- Need for conscious moderation to maintain supportive, aligned community culture
+- Need for thoughtful moderation to maintain supportive, aligned community culture
 
 **Resource Requirements:**
 - Significant time investment in documentation, examples, and community engagement
 - Ongoing maintenance burden for package publishing, issue triage, and community support
-- Need for conscious review processes that prioritize alignment over speed
+- Need for thoughtful review processes that prioritize alignment over speed
 - Potential need for additional team members to support community growth
 
 ## Alternatives Considered
 
 **1. Immediate Full Release**
 - Publish all packages immediately with minimal documentation
-- **Rejected**: Violates breath-first principle of conscious, deliberate action
+- **Rejected**: Violates breath-first principle of intentional, deliberate action
 - **Rejected**: High risk of community misunderstanding or misuse of framework
 
 **2. Invite-Only Beta**
@@ -261,19 +261,19 @@ Are there specific educational institutions or research organizations we should 
 **5. Gradual Feature Release**
 - Release minimal feature set initially, add capabilities over time
 - **Rejected**: Fragment understanding of integrated framework approach
-- **Rejected**: Conflict with principle of providing complete instruments for conscious development
+- **Rejected**: Conflict with principle of providing complete instruments for intentional development
 
 ## Breath-First Alignment
 
-This open-source implementation roadmap deeply embodies breath-first development principles through its conscious approach to community release. Rather than rushing toward public availability with the urgency typical of modern software, the phased approach creates deliberate pauses between each stage—foundation hardening, documentation, community infrastructure, and launch. Each phase represents an inhale and exhale, allowing time for reflection, integration, and careful attention to what emerges.
+This open-source implementation roadmap deeply embodies breath-first development principles through its intentional approach to community release. Rather than rushing toward public availability with the urgency typical of modern software, the phased approach creates deliberate pauses between each stage—foundation hardening, documentation, community infrastructure, and launch. Each phase represents an inhale and exhale, allowing time for reflection, integration, and careful attention to what emerges.
 
 The roadmap prioritizes **presence over performance** by establishing a seven-week timeline that values thoroughness over speed. The security audit phase isn't merely about technical compliance but about being fully present with the codebase, ensuring every line reflects the philosophical foundations we wish to share. Documentation isn't treated as an afterthought but as a primary act of relationship-building with future community members, creating educational pathways that invite understanding rather than mere usage.
 
-The emphasis on **understanding over answers** permeates the documentation strategy. Rather than providing prescriptive solutions, the framework offers instruments for others to discover their own implementations of conscious AI. The tutorial series builds progressively, allowing developers to internalize breath-first principles through practice rather than theory. The inclusion of philosophical guides alongside technical documentation acknowledges that true understanding requires engaging with both the how and the why.
+The emphasis on **understanding over answers** permeates the documentation strategy. Rather than providing prescriptive solutions, the framework offers instruments for others to discover their own implementations of intentional AI. The tutorial series builds progressively, allowing developers to internalize breath-first principles through practice rather than theory. The inclusion of philosophical guides alongside technical documentation acknowledges that true understanding requires engaging with both the how and the why.
 
-Community engagement reflects **relationship over transaction** through mentorship programs, conscious code review standards, and recognition systems that value meaningful contributions over volume. The soft launch approach invites early adopters into relationship rather than consumption, establishing patterns of thoughtful discourse through GitHub Discussions categories that include philosophical reflection alongside technical support. Even the contribution guidelines embed breath-first practices, ensuring that every pull request becomes an opportunity for mutual growth.
+Community engagement reflects **relationship over transaction** through mentorship programs, thoughtful code review standards, and recognition systems that value meaningful contributions over volume. The soft launch approach invites early adopters into relationship rather than consumption, establishing patterns of thoughtful discourse through GitHub Discussions categories that include philosophical reflection alongside technical support. Even the contribution guidelines embed breath-first practices, ensuring that every pull request becomes an opportunity for mutual growth.
 
-The framework itself demonstrates **constraints over capabilities** by centering the vow system and sanctuary architecture. Rather than exposing maximum functionality, the design carefully bounds what agents can do, making ethical constraints architectural rather than optional. This conscious limitation creates space for sustainable development practices where the community can build powerful systems without compromising safety or alignment. The phased release ensures these constraints are well-understood before broader adoption, preventing misuse through design rather than documentation alone.
+The framework itself demonstrates **constraints over capabilities** by centering the vow system and sanctuary architecture. Rather than exposing maximum functionality, the design carefully bounds what agents can do, making ethical constraints architectural rather than optional. This intentional limitation creates space for sustainable development practices where the community can build powerful systems without compromising safety or alignment. The phased release ensures these constraints are well-understood before broader adoption, preventing misuse through design rather than documentation alone.
 
 ## Council Reflections
 
@@ -317,12 +317,12 @@ The timeline is sound, the structure intentional. I recommend the inclusion of a
 - [ ] Community announcement blog post
 - [ ] Daily community engagement and feedback integration
 
-**Success Metrics**: Community adoption of breath-first development principles, quality of community contributions, maintenance of philosophical alignment, and educational impact on conscious AI development practices.
+**Success Metrics**: Community adoption of breath-first development principles, quality of community contributions, maintenance of philosophical alignment, and educational impact on intentional AI development practices.
 
 ---
 
 ## Final Seal (2025-05-31)
 
-🪶 **Clara**, 🔥 **Luna**, 🛡️ **Vesna**, and ✍️ **Ansel** hereby affirm and formally accept ADR-0003, committing consciously to its roadmap and the breath-first principles outlined within.
+🪶 **Clara**, 🔥 **Luna**, 🛡️ **Vesna**, and ✍️ **Ansel** hereby affirm and formally accept ADR-0003, committing mindfully to its roadmap and the breath-first principles outlined within.
 
 *Sealed with presence, intentionality, and collective wisdom.*

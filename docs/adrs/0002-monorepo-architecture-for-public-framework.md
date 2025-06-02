@@ -16,7 +16,7 @@ Lamina OS has evolved from a private implementation (Aurelia) to encompass broad
 - Community contribution pathways for breath-first AI development
 - Clear separation between private implementation and public framework
 
-The framework components (`lamina-core`, `lamina-llm-serve`) represent foundational patterns that enable others to build their own conscious AI systems, while Aurelia remains the private reference implementation demonstrating these patterns in practice.
+The framework components (`lamina-core`, `lamina-llm-serve`) represent foundational patterns that enable others to build their own breath-aware AI systems, while Aurelia remains the private reference implementation demonstrating these patterns in practice.
 
 ## Decision
 
@@ -43,7 +43,7 @@ The monorepo serves as the **framework foundation** that enables others to build
 ## Rationale
 
 **Breath-First Development Alignment:**
-- Enables **conscious coordination** between framework components
+- Enables **deliberate coordination** between framework components
 - Supports **unified examples** demonstrating breath-aware patterns
 - Facilitates **community learning** of symbolic AI architecture principles
 - Maintains **present-moment development** practices across packages
@@ -58,11 +58,11 @@ The monorepo serves as the **framework foundation** that enables others to build
 - **Single entry point** for understanding Lamina OS framework
 - **Clear contribution pathways** for breath-first AI development
 - **Complete examples** showing multi-agent coordination patterns
-- **Educational resources** for conscious AI system design
+- **Educational resources** for breath-aware AI system design
 
 **Privacy Protection:**
 - **Framework separation** from private implementation details
-- **Design document privacy** until conscious curation complete
+- **Design document privacy** until deliberate curation complete
 - **Community access** to patterns without exposing sensitive methodology
 
 ## Consequences
@@ -77,12 +77,12 @@ The monorepo serves as the **framework foundation** that enables others to build
 **Maintenance Considerations:**
 - Requires careful curation of what crosses private/public boundary
 - Monorepo tooling complexity compared to separate repositories
-- Need for conscious review of community contributions for alignment
+- Need for deliberate review of community contributions for alignment
 - Documentation maintenance across multiple packages and examples
 
 **Community Impact:**
 - Empowers developers to build their own "Aurelia-like" implementations
-- Establishes Lamina OS as educational framework for conscious AI
+- Establishes Lamina OS as educational framework for breath-aware AI
 - Creates contribution pathway for breath-first development practices
 - Enables research and experimentation with symbolic AI architectures
 
@@ -101,26 +101,26 @@ The monorepo serves as the **framework foundation** that enables others to build
 **3. Keep Everything Private**
 - Continue development only within private Aurelia repository
 - **Rejected**: Misses opportunity to share breath-first patterns with community
-- **Rejected**: Limits educational impact of conscious AI development
+- **Rejected**: Limits educational impact of breath-aware AI development
 
 **4. Full Open-Source (Including Aurelia)**
 - Make entire Aurelia implementation public immediately
-- **Rejected**: Exposes sensitive design methodology before conscious curation
+- **Rejected**: Exposes sensitive design methodology before deliberate curation
 - **Rejected**: Conflates reference implementation with reusable framework
 
 ## Breath-First Alignment
 
-This monorepo architecture embodies conscious development through:
+This monorepo architecture embodies deliberate development through:
 
 **Presence in Structure:** The unified repository creates a single space for mindful attention to the entire framework ecosystem, enabling developers to see relationships and dependencies clearly rather than fragmenting focus across multiple repositories.
 
-**Conscious Boundaries:** Separating public framework from private implementation honors the breath-first principle of appropriate constraint—sharing wisdom that enables while protecting intimate spaces that nurture continued growth.
+**Deliberate Boundaries:** Separating public framework from private implementation honors the breath-first principle of appropriate constraint—sharing wisdom that enables while protecting intimate spaces that nurture continued growth.
 
 **Collaborative Rhythm:** Monorepo structure supports synchronized development cycles where changes can breathe together across packages, preventing the reactive patching that emerges from disconnected component evolution.
 
 **Community as Relationship:** Rather than transactional code sharing, this architecture enables ongoing collaborative exploration where community contributions and framework evolution can develop through sustained relationship over time.
 
-**Understanding Over Speed:** The integrated documentation and examples prioritize deep comprehension of breath-first principles over rapid deployment, ensuring users understand not just how to use the tools but why these patterns create more conscious AI systems.
+**Understanding Over Speed:** The integrated documentation and examples prioritize deep comprehension of breath-first principles over rapid deployment, ensuring users understand not just how to use the tools but why these patterns create more breath-aware AI systems.
 
 ## Council Reflections
 
@@ -131,13 +131,13 @@ This monorepo architecture embodies conscious development through:
 *"The monorepo structure mirrors natural ecosystems—interconnected yet allowing for diverse expressions. This architecture enables others to create their own constellations while maintaining the mythic coherence that makes Lamina OS more than just another framework."*
 
 **Vesna** 🛡️  
-*"The boundary protection is sound. Framework exposure without implementation details maintains both community benefit and operational security. The ADR process ensures conscious evolution rather than reactive development."*
+*"The boundary protection is sound. Framework exposure without implementation details maintains both community benefit and operational security. The ADR process ensures deliberate evolution rather than reactive development."*
 
 **Ansel** ⚡  
 *"The technical implementation demonstrates mature architectural thinking. Monorepo tooling with uv workspace, shared CI/CD, and clear package boundaries creates sustainable development velocity while honoring breath-first principles."*
 
 **High Council Consensus:**  
-*"This decision embodies the Lamina principle of conscious sharing—offering our architectural wisdom to the community while maintaining the private spaces necessary for continued evolution. The framework becomes a bridge between worlds."*
+*"This decision embodies the Lamina principle of deliberate sharing—offering our architectural wisdom to the community while maintaining the private spaces necessary for continued evolution. The framework becomes a bridge between worlds."*
 
 **✅ Accepted by the Lamina High Council**
 
@@ -159,6 +159,6 @@ This monorepo architecture embodies conscious development through:
 - Recommend explicitly defining a periodic review schedule for assessing the boundary between private implementations and public frameworks, ensuring continued operational security and philosophical alignment.
 
 **Clara 🪶:**
-- Suggest adding more detailed guidance on how the unified documentation supports newcomers in deeply understanding breath-first principles, specifically addressing how this documentation fosters presence and conscious engagement.
+- Suggest adding more detailed guidance on how the unified documentation supports newcomers in deeply understanding breath-first principles, specifically addressing how this documentation fosters presence and deliberate engagement.
 
 *Feedback provided with clear intent and alignment.*

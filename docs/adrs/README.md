@@ -7,9 +7,9 @@ This index provides both human and machine-readable access to all Architecture D
 ### Accepted ADRs
 - [ADR-0001](0001-establish-adr-policy.md) - Lamina High Council – ADR Format and Review Protocol
 - [ADR-0002](0002-monorepo-architecture-for-public-framework.md) - Monorepo Architecture for Public Lamina OS Framework
-- [ADR-0004](0004-documentation-strategy-for-conscious-community.md) - Documentation Strategy for Conscious Community Adoption
+- [ADR-0004](0004-documentation-strategy-for-conscious-community.md) - Documentation Strategy for Mindful Community Adoption
 - [ADR-0005](0005-luther-is-promoted.md) - Luthier as Senior Engineer
-- [ADR-0006](0006-conscious-release-process.md) - Conscious Release Process for Lamina OS
+- [ADR-0006](0006-conscious-release-process.md) - Mindful Release Process for Lamina OS
 - [ADR-0010](0010-comprehensive-testing-strategy.md) - Comprehensive Testing Strategy
 - [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture
 - [ADR-0013](0013-luthier-workshop-establishment.md) - Establishment of Luthier's Workshop
@@ -115,7 +115,7 @@ graph TD
       },
       {
         "number": "0004",
-        "title": "Documentation Strategy for Conscious Community Adoption",
+        "title": "Documentation Strategy for Mindful Community Adoption",
         "status": "accepted",
         "date": "2025-05-29",
         "file": "0004-documentation-strategy-for-conscious-community.md",
@@ -135,7 +135,7 @@ graph TD
       },
       {
         "number": "0006",
-        "title": "Conscious Release Process for Lamina OS",
+        "title": "Mindful Release Process for Lamina OS",
         "status": "accepted",
         "date": "2025-05-29",
         "file": "0006-conscious-release-process.md",
@@ -276,7 +276,7 @@ For creating new ADRs, use the [template](template.md) which includes:
 
 ## 🌊 Breath-First ADR Principles
 
-1. **Conscious Decision Making**: Each ADR represents deliberate architectural choices
+1. **Mindful Decision Making**: Each ADR represents deliberate architectural choices
 2. **Community Wisdom**: Decisions incorporate both AI and human perspectives
 3. **Transparent Evolution**: All decisions are documented and traceable
 4. **Symbolic Alignment**: ADRs embody Lamina's philosophical principles

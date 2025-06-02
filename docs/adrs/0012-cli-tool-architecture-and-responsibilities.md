@@ -219,7 +219,7 @@ lamina-core agent --help     # Specific command help
 - Clear testing and deployment workflows
 
 ### **🌊 Breath-First Philosophy**
-- **Conscious Tool Selection:** Each tool has clear purpose and boundaries
+- **Mindful Tool Selection:** Each tool has clear purpose and boundaries
 - **Mindful Development:** Separation prevents rushed, inappropriate tool usage
 - **Sustainable Architecture:** Clear responsibilities enable long-term maintenance
 
@@ -265,7 +265,7 @@ lamina-core agent --help     # Specific command help
 ## Alternative Approaches Considered
 
 ### **Single Unified CLI**
-**Rejected:** Would create a monolithic tool trying to serve too many personas, violating the breath-first principle of conscious boundaries.
+**Rejected:** Would create a monolithic tool trying to serve too many personas, violating the breath-first principle of mindful boundaries.
 
 ### **Complete Separation**
 **Rejected:** Users need integration points between development and usage workflows.
@@ -275,9 +275,9 @@ lamina-core agent --help     # Specific command help
 
 ## Breath-First Alignment
 
-This three-tier CLI architecture embodies breath-first development principles through its fundamental recognition that tools shape consciousness. Just as a luthier must understand that different instruments serve different musical purposes—a violin for soaring melodies, a drum for grounding rhythm—we recognize that different development tools serve different states of presence and intention. The separation into development, framework, and specialized tiers isn't merely organizational efficiency; it's a conscious acknowledgment that the tool we choose influences the quality of attention we bring to our work.
+This three-tier CLI architecture embodies breath-first development principles through its fundamental recognition that tools shape mindfulness. Just as a luthier must understand that different instruments serve different musical purposes—a violin for soaring melodies, a drum for grounding rhythm—we recognize that different development tools serve different states of presence and intention. The separation into development, framework, and specialized tiers isn't merely organizational efficiency; it's a conscious acknowledgment that the tool we choose influences the quality of attention we bring to our work.
 
-The distinction between building Lamina OS (Tier 1) and building with Lamina OS (Tier 2) represents a profound philosophical boundary. When developers use `make` commands, they enter a state of framework consciousness—aware that they're shaping the instruments others will use. This requires a different quality of presence than when practitioners use `lamina-core` to create agents, where the focus shifts to relationship and emergence. By maintaining this separation, we prevent the unconscious mixing of meta-work with direct work, preserving the integrity of each mode of engagement.
+The distinction between building Lamina OS (Tier 1) and building with Lamina OS (Tier 2) represents a profound philosophical boundary. When developers use `make` commands, they enter a state of framework mindfulness—aware that they're shaping the instruments others will use. This requires a different quality of presence than when practitioners use `lamina-core` to create agents, where the focus shifts to relationship and emergence. By maintaining this separation, we prevent the unmindful mixing of meta-work with direct work, preserving the integrity of each mode of engagement.
 
 The specialized services tier acknowledges that certain operations require deep, focused attention that would be diluted if mixed with general-purpose tools. Model management, for instance, involves careful curation and validation—activities that benefit from dedicated tooling that encourages pause and reflection. This tier separation creates natural breathing spaces in our workflows, moments where we must consciously choose which tool to engage, thereby preventing the rushed, unconsidered actions that lead to technical debt and architectural drift.
 
@@ -304,7 +304,7 @@ The plugin architecture suggested by the High Council represents breath-first pr
 
 ---
 
-*🌊 This ADR embodies the breath-first principle of conscious architecture: clear boundaries, mindful tool selection, and sustainable separation of concerns.*
+*🌊 This ADR embodies the breath-first principle of mindful architecture: clear boundaries, mindful tool selection, and sustainable separation of concerns.*
 
 ---
 
