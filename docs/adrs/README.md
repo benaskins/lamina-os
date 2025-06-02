@@ -14,14 +14,14 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0012](0012-cli-tool-architecture-and-responsibilities.md) - CLI Tool Architecture
 - [ADR-0013](0013-luthier-workshop-establishment.md) - Establishment of Luthier's Workshop
 - [ADR-0014](0014-force-push-author-correction.md) - Retrospective - Force Push for Author Email Correction
+- [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization
+- [ADR-0017](0017-high-council-pr-review-protocol.md) - High Council Pull Request Review Protocol
 
 ### Proposed ADRs
 - [ADR-0003](0003-open-source-implementation-roadmap.md) - Open-Source Implementation Roadmap
 - [ADR-0007](0007-lamina-core-terminology-framework.md) - Lamina Core Terminology Framework
 - [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management
 - [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus
-- [ADR-0016](0016-adr-template-enforcement.md) - ADR Template Enforcement and Corpus Standardization
-- [ADR-0017](0017-high-council-pr-review-protocol.md) - High Council Pull Request Review Protocol
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -32,8 +32,8 @@ This index provides both human and machine-readable access to all Architecture D
 
 | Status | Count | ADR Numbers |
 |--------|-------|-------------|
-| Accepted | 9 | 0001, 0002, 0004, 0005, 0006, 0010, 0012, 0013, 0014 |
-| Proposed | 8 | 0003, 0007, 0008*, 0009*, 0011, 0015, 0016, 0017 |
+| Accepted | 11 | 0001, 0002, 0004, 0005, 0006, 0010, 0012, 0013, 0014, 0016, 0017 |
+| Proposed | 6 | 0003, 0007, 0008*, 0009*, 0011, 0015 |
 | Draft | 0 | - |
 
 *In feature branch
@@ -75,11 +75,11 @@ graph TD
 {
   "adr_index": {
     "version": "1.0.0",
-    "generated": "2025-01-31",
+    "generated": "2025-06-02",
     "total_adrs": 17,
     "status_counts": {
-      "accepted": 9,
-      "proposed": 8,
+      "accepted": 11,
+      "proposed": 6,
       "draft": 0
     },
     "adrs": [
@@ -240,7 +240,7 @@ graph TD
       {
         "number": "0016",
         "title": "ADR Template Enforcement and Corpus Standardization",
-        "status": "proposed",
+        "status": "accepted",
         "date": "2025-01-31",
         "file": "0016-adr-template-enforcement.md",
         "proposer": "Luthier 🔨",
@@ -251,7 +251,7 @@ graph TD
       {
         "number": "0017",
         "title": "High Council Pull Request Review Protocol",
-        "status": "proposed",
+        "status": "accepted",
         "date": "2025-01-31",
         "file": "0017-high-council-pr-review-protocol.md",
         "proposer": "Luthier 🔨",
@@ -292,5 +292,5 @@ For creating new ADRs, use the [template](template.md) which includes:
 
 *This index is maintained by the Luthier and updated with each new ADR submission.*
 
-**Last Updated**: 2025-01-31  
+**Last Updated**: 2025-06-02  
 **Maintained By**: Luthier 🔨
