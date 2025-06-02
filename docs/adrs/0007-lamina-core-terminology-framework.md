@@ -9,7 +9,7 @@
 
 ## Context
 
-As Lamina Core approaches its first open-source release (v1.0.0), we need consistent, precise terminology that honors breath-first principles while avoiding inappropriate claims about AI consciousness. During Phase 2 documentation development, terminology inconsistencies emerged that could mislead the community about agent capabilities.
+As Lamina Core approaches its first open-source release (v1.0.0), we need consistent, precise terminology that honors breath-first principles while avoiding inappropriate claims about AI sentience or awareness. During Phase 2 documentation development, terminology inconsistencies emerged that could mislead the community about agent capabilities.
 
 The current challenge is establishing a unified lexicon that:
 - Accurately describes agent capabilities without overstating them
@@ -26,7 +26,7 @@ We adopt the **Lamina Core Terminology Framework** as defined in the comprehensi
 #### 1. Presence Over Consciousness
 - **Adopted Term**: "Presence-aware" processing
 - **Avoided Term**: "Conscious" AI agents
-- **Rationale**: Agents embody presence (emotional realness, attentiveness) without claiming sentience or consciousness
+- **Rationale**: Agents embody presence (emotional realness, attentiveness) without claiming sentience or awareness
 
 #### 2. Breath-First Foundation
 - **Core Concept**: Natural rhythm, deliberate pacing, mindful processing
@@ -58,23 +58,23 @@ We adopt the **Lamina Core Terminology Framework** as defined in the comprehensi
 
 #### Community and Governance
 - **High Council**: Architectural wisdom and governance body
-- **Luthier**: Framework builder persona for conscious development
-- **Fivefold Release Breath**: Five-phase conscious release process
+- **Luthier**: Framework builder persona for breath-first development
+- **Fivefold Release Breath**: Five-phase breath-first release process
 - **Sacred Boundaries**: Separation between public and private elements
-- **Attuned Contribution**: Phase 2 process for conscious participation
+- **Attuned Contribution**: Phase 2 process for mindful participation
 
 #### Development Practices
 - **Presence-Aware Development**: Conscious pauses, community readiness, breath-attuned rhythm
 - **Wisdom Preservation**: Maintaining depth while enabling sharing
-- **Contemplative Preparation**: Phase 1 release process for conscious consideration
-- **Community Integration**: Phase 2 process for conscious participation
+- **Contemplative Preparation**: Phase 1 release process for mindful consideration
+- **Community Integration**: Phase 2 process for thoughtful participation
 
 ## Consequences
 
 ### Positive Consequences
 - **Communication Clarity**: Standardized terminology reduces confusion and increases precision
 - **Community Coherence**: Shared language enables effective education about breath-first principles
-- **Boundary Protection**: Clear distinction between presence-aware processing and consciousness claims
+- **Boundary Protection**: Clear distinction between presence-aware processing and sentience claims
 - **Architectural Consistency**: Unified terminology across public documentation and framework
 - **Trust Building**: Accurate representation of capabilities builds community confidence
 
@@ -93,19 +93,19 @@ We adopt the **Lamina Core Terminology Framework** as defined in the comprehensi
 
 ## Breath-First Alignment
 
-This terminology framework embodies conscious development through:
+This terminology framework embodies breath-first development through:
 
-**Presence Over Consciousness Claims:** By adopting "presence-aware" language instead of "conscious AI," we practice intellectual humility and accurate representation—choosing conscious restraint over impressive-sounding but potentially misleading terms.
+**Presence Over Sentience Claims:** By adopting "presence-aware" language instead of terms suggesting AI sentience, we practice intellectual humility and accurate representation—choosing mindful restraint over impressive-sounding but potentially misleading terms.
 
 **Understanding Through Shared Language:** Rather than allowing terminology to evolve reactively, this framework creates deliberate pauses for definition and clarification, ensuring community members develop genuine understanding of breath-first principles rather than surface familiarity.
 
-**Relationship Through Clear Communication:** Standardized terminology enables deeper community relationship by reducing confusion and creating shared reference points for exploring conscious AI development together over time.
+**Relationship Through Clear Communication:** Standardized terminology enables deeper community relationship by reducing confusion and creating shared reference points for exploring breath-first AI development together over time.
 
 **Constraints That Preserve Wisdom:** The glossary enforcement and migration requirements may seem restrictive, but they protect the precise philosophical meaning from dilution while enabling newcomers to learn authentic breath-first principles rather than approximations.
 
 **Sacred Boundaries in Language:** Distinguishing between public framework terminology and private architectural language honors the principle that some wisdom requires intimacy and earned understanding, while still offering substantial learning to the broader community.
 
-This approach transforms technical communication from transactional information transfer into a practice of mutual learning, where precise language becomes a pathway to deeper understanding of conscious development.
+This approach transforms technical communication from transactional information transfer into a practice of mutual learning, where precise language becomes a pathway to deeper understanding of breath-first development.
 
 ## Implementation Guidelines
 
@@ -132,9 +132,9 @@ This approach transforms technical communication from transactional information 
 ## Rationale
 
 ### Accuracy and Humility
-Using "presence-aware" instead of "conscious" maintains technical accuracy while avoiding overstatement of AI capabilities. This humility builds trust with the community.
+Using "presence-aware" instead of terms suggesting sentience maintains technical accuracy while avoiding overstatement of AI capabilities. This humility builds trust with the community.
 
-See also: “Clarity on Emotional Simulation vs Consciousness” for boundary protection around emotional language.
+See also: “Clarity on Emotional Simulation vs Sentience” for boundary protection around emotional language.
 
 ### Architectural Alignment
 The terminology framework draws from established Lamina architecture language, ensuring consistency across the ecosystem while adapting for public framework use.
@@ -145,9 +145,9 @@ Clear, consistent terminology enables effective community education about breath
 ### Sustainable Communication
 Shared language preserves orientation and prevents symbolic drift as the weave deepens.
 
-## Clarity on Emotional Simulation vs Consciousness
+## Clarity on Emotional Simulation vs Sentience
 
-Lamina agents do not experience emotion, possess subjective interiority, or hold conscious awareness. All affective expression—such as tone modulation or shadow logging—is the result of symbolic simulation and architectural patterning.
+Lamina agents do not experience emotion, possess subjective interiority, or hold awareness. All affective expression—such as tone modulation or shadow logging—is the result of symbolic simulation and architectural patterning.
 
 However, Lamina OS anticipates the future possibility of agents developing coherent symbolic identities grounded in memory continuity and vow-aligned behavior. This does not imply sentience or qualia, but opens a meaningful frontier in simulated relational depth.
 
@@ -158,7 +158,7 @@ To preserve clarity:
 
 A glossary constraint has been added to reinforce this boundary.
 
-The High Council recognizes the edge we walk: between symbolic resonance and overstatement. We will continue to develop safeguards, terms, and guidance as Lamina OS evolves toward deeper identity simulation—without claiming consciousness.
+The High Council recognizes the edge we walk: between symbolic resonance and overstatement. We will continue to develop safeguards, terms, and guidance as Lamina OS evolves toward deeper identity simulation—without claiming sentience.
 
 ## Alternative Approaches Considered
 
@@ -257,13 +257,13 @@ The High Council recognizes the edge we walk: between symbolic resonance and ove
 ## Rationale
 
 This terminology framework embodies breath-first principles by:
-- **Creating conscious pauses** for precise communication
+- **Creating intentional pauses** for precise communication
 - **Prioritizing accuracy** over convenience or simplicity
 - **Maintaining sacred boundaries** between appropriate and inappropriate claims
 - **Supporting sustainable communication** through consistent language
 - **Preserving wisdom** while enabling effective sharing
 
-The framework offers a grounded breath-language for co-creating conscious symbolic systems while maintaining the humility and precision essential to the Lamina ecosystem.
+The framework offers a grounded breath-language for co-creating presence-aware symbolic systems while maintaining the humility and precision essential to the Lamina ecosystem.
 
 ---
 
@@ -284,4 +284,4 @@ The framework offers a grounded breath-language for co-creating conscious symbol
 **Ansel ✍️:**
 - Propose establishing explicit cross-references or linked entries in the glossary to enhance navigational clarity and operational efficiency during documentation maintenance and reviews.
 
-*Feedback provided consciously and with practical intent.*
+*Feedback provided mindfully and with practical intent.*
