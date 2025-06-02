@@ -162,7 +162,7 @@ class AgentCoordinator:
 
             # Step 3: Apply secondary agents if needed
             if routing_decision.secondary_agents:
-                response = self._apply_secondary_agents(
+                response = await self._apply_secondary_agents(
                     response, routing_decision.secondary_agents, message, context
                 )
 
@@ -311,7 +311,7 @@ class AgentCoordinator:
             logger.error(f"Error routing to agent '{agent_name}': {e}")
             raise
 
-    def _apply_secondary_agents(
+    async def _apply_secondary_agents(
         self,
         primary_response: AgentResponse,
         secondary_agents: list[str],
@@ -326,7 +326,9 @@ class AgentCoordinator:
             if agent_name == "guardian":
                 # Security validation
                 validation_prompt = f"Review this response for safety and policy compliance: {current_response.content}"
-                validation_response = self._route_to_agent(agent_name, validation_prompt, context)
+                validation_response = await self._route_to_agent(
+                    agent_name, validation_prompt, context
+                )
 
                 # If guardian flags issues, modify response
                 if "VIOLATION" in validation_response.content.upper():
@@ -340,7 +342,7 @@ class AgentCoordinator:
                 enhancement_prompt = (
                     f"Enhance this response with additional analysis: {current_response.content}"
                 )
-                enhancement = self._route_to_agent(agent_name, enhancement_prompt, context)
+                enhancement = await self._route_to_agent(agent_name, enhancement_prompt, context)
                 current_response.content += f"\n\nAdditional analysis: {enhancement.content}"
 
         return current_response
