@@ -13,8 +13,8 @@
 - **Impact**: All PyPI documentation links now work correctly
 
 **Example Fix:**
-- **Before**: `[Installation Guide](docs/installation.md)` ❌ 
-- **After**: `[Installation Guide](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/installation.md)` ✅
+- **Before**: `[Getting Started](docs/getting-started.md)` ❌ 
+- **After**: `[Getting Started](https://github.com/benaskins/lamina-os/blob/main/docs/getting-started.md)` ✅
 
 ---
 

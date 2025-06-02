@@ -299,13 +299,13 @@ In this first breath, you've encountered:
 
 ### Build with Intention
 
-4. **[Sanctuary Design Patterns](sanctuary-patterns.md)** - Creating conscious spaces
-5. **[Agent Development](agent-development.md)** - Crafting thoughtful agents
-6. **[Multi-Agent Coordination](multi-agent-coordination.md)** - Collaborative AI systems
+4. **Sanctuary Design Patterns** - Creating conscious spaces *(guide coming soon)*
+5. **Agent Development** - Crafting thoughtful agents *(guide coming soon)*
+6. **Multi-Agent Coordination** - Collaborative AI systems *(guide coming soon)*
 
 ### Join the Community
 
-7. **[GitHub Discussions](https://github.com/benaskins/lamina-os/discussions)** - Philosophy and practice
+7. **[GitHub Discussions](https://github.com/benaskins/lamina-os/issues)** - Philosophy and practice
 8. **[Contributing Guide](../CONTRIBUTING.md)** - Breath-first development practices
 9. **[Support Resources](../SUPPORT.md)** - Community assistance
 

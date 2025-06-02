@@ -855,4 +855,4 @@ The path from current implementation to symbolic architecture requires community
 
 **For Immediate Use**: [Current Capabilities](current-capabilities.md)  
 **For Contribution**: [Contributing Guide](../CONTRIBUTING.md)  
-**For Discussion**: [GitHub Discussions](https://github.com/benaskins/lamina-os/discussions)
+**For Discussion**: [GitHub Discussions](https://github.com/benaskins/lamina-os/issues)

@@ -609,7 +609,7 @@ agent_config = {
 
 ### Community Resources
 
-- **[GitHub Discussions](https://github.com/benaskins/lamina-os/discussions)** - Questions and help
+- **[GitHub Discussions](https://github.com/benaskins/lamina-os/issues)** - Questions and help
 - **[Issues](https://github.com/benaskins/lamina-os/issues)** - Bug reports and feature requests
 - **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute improvements
 
