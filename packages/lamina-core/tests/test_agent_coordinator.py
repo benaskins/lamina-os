@@ -184,3 +184,14 @@ class TestAgentCoordinator:
         # Should be much faster without breathing (but allow for mock processing time)
         assert (end_time - start_time) < 0.5
         assert response is not None
+
+    @pytest.mark.asyncio
+    async def test_secondary_agent_enhancement(self):
+        """Test that secondary agents are properly awaited and applied."""
+        agents = dict(self.test_agents)
+        coordinator = get_coordinator(agents=agents)
+
+        primary = await coordinator._route_to_agent("assistant", "test", None)
+        enhanced = await coordinator._apply_secondary_agents(primary, ["researcher"], "test", None)
+
+        assert "Additional analysis:" in enhanced.content
