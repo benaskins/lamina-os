@@ -2,5 +2,5 @@ ai_model: llama3.2:3b
 ai_provider: ollama
 created_with: lamina-core
 description: AI Agent Sanctuary
-name: conscious-sanctuary
+name: aware-sanctuary
 version: 1.0.0

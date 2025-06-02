@@ -3,7 +3,7 @@
 Model Serving Example
 
 Demonstrates using lamina-llm-serve for model management and serving
-with breath-aware request handling and conscious caching.
+with breath-aware request handling and mindful caching.
 """
 
 import asyncio
@@ -44,7 +44,7 @@ class MockModelManager:
 
     async def list_models(self) -> list[dict]:
         """List available models with breath-compatibility info."""
-        await asyncio.sleep(0.2)  # Conscious query time
+        await asyncio.sleep(0.2)  # Mindful query time
         return list(self.available_models.values())
 
     async def load_model(self, model_name: str) -> bool:
@@ -58,7 +58,7 @@ class MockModelManager:
         print(f"   Backend: {model_info['backend']}")
         print(f"   Breath compatible: {model_info['breath_compatible']}")
 
-        # Simulate conscious loading time
+        # Simulate mindful loading time
         load_time = 2.0 if "7b" in model_name else 1.0
         await asyncio.sleep(load_time)
 
@@ -98,8 +98,8 @@ class MockModelManager:
 
         # Breath-aware processing
         if breath_aware and model_info["breath_compatible"]:
-            print(f"   🧘 {model_name} taking conscious pause...")
-            await asyncio.sleep(0.5)  # Conscious consideration
+            print(f"   🧘 {model_name} taking mindful pause...")
+            await asyncio.sleep(0.5)  # Mindful consideration
 
         # Simulate generation time
         generation_time = 1.5 if breath_aware else 0.3
@@ -117,13 +117,13 @@ class MockModelManager:
 
 
 class BreathAwareServer:
-    """Breath-aware model serving with conscious request handling."""
+    """Breath-aware model serving with mindful request handling."""
 
     def __init__(self):
         self.model_manager = MockModelManager()
         self.request_queue = []
         self.processing = False
-        self.stats = {"total_requests": 0, "breath_aware_requests": 0, "conscious_pauses": 0}
+        self.stats = {"total_requests": 0, "breath_aware_requests": 0, "mindful_pauses": 0}
 
     async def start_server(self):
         """Start the breath-aware serving loop."""
@@ -133,7 +133,7 @@ class BreathAwareServer:
         # Load a default model
         await self.model_manager.load_model("llama3.2-1b-instruct")
 
-        print("✅ Server ready for conscious requests")
+        print("✅ Server ready for mindful requests")
 
     async def stop_server(self):
         """Stop server with graceful shutdown."""
@@ -173,9 +173,9 @@ class BreathAwareServer:
 
         if request["breath_aware"]:
             self.stats["breath_aware_requests"] += 1
-            self.stats["conscious_pauses"] += 1
+            self.stats["mindful_pauses"] += 1
 
-            print("   🧘 Taking conscious pause before processing...")
+            print("   🧘 Taking mindful pause before processing...")
             await asyncio.sleep(0.3)
 
         # Generate response
@@ -234,7 +234,7 @@ async def demonstrate_breath_aware_serving():
         ("Explain the concept of breath-first development", True),
         ("What's 2+2?", False),  # Simple math doesn't need breath
         ("Help me process a difficult emotional situation", True),
-        ("List the benefits of conscious AI systems", True),
+        ("List the benefits of mindful AI systems", True),
         ("Quick factual lookup: what year was Python created?", False),
     ]
 
@@ -254,7 +254,7 @@ async def demonstrate_breath_aware_serving():
     print(f"   Total requests: {stats['total_requests']}")
     print(f"   Breath-aware requests: {stats['breath_aware_requests']}")
     print(f"   Breath-aware percentage: {stats['breath_aware_percentage']:.1f}%")
-    print(f"   Conscious pauses taken: {stats['conscious_pauses']}")
+    print(f"   Mindful pauses taken: {stats['mindful_pauses']}")
 
     await server.stop_server()
 
@@ -273,8 +273,8 @@ async def demonstrate_model_selection():
             """Select appropriate model based on task and breath requirements."""
             models = await self.model_manager.list_models()
 
-            # Filter breath-compatible models for conscious tasks
-            if breath_requirement == "conscious":
+            # Filter breath-compatible models for mindful tasks
+            if breath_requirement == "mindful":
                 models = [m for m in models if m["breath_compatible"]]
 
             # Select based on task type
@@ -301,9 +301,9 @@ async def demonstrate_model_selection():
 
     # Test different task types
     test_cases = [
-        ("instruct", "conscious", "Thoughtful analysis task"),
+        ("instruct", "mindful", "Thoughtful analysis task"),
         ("chat", "reactive", "Quick factual question"),
-        ("general", "conscious", "Complex reasoning task"),
+        ("general", "mindful", "Complex reasoning task"),
     ]
 
     for task_type, breath_req, description in test_cases:

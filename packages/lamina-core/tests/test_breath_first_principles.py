@@ -28,11 +28,11 @@ class TestBreathFirstPrinciples:
 
         # Should have breathing capability
         assert hasattr(coordinator, "breath_modulation")
-        assert hasattr(coordinator, "conscious_pause")
+        assert hasattr(coordinator, "mindful_pause")
 
         # Default should be breath-aware
         assert coordinator.breath_modulation is True
-        assert coordinator.conscious_pause > 0
+        assert coordinator.mindful_pause > 0
 
     @pytest.mark.asyncio
     async def test_presence_over_speed(self):
@@ -48,7 +48,7 @@ class TestBreathFirstPrinciples:
 
         # With presence-aware processing
         coordinator_present = get_coordinator(
-            agents=agents, breath_modulation=True, conscious_pause=0.1
+            agents=agents, breath_modulation=True, mindful_pause=0.1
         )
 
         # Without presence-aware processing
@@ -65,7 +65,7 @@ class TestBreathFirstPrinciples:
 
         # Presence-aware should take longer (includes pause)
         assert present_time > fast_time
-        assert present_time >= 0.1  # At least the conscious pause
+        assert present_time >= 0.1  # At least the mindful pause
 
     def test_wisdom_preservation(self):
         """Test that wisdom is preserved in architecture."""
@@ -95,14 +95,14 @@ class TestBreathFirstPrinciples:
             }
         }
 
-        coordinator = get_coordinator(agents=agents, conscious_pause=0.05)
+        coordinator = get_coordinator(agents=agents, mindful_pause=0.05)
 
         # Should go through deliberate process
         start_time = time.time()
         response = await coordinator.process_message("Complex question requiring thought")
         processing_time = time.time() - start_time
 
-        # Should include conscious pause for consideration
+        # Should include mindful pause for consideration
         assert processing_time >= 0.05
         assert response is not None
         assert len(response) > 0
@@ -146,11 +146,11 @@ class TestBreathFirstPrinciples:
         # Should demonstrate understanding of mindfulness
         assert len(response) > 0
 
-    def test_conscious_boundaries_maintenance(self):
-        """Test maintenance of conscious boundaries."""
+    def test_mindful_boundaries_maintenance(self):
+        """Test maintenance of mindful boundaries."""
         coordinator = get_coordinator()
 
-        # Should not claim consciousness
+        # Should maintain appropriate presence awareness
         # (This is more about documentation and response patterns)
         assert hasattr(coordinator, "intent_classifier")
 
@@ -187,8 +187,8 @@ class TestBreathFirstPrinciples:
         # Intention: Natural rhythm → Implementation: breath_modulation
         assert hasattr(coordinator, "breath_modulation")
 
-        # Intention: Deliberate pacing → Implementation: conscious_pause
-        assert hasattr(coordinator, "conscious_pause")
+        # Intention: Deliberate pacing → Implementation: mindful_pause
+        assert hasattr(coordinator, "mindful_pause")
 
         # Intention: Intelligent routing → Implementation: intent classification
         assert hasattr(coordinator, "intent_classifier")

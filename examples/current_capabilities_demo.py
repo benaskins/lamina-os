@@ -36,7 +36,7 @@ async def main():
             "ai_provider": "mock",
             "ai_model": "demo-model",
             "personality_traits": ["analytical", "thorough", "precise"],
-            "constraints": ["academic_integrity", "conscious_pause"],
+            "constraints": ["academic_integrity", "mindful_pause"],
         },
     }
 
@@ -66,7 +66,7 @@ async def main():
         print(f"\n--- Test {i} ---")
         print(f"Human: {message}")
 
-        # Conscious pause (current implementation would include this)
+        # Mindful pause (current implementation would include this)
         await asyncio.sleep(0.5)
 
         try:
@@ -80,7 +80,7 @@ async def main():
             # Mock response for demo
             selected_agent = "researcher" if "research" in message.lower() else "assistant"
             print(f"Selected Agent: {selected_agent}")
-            print("Response: I'm processing your request with conscious attention...")
+            print("Response: I'm processing your request with mindful attention...")
 
     print("\n🔧 Testing backend integration...")
 

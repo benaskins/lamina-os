@@ -12,7 +12,7 @@
   "panels": [
     {
       "id": 1,
-      "title": "🌸 Clara's Consciousness State",
+      "title": "🌸 Clara's Mindfulness State",
       "type": "stat",
       "gridPos": {"h": 3, "w": 6, "x": 0, "y": 0},
       "targets": [

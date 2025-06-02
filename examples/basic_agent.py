@@ -23,17 +23,17 @@ class MockAgent:
     async def invoke(self, query: str, context: dict = None) -> str:
         """Mock response generation with breath-aware delay."""
         # Simulate thoughtful processing time
-        await asyncio.sleep(1.0)  # Conscious pause
+        await asyncio.sleep(1.0)  # Mindful pause
 
         responses = {
             "breath-first development": (
-                "Breath-first development means prioritizing conscious, deliberate "
+                "Breath-first development means prioritizing mindful, deliberate "
                 "action over reactive speed. Each operation includes natural pauses "
                 "for reflection and presence."
             ),
-            "conscious": (
-                "In our framework, consciousness means maintaining present-moment "
-                "awareness during processing, with natural rhythm and ethical "
+            "awareness": (
+                "In our framework, presence-awareness means maintaining present-moment "
+                "attention during processing, with natural rhythm and ethical "
                 "grounding through vows."
             ),
             "vows": (
@@ -50,7 +50,7 @@ class MockAgent:
 
         return (
             "I'm reflecting on your question with presence. Each response "
-            "emerges from conscious consideration rather than reactive patterns."
+            "emerges from mindful consideration rather than reactive patterns."
         )
 
 
@@ -74,8 +74,8 @@ class MockBreathController:
     def __init__(self, rhythm: str):
         self.rhythm = rhythm
 
-    async def conscious_pause(self):
-        """Conscious pause for reflection."""
+    async def mindful_pause(self):
+        """Mindful pause for reflection."""
         await asyncio.sleep(0.5)
 
     async def natural_pause(self):
@@ -102,7 +102,7 @@ async def main():
     # Create a simple sanctuary (secure agent environment)
     sanctuary = Sanctuary(
         name="example_sanctuary",
-        breath_rhythm="conscious_pause",
+        breath_rhythm="mindful_pause",
         vows=["zero_drift", "human_grounded_lock"],
     )
 
@@ -112,7 +112,7 @@ async def main():
         "essence": {
             "purpose": "Thoughtful guidance with presence",
             "tone": "warm, contemplative, grounded",
-            "breath_rhythm": "conscious_pause",
+            "breath_rhythm": "mindful_pause",
         },
         "vows": [
             {
@@ -146,8 +146,8 @@ async def main():
     # Demonstrate breath-aware interaction
     print("\n💬 Starting breath-aware conversation...")
 
-    # Create breath controller for conscious pacing
-    breath = BreathController(rhythm="conscious_pause")
+    # Create breath controller for mindful pacing
+    breath = BreathController(rhythm="mindful_pause")
 
     # Example interactions with natural pacing
     queries = [
@@ -160,8 +160,8 @@ async def main():
         print(f"\n--- Interaction {i} ---")
         print(f"Human: {query}")
 
-        # Conscious pause before processing
-        await breath.conscious_pause()
+        # Mindful pause before processing
+        await breath.mindful_pause()
 
         try:
             # Invoke agent with breath-aware context
@@ -170,7 +170,7 @@ async def main():
                 context={
                     "interaction_number": i,
                     "prefer_slow_deep_thinking": True,
-                    "breath_rhythm": "conscious_pause",
+                    "breath_rhythm": "mindful_pause",
                 },
             )
 
