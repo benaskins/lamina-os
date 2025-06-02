@@ -18,7 +18,7 @@ This changelog embodies the breath-first principle by:
 
 ---
 
-## [0.2.0] - 2025-02-06 - Governance & Standardization (Alpha)
+## [0.2.0] - 2025-06-02 - Governance & Standardization (Alpha)
 
 ### 🌱 Breath Reflection
 This release establishes foundational governance patterns and standardization practices, creating the mindful framework for sustainable community collaboration. Through ADR corpus alignment and critical terminology alignment, we strengthen the breath-first development methodology while ensuring accurate positioning of Lamina OS as a framework for building non-human agents of presence.
