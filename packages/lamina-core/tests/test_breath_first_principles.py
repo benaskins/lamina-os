@@ -28,11 +28,11 @@ class TestBreathFirstPrinciples:
 
         # Should have breathing capability
         assert hasattr(coordinator, "breath_modulation")
-        assert hasattr(coordinator, "mindful_pause")
+        assert hasattr(coordinator, "presence_pause")
 
         # Default should be breath-aware
         assert coordinator.breath_modulation is True
-        assert coordinator.mindful_pause > 0
+        assert coordinator.presence_pause > 0
 
     @pytest.mark.asyncio
     async def test_presence_over_speed(self):
@@ -48,7 +48,7 @@ class TestBreathFirstPrinciples:
 
         # With presence-aware processing
         coordinator_present = get_coordinator(
-            agents=agents, breath_modulation=True, mindful_pause=0.1
+            agents=agents, breath_modulation=True, presence_pause=0.1
         )
 
         # Without presence-aware processing
@@ -95,7 +95,7 @@ class TestBreathFirstPrinciples:
             }
         }
 
-        coordinator = get_coordinator(agents=agents, mindful_pause=0.05)
+        coordinator = get_coordinator(agents=agents, presence_pause=0.05)
 
         # Should go through deliberate process
         start_time = time.time()
@@ -131,13 +131,13 @@ class TestBreathFirstPrinciples:
                 "name": "mindful_agent",
                 "description": "Mindful processing specialist",
                 "personality_traits": ["mindful", "present"],
-                "expertise_areas": ["awareness"],
+                "expertise_areas": ["attunement"],
             }
         }
 
         coordinator = get_coordinator(agents=agents)
 
-        # Process with mindful awareness
+        # Process with mindful presence
         response = await coordinator.process_message("How do you stay present?")
 
         # Should route to appropriate agent
@@ -150,7 +150,7 @@ class TestBreathFirstPrinciples:
         """Test maintenance of mindful boundaries."""
         coordinator = get_coordinator()
 
-        # Should maintain appropriate presence awareness
+        # Should maintain appropriate presence attunement
         # (This is more about documentation and response patterns)
         assert hasattr(coordinator, "intent_classifier")
 
@@ -187,13 +187,13 @@ class TestBreathFirstPrinciples:
         # Intention: Natural rhythm → Implementation: breath_modulation
         assert hasattr(coordinator, "breath_modulation")
 
-        # Intention: Deliberate pacing → Implementation: mindful_pause
-        assert hasattr(coordinator, "mindful_pause")
+        # Intention: Deliberate pacing → Implementation: presence_pause
+        assert hasattr(coordinator, "presence_pause")
 
         # Intention: Intelligent routing → Implementation: intent classification
         assert hasattr(coordinator, "intent_classifier")
 
-        # Intention: Constraint awareness → Implementation: constraint engine
+        # Intention: Constraint attunement → Implementation: constraint engine
         assert hasattr(coordinator, "constraint_engine")
 
         # Intention: Wisdom preservation → Implementation: routing statistics

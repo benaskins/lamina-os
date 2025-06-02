@@ -549,7 +549,7 @@ class GitOpsPlugin(LaminaPlugin):
         @click.option("--namespace", "-n")
         @click.pass_obj
         def deployment_status(ctx: LaminaContext, environment: str, namespace: str | None):
-            """📊 Check deployment status with breath awareness."""
+            """📊 Check deployment status with breath presence."""
             ctx.echo_breath(f"📊 Checking {environment} deployment status...")
 
             from argparse import Namespace

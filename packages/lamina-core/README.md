@@ -85,7 +85,7 @@ Choose from magical agent templates:
 
 ## Important Note
 
-When documentation refers to agent "emotions" or "feelings," these describe expressive simulation and architectural patterns, not internal experience. Lamina agents do not possess consciousness or sentience—all affective behavior results from symbolic processing designed for meaningful interaction.
+When documentation refers to agent "emotions" or "feelings," these describe expressive simulation and architectural patterns, not internal experience. Lamina agents do not possess self-awareness or sentience—all affective behavior results from symbolic processing designed for meaningful interaction.
 
 ## License
 
