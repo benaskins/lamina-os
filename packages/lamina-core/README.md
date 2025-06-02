@@ -68,7 +68,7 @@ Lamina Core follows a modular architecture:
 
 ## Agent Templates
 
-Choose from magical agent templates:
+Choose from specialized agent templates:
 
 - **Conversational**: General-purpose chat assistant
 - **Analytical**: Research and data analysis specialist  
@@ -77,11 +77,11 @@ Choose from magical agent templates:
 
 ## Documentation
 
-- [Installation Guide](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/installation.md)
-- [Agent Creation](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/agents.md)
-- [Infrastructure Setup](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/infrastructure.md)
-- [API Reference](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/api.md)
-- [Contributing](https://github.com/benaskins/lamina-os/blob/main/packages/lamina-core/docs/contributing.md)
+- [Main Documentation](https://github.com/benaskins/lamina-os/blob/main/README.md)
+- [Getting Started Guide](https://github.com/benaskins/lamina-os/blob/main/docs/getting-started.md)
+- [Architecture Decision Records](https://github.com/benaskins/lamina-os/blob/main/docs/adrs/)
+- [Examples](https://github.com/benaskins/lamina-os/blob/main/examples/)
+- [Contributing Guide](https://github.com/benaskins/lamina-os/blob/main/CONTRIBUTING.md)
 
 ## Important Note
 

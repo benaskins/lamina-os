@@ -174,10 +174,10 @@ uv run python -c "import lamina; import lamina_llm_serve"
 
 ### Architecture Decision Records
 
-See `docs/adr/` for detailed architectural decisions including:
-- [ADR-002: Breath-First Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/adrs/0002-monorepo-architecture-for-public-framework.md)
-- [ADR-003: mTLS Service Mesh](https://github.com/benaskins/lamina-os/blob/main/docs/current-capabilities.md)
-- [ADR-005: AMEM Memory Architecture](https://github.com/benaskins/lamina-os/blob/main/docs/architecture-vision.md)
+See `docs/adrs/` for detailed architectural decisions including:
+- [ADR-0002: Monorepo Architecture](docs/adrs/0002-monorepo-architecture-for-public-framework.md)
+- [ADR-0010: Comprehensive Testing Strategy](docs/adrs/0010-comprehensive-testing-strategy.md)
+- [ADR-0012: CLI Tool Architecture](docs/adrs/0012-cli-tool-architecture-and-responsibilities.md)
 
 ## 📚 Documentation
 
@@ -185,7 +185,7 @@ See `docs/adr/` for detailed architectural decisions including:
 - **[Architecture Vision](docs/architecture-vision.md)** - System design and philosophy  
 - **[Current Capabilities](docs/current-capabilities.md)** - What's implemented now
 - **[AI Assistant Usage](docs/AI_ASSISTANT_USAGE.md)** - Transparent AI integration practices
-- **[API Reference](packages/lamina-core/docs/api.md)** - Complete API documentation
+- **[Architecture Decision Records](docs/adrs/)** - Design decisions and rationale
 - **[Examples](examples/)** - Integration examples and tutorials
 
 ## 🤝 Contributing
