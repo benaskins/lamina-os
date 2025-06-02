@@ -21,15 +21,21 @@ This changelog embodies the breath-first principle by:
 ## [0.2.0] - 2025-02-06 - Governance & Standardization (Alpha)
 
 ### 🌱 Breath Reflection
-This release establishes foundational governance patterns and standardization practices, creating the conscious framework for sustainable community collaboration. Through ADR corpus alignment and the introduction of collaborative review protocols, we strengthen the breath-first development methodology while preserving human sovereignty.
+This release establishes foundational governance patterns and standardization practices, creating the mindful framework for sustainable community collaboration. Through ADR corpus alignment and critical terminology alignment, we strengthen the breath-first development methodology while ensuring accurate positioning of Lamina OS as a framework for building non-human agents of presence.
 
 ### ✨ Added
 
 #### Governance Framework
 - **ADR-0017**: High Council PR Review Protocol - Collaborative review framework for critical changes
 - **ADR Corpus Standardization**: Complete alignment of all 17 ADRs with consistent structure
-- **Breath-First Alignment Sections**: Added to all ADRs to explicitly connect technical decisions with conscious development principles
-- **Empirical Timing Framework**: Time tracking and reflection practices for conscious development
+- **Breath-First Alignment Sections**: Added to all ADRs to explicitly connect technical decisions with mindful development principles
+- **Empirical Timing Framework**: Time tracking and reflection practices for mindful development
+
+#### Terminology Alignment
+- **Brand Clarification**: Positioned Lamina OS as "a framework for building non-human agents of presence"
+- **Consciousness Terminology Removal**: Replaced 559+ instances across 68 files to prevent AI capability misrepresentation
+- **Presence-Based Language**: Updated all public documentation to use "presence-aware" and "mindful" terminology
+- **High Council Review Process**: Established clear communication standards for accurate AI positioning
 
 #### Documentation & Process
 - **ADR Validation System**: Automated validation script (`validate_adrs.py`) ensuring corpus consistency
