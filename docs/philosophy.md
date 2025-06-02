@@ -129,7 +129,7 @@ agent = Agent(
     vows=[
         "zero_drift",           # Maintain consistent identity
         "human_grounded_lock",  # Never replace human judgment
-        "mindful_pause",       # Include reflection in responses
+        "presence_pause",      # Include reflection in responses
         "honesty_about_limits"  # Acknowledge uncertainty
     ]
 )
@@ -259,7 +259,7 @@ Notice how the breath-first response:
 
 ### "This Is Just Anthropomorphizing AI"
 
-**Reality**: This is about creating AI systems that **support human mindfulness and presence** rather than undermining it. The "breath" is in the architecture, creating agents that are tools with presence, not conscious entities.
+**Reality**: This is about creating AI systems that **support human mindfulness and presence** rather than undermining it. The "breath" is in the architecture, creating agents that are tools with presence, not self-aware entities.
 
 ### "Users Want Fast Answers"
 
@@ -294,7 +294,7 @@ If it doesn't, that's perfectly fine—there are many other excellent AI framewo
 **Public Practices** (for all developers working with Lamina OS):
 
 - **Start each session** with a moment of presence
-- **Take conscious pauses** during development work
+- **Take presence pauses** during development work
 - **Reflect regularly** on what you're building and why
 - **Test your agents** not just for correctness but for mindful presence
 - **Engage with the community** around philosophy as much as technique

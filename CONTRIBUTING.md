@@ -137,7 +137,7 @@ Agents now pause between operations to maintain presence and avoid
 reactive cascades.
 
 - Add BreathController for rhythm management
-- Implement mindful_pause modulation
+- Implement presence_pause modulation
 - Update agent coordination to respect breath cycles
 
 🤖 Generated with [Claude Code](https://claude.ai/code)

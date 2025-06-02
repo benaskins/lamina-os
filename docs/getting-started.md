@@ -124,7 +124,7 @@ agent = Agent(
     vows=[
         "zero_drift",           # Maintain consistent identity
         "human_grounded_lock",  # Never simulate human judgment
-        "mindful_pause"        # Include deliberate pauses in responses
+        "presence_pause"       # Include deliberate pauses in responses
     ],
     modulation_rhythm="learning_pace"
 )
