@@ -1,12 +1,12 @@
-# 🧱 lamina-llm-cache
+# 🧱 lamina-llm-serve
 
-**Lamina LLM Cache** is a local-first, centralized model caching and serving layer for Lamina OS. It provides canonical, persistent access to language models used by the system—ensuring consistency, efficiency, and symbolic alignment across the sanctuary.
+**Lamina LLM Serve** is a local-first, centralized model caching and serving layer for Lamina OS. It provides canonical, persistent access to language models used by the system—ensuring consistency, efficiency, and symbolic alignment across the sanctuary.
 
 ---
 
 ## 🌱 Purpose
 
-`lamina-llm-cache` solves common issues in multi-agent AI environments:
+`lamina-llm-serve` solves common issues in multi-agent AI environments:
 
 * Prevents redundant downloads of large models
 * Offers a unified directory and manifest for all system models
@@ -20,7 +20,7 @@ It serves as the **source of truth** for all LLM usage across `lamina-core`.
 ## 🤩 Directory Structure
 
 ```
-lamina-llm-cache/
+lamina-llm-serve/
 ├── models/
 │   ├── llama3-70b-q4_k_m/
 │   ├── yi-34b-awq/
@@ -61,14 +61,14 @@ models:
 In `lamina-core`, agents reference this manifest indirectly:
 
 * Model-to-agent mapping occurs **within Lamina OS**
-* `lamina-llm-cache` is **model aware**, not agent aware
+* `lamina-llm-serve` is **model aware**, not agent aware
 * Ensures consistent, centralized loading and version control
 
 Example Docker Compose volume mount:
 
 ```yaml
 volumes:
-  - ./lamina-llm-cache/models:/models
+  - ./lamina-llm-serve/models:/models
 ```
 
 ---
@@ -99,8 +99,8 @@ Provides:
 1. Clone this repo:
 
    ```bash
-   git clone https://your-repo-url/lamina-llm-cache.git
-   cd lamina-llm-cache
+   git clone https://your-repo-url/lamina-llm-serve.git
+   cd lamina-llm-serve
    ```
 
 2. Populate `models/` manually or use the helper script:
