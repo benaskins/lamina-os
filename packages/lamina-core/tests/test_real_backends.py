@@ -84,7 +84,7 @@ class TestRealLLMClientIntegration:
         analytical_response = "".join(response_chunks)
 
         # Test clear creative intent
-        creative_prompt = "Write me a short poem about artificial intelligence and consciousness."
+        creative_prompt = "Write me a short poem about artificial intelligence and presence."
         response_chunks = []
         async for chunk in client.generate(
             [Message(role="user", content=creative_prompt)], stream=True

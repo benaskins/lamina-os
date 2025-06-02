@@ -131,7 +131,7 @@ class InfrastructureValuesLoader:
                 "grafana": {
                     "dashboard_title": f"{agent_name.title()} - Agent Insights & Conversations",
                     "dashboard_tags": [agent_name, "agent", "conversations"],
-                    "consciousness_title": f"🤖 {agent_name.title()}'s Consciousness State",
+                    "mindfulness_title": f"🤖 {agent_name.title()}'s Mindfulness State",
                     "mood_title": f"📊 {agent_name.title()}'s Mood (Error Rate)",
                     "activity_title": f"📈 {agent_name.title()} Activity Pattern",
                     "health_title": f"⚠️ {agent_name.title()}'s Health Alerts",

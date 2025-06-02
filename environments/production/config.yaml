@@ -144,7 +144,7 @@ networking:
 # Breath-aware configuration (full implementation)
 breath:
   modulation: true
-  conscious_pause: 0.5
+  awareness_pause: 0.5
   breath_monitoring: true
   rhythm_adjustment: "adaptive"
 

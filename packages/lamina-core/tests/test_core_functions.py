@@ -77,4 +77,4 @@ class TestCoreFunctions:
 
         # Should default to breath-aware processing
         assert coordinator.breath_modulation is True
-        assert coordinator.conscious_pause > 0
+        assert coordinator.mindful_pause > 0

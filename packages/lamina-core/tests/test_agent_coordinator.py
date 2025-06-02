@@ -51,16 +51,16 @@ class TestAgentCoordinator:
         assert coordinator is not None
         assert len(coordinator.agents) == 3
         assert coordinator.breath_modulation is True
-        assert coordinator.conscious_pause == 0.5
+        assert coordinator.mindful_pause == 0.5
 
     def test_breath_modulation_settings(self):
         """Test breath modulation configuration."""
         # Test with custom settings
         coordinator = get_coordinator(
-            agents=self.test_agents, breath_modulation=False, conscious_pause=1.0
+            agents=self.test_agents, breath_modulation=False, mindful_pause=1.0
         )
         assert coordinator.breath_modulation is False
-        assert coordinator.conscious_pause == 1.0
+        assert coordinator.mindful_pause == 1.0
 
     @pytest.mark.asyncio
     async def test_presence_aware_processing(self):
@@ -68,14 +68,14 @@ class TestAgentCoordinator:
         coordinator = get_coordinator(
             agents=self.test_agents,
             breath_modulation=True,
-            conscious_pause=0.2,  # Short pause for testing
+            mindful_pause=0.2,  # Short pause for testing
         )
 
         start_time = time.time()
         response = await coordinator.process_message("Hello, how are you?")
         end_time = time.time()
 
-        # Should take at least the conscious pause time
+        # Should take at least the mindful pause time
         assert (end_time - start_time) >= 0.2
         assert response is not None
         assert len(response) > 0
@@ -162,7 +162,7 @@ class TestAgentCoordinator:
 
         # Should have presence-aware settings
         assert hasattr(coordinator, "breath_modulation")
-        assert hasattr(coordinator, "conscious_pause")
+        assert hasattr(coordinator, "mindful_pause")
 
         # Should use MockIntentClassifier (supports creative routing)
         assert hasattr(coordinator, "intent_classifier")

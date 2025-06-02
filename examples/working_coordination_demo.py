@@ -36,7 +36,7 @@ async def main():
             "ai_model": "research-model",
             "personality_traits": ["analytical", "thorough", "precise"],
             "expertise_areas": ["research", "analysis", "data", "academic"],
-            "constraints": ["academic_integrity", "conscious_pause"],
+            "constraints": ["academic_integrity", "mindful_pause"],
         },
         "creative": {
             "name": "creative",
@@ -57,9 +57,9 @@ async def main():
 
     # Initialize coordinator with breath-aware settings
     print("\n🧘 Initializing breath-aware coordinator...")
-    coordinator = get_coordinator(agents=agent_configs, breath_modulation=True, conscious_pause=0.5)
+    coordinator = get_coordinator(agents=agent_configs, breath_modulation=True, mindful_pause=0.5)
 
-    print("✅ Coordinator ready with conscious processing enabled")
+    print("✅ Coordinator ready with mindful processing enabled")
 
     # Test scenarios that demonstrate intelligent routing
     test_scenarios = [
@@ -123,7 +123,7 @@ async def main():
         print(f"  • Total requests processed: {stats['total_requests']}")
         print(f"  • Agents available: {status['coordinator']['agents_count']}")
         print(f"  • Breath modulation: {status['coordinator']['breath_modulation']}")
-        print(f"  • Conscious pause duration: {status['coordinator']['conscious_pause']}s")
+        print(f"  • Mindful pause duration: {status['coordinator']['mindful_pause']}s")
 
         print("\n  Routing distribution:")
         for agent, count in stats.get("routing_decisions", {}).items():
@@ -181,7 +181,7 @@ async def main():
     print("  • Add constraint enforcement and safety policies")
     print("  • Build toward symbolic architecture (Agent, Sanctuary, Vows)")
 
-    print(f"\n🌬️ Breath-first development: {processing_time:.2f}s average conscious pause")
+    print(f"\n🌬️ Breath-first development: {processing_time:.2f}s average mindful pause")
     print("Building AI that breathes, not just responds. 🙏")
 
 
