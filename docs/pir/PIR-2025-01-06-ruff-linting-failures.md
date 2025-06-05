@@ -1,7 +1,7 @@
 # Post-Incident Review: Ruff Linting CI Failures
 
 **Date**: 2025-01-06  
-**Duration**: ~45 minutes  
+**Duration**: ~55 minutes (20:49 - 21:44)  
 **Severity**: Medium (blocked PR progress, multiple failed commits)  
 **Incident Type**: CI/CD Configuration Mismatch  
 
@@ -11,22 +11,18 @@ A seemingly simple task to fix Ruff linting errors on PR #28 (agent architecture
 
 ## Timeline
 
-- **11:35** - User reported CI failures on PR #28, requested help fixing build
-- **11:36** - Identified Ruff linting errors, began applying fixes
-- **11:38** - Claimed "CI should pass" without verifying CI configuration
-- **11:39** - Push failed, CI still failing with Black formatting errors
-- **11:40** - Discovered project had both Black and Ruff configured
-- **11:42** - GitHub bot (claude[bot]) made 3 problematic commits attempting fixes
-- **11:45** - Decided to remove Black tooling, user requested reverting bot commits
-- **11:50** - Reset branch and applied Ruff-only approach
-- **11:55** - Applied formatting fixes, claimed CI would pass again
-- **12:00** - Push showed "Everything up-to-date", no actual changes pushed
-- **12:02** - User pointed out CI was still failing, checked actual logs
-- **12:05** - **ROOT CAUSE DISCOVERED**: CI workflow still configured to use Black
-- **12:08** - Applied Black formatting locally (wrong approach)
-- **12:10** - User correctly identified inconsistency: "Why run Black if we're removing it?"
-- **12:12** - Reverted Black changes, updated CI to use Ruff consistently
-- **12:15** - **RESOLUTION**: CI workflow updated, all checks passing
+Based on git commit history:
+
+- **20:49** - Initial agent architecture foundation commit (a782c63)
+- **~21:30** - User reported CI failures on PR #28, requested help fixing build  
+- **~21:35** - Identified Ruff linting errors, began applying fixes
+- **21:38** - First formatting fix attempt (8365191): "fix: apply Ruff formatting to agent architecture files"
+- **21:39** - Second formatting attempt (1a2ea9f): "fix: apply Ruff formatting to remaining files"
+- **~21:40** - User pointed out CI was still failing, checked actual logs
+- **~21:42** - **ROOT CAUSE DISCOVERED**: CI workflow still configured to use Black
+- **~21:43** - Applied Black formatting locally (wrong approach), user corrected inconsistency
+- **21:44** - **RESOLUTION** (f61f20d): "fix: update CI workflow to use Ruff instead of Black"
+- **21:49** - PIR documentation (ea25769)
 
 ## Root Cause Analysis
 
@@ -53,7 +49,7 @@ A seemingly simple task to fix Ruff linting errors on PR #28 (agent architecture
 
 ## Impact
 
-- **Development Velocity**: 45 minutes lost on what should have been a 5-minute fix
+- **Development Velocity**: 55 minutes lost on what should have been a 5-minute fix
 - **Code Quality**: 6 commits with inconsistent messaging and approach
 - **Trust**: User had to correct inconsistent reasoning multiple times
 - **Repository History**: Unnecessary commit noise and force pushes
