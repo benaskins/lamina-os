@@ -34,13 +34,11 @@ jobs:
     - name: Install dependencies
       run: uv sync --extra dev
     
-    - name: Lint with ruff
+    - name: Lint and format check with ruff
       if: matrix.test-tier == 'unit'
-      run: uv run ruff check
-    
-    - name: Format check with black
-      if: matrix.test-tier == 'unit'
-      run: uv run black --check .
+      run: |
+        uv run ruff check
+        uv run ruff format --check
     
     - name: Security check with bandit
       if: matrix.test-tier == 'unit'
