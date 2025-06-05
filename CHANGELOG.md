@@ -18,6 +18,45 @@ This changelog embodies the breath-first principle by:
 
 ---
 
+## [0.2.1] - 2025-06-05 - Agent Architecture Foundation (Alpha)
+
+### 🌱 Breath Reflection
+This release introduces the foundational Agent class and essence-based configuration system, providing developers with a structured approach to creating presence-aware AI agents. The essence layer allows agents to be defined through mindful markdown specifications that capture their core behavioral characteristics, drift boundaries, and modulation features.
+
+### ✨ Added
+
+#### Agent Architecture
+- **Base Agent Class**: Core `Agent` abstract base class in `lamina.agents.base` providing:
+  - Breath-first operation with conscious pause mechanisms
+  - Essence-based configuration loading from markdown files
+  - Constraint application through vow enforcement
+  - Context management and state tracking
+  - Integration with existing `AgentConfig` system
+
+#### Essence Layer System  
+- **Essence Parser**: Markdown parser for agent essence definitions (`lamina.agents.essence_parser`):
+  - Parses structured markdown format used in sanctuary configurations
+  - Extracts behavioral pillars, drift boundaries, and modulation features
+  - Validates essence completeness and correctness
+  - Supports custom metadata sections for extensibility
+
+- **AgentEssence Dataclass**: Structured representation of agent essence including:
+  - Core tone and behavioral characteristics
+  - Drift boundaries preventing unwanted behaviors
+  - Modulation features for breath-based operation
+  - Metadata support for agent-specific extensions
+
+#### Testing Infrastructure
+- Comprehensive test suites for agent base class functionality
+- Full coverage of essence parser with various markdown formats
+- Mock implementations for testing abstract agent behavior
+
+### 🔧 Changed
+- Version bumped to 0.2.1 across workspace and lamina-core package
+- Enhanced `lamina.agents` module exports for cleaner imports
+
+---
+
 ## [0.2.0] - 2025-06-02 - Governance & Standardization (Alpha)
 
 ### 🌱 Breath Reflection
