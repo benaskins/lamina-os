@@ -6,12 +6,12 @@
 
 """Tests for the base Agent class."""
 
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch, AsyncMock
+from unittest.mock import Mock, patch
 
-from lamina.agents.base import Agent, AgentEssence
+import pytest
+
 from lamina.agent_config import AgentConfig
+from lamina.agents.base import Agent, AgentEssence
 
 
 class ConcreteAgent(Agent):
@@ -203,4 +203,3 @@ class TestAgentBase:
         assert essence.core_tone == "Present, attentive, breath-aware"
         assert len(essence.behavioral_pillars) == 3
         assert len(essence.drift_boundaries) == 3
-

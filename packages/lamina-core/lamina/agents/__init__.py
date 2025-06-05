@@ -15,4 +15,3 @@ from lamina.agents.base import Agent, AgentEssence
 from lamina.agents.essence_parser import EssenceParser
 
 __all__ = ["Agent", "AgentEssence", "EssenceParser"]
-

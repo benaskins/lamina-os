@@ -6,12 +6,13 @@
 
 """Tests for the EssenceParser class."""
 
-import pytest
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
-from lamina.agents.essence_parser import EssenceParser
+import pytest
+
 from lamina.agents.base import AgentEssence
+from lamina.agents.essence_parser import EssenceParser
 
 
 class TestEssenceParser:
@@ -219,4 +220,3 @@ More custom content
 
         lines3 = ["No status here", "Other content"]
         assert parser._extract_status(lines3) == "undefined"  # Default value
-

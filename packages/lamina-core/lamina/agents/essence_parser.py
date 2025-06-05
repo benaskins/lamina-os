@@ -14,7 +14,6 @@ written in the Lamina markdown format.
 import logging
 import re
 from pathlib import Path
-from typing import Any, Optional
 
 from lamina.agents.base import AgentEssence
 
@@ -46,7 +45,7 @@ class EssenceParser:
         if not file_path.exists():
             raise ValueError(f"Essence file not found: {file_path}")
 
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         return self.parse_content(content)
@@ -211,4 +210,3 @@ class EssenceParser:
             errors.append("Drift boundaries should not be empty")
 
         return errors
-
