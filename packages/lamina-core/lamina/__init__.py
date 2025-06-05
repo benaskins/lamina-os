@@ -11,7 +11,7 @@ A framework for building AI agent systems with mindful, deliberate operations
 that prioritize presence and wisdom over reactive speed.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 # Lazy imports to avoid dependency issues
@@ -44,10 +44,36 @@ def create_simple_agent(name: str, config: dict):
     return SimpleAgent(name, config)
 
 
+# Export core classes
+from lamina.agent_config import AgentConfig, load_agent_config
+from lamina.agents import Agent, AgentEssence, EssenceParser
+from lamina.coordination import AgentCoordinator, ConstraintEngine
+from lamina.llm_base import LLMClient, get_llm_client as _get_llm_client
+# Memory store is optional - requires chromadb
+try:
+    from lamina.memory import AMEMMemoryStore
+except ImportError:
+    AMEMMemoryStore = None
+
 __all__ = [
+    # Agent classes
+    "Agent",
+    "AgentConfig",
+    "AgentEssence",
+    "EssenceParser",
+    "load_agent_config",
+    # Coordination
+    "AgentCoordinator",
+    "ConstraintEngine",
+    # LLM clients
+    "LLMClient",
+    # Memory
+    "AMEMMemoryStore",
+    # Factory functions
     "get_llm_client",
     "get_coordinator",
     "get_memory_store",
     "create_simple_agent",
+    # Version
     "__version__",
 ]
