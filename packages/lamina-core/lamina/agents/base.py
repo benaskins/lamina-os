@@ -16,7 +16,7 @@ import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from lamina.agent_config import AgentConfig, load_agent_config
 from lamina.coordination.constraint_engine import ConstraintEngine
@@ -44,7 +44,7 @@ class AgentEssence:
     modulation_features: list[str] = field(default_factory=list)
 
     # Optional notes
-    notes: Optional[str] = None
+    notes: str | None = None
 
     # Additional metadata
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -62,9 +62,9 @@ class Agent(ABC):
     def __init__(
         self,
         name: str,
-        config: Optional[AgentConfig] = None,
-        essence: Optional[AgentEssence] = None,
-        sanctuary_path: Optional[Path] = None,
+        config: AgentConfig | None = None,
+        essence: AgentEssence | None = None,
+        sanctuary_path: Path | None = None,
     ):
         """
         Initialize an agent with configuration and essence.
@@ -130,7 +130,7 @@ class Agent(ABC):
         )
 
     @abstractmethod
-    async def process(self, message: str, context: Optional[dict] = None) -> str:
+    async def process(self, message: str, context: dict | None = None) -> str:
         """
         Process a message and generate a response.
 
@@ -164,7 +164,10 @@ class Agent(ABC):
         """Apply breath-based modulation to agent state."""
         # This is where breath-based timing and pacing would be implemented
         # For now, it's a placeholder for the modulation logic
-        pass
+
+        # Update internal state to reflect the breath
+        if self._breath_count % 10 == 0:
+            logger.debug(f"Agent {self.name} has taken {self._breath_count} breaths")
 
     def apply_constraints(self, content: str) -> str:
         """
@@ -229,4 +232,3 @@ class Agent(ABC):
     def __repr__(self) -> str:
         """String representation of the agent."""
         return f"Agent(name='{self.name}', essence='{self.essence.tag}')"
-

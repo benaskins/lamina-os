@@ -9,30 +9,25 @@ Base LLM Client interface for Lamina
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
 
 
 class LLMClient(ABC):
     """Abstract base class for LLM clients."""
-    
+
     @abstractmethod
     async def generate(
-        self,
-        prompt: str,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        **kwargs
+        self, prompt: str, temperature: float | None = None, max_tokens: int | None = None, **kwargs
     ) -> str:
         """Generate a response from the LLM."""
         pass
-    
+
     @abstractmethod
     async def chat(
         self,
         messages: list[dict[str, str]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        **kwargs
+        temperature: float | None = None,
+        max_tokens: int | None = None,
+        **kwargs,
     ) -> str:
         """Chat completion with message history."""
         pass
@@ -42,6 +37,7 @@ def get_llm_client(provider: str = "lamina", **config) -> LLMClient:
     """Factory function to get an LLM client instance."""
     if provider == "lamina":
         from lamina.llm_client import LaminaLLMClient
+
         return LaminaLLMClient(config)
     else:
         raise ValueError(f"Unknown LLM provider: {provider}")
