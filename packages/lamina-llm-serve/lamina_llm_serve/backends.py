@@ -77,7 +77,7 @@ class LlamaCppBackend(LLMBackend):
             if key.startswith("--"):
                 args.extend([key, str(value)])
             elif key.replace("_", "-") not in ["model", "port", "host"]:
-                args.extend([f'--{key.replace("_", "-")}', str(value)])
+                args.extend([f"--{key.replace('_', '-')}", str(value)])
 
         logger.info(f"Starting llama.cpp server: {' '.join(args)}")
         return subprocess.Popen(args)

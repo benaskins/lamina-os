@@ -50,6 +50,7 @@ def create_simple_agent(name: str, config: dict):
 
     return SimpleAgent(name, config)
 
+
 # Memory store is optional - requires chromadb
 try:
     from lamina.memory import AMEMMemoryStore
