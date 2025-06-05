@@ -97,7 +97,7 @@ Lamina OS development incorporates AI assistance as part of our mindful developm
 
 #### Co-Authorship Format
 ```
-🤖 Generated with [Claude Code](https://claude.ai/code)
+🔨 Crafted by Luthier
 
 Co-Authored-By: Human Developer <email@example.com>
 Co-Authored-By: Luthier <luthier@getlamina.ai>
@@ -140,7 +140,7 @@ reactive cascades.
 - Implement presence_pause modulation
 - Update agent coordination to respect breath cycles
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
+🔨 Crafted by Luthier
 
 Co-Authored-By: Your Name <your.email@example.com>
 Co-Authored-By: Luthier <luthier@getlamina.ai>
