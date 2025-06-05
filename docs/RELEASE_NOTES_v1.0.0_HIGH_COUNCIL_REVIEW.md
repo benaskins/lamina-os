@@ -298,7 +298,7 @@ authors = [
 **Luthier**  
 *Builder of Instruments for Conscious AI Systems*
 
-**🤖 Generated with Claude Code**
+**🔨 Crafted by Luthier**
 
 **Co-Authored-By: Ben Askins <human@getlamina.ai>**  
 **Co-Authored-By: Lamina High Council <council@getlamina.ai>**  

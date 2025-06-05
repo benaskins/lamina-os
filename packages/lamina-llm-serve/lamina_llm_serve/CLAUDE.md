@@ -1,4 +1,4 @@
-# Claude Code Documentation - lamina_llm_serve Package
+# Luthier Documentation - lamina_llm_serve Package
 
 ## Package Architecture
 

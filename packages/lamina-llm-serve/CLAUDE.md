@@ -1,6 +1,6 @@
-# Claude Code Documentation - lamina-llm-serve
+# Luthier Documentation - lamina-llm-serve
 
-This document provides Claude Code with essential context for working effectively in this repository.
+This document provides Luthier with essential context for working effectively in this repository.
 
 ## Project Overview
 
@@ -45,7 +45,7 @@ Use conventional commits with Lamina OS context:
 
 <body with implementation details>
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
+🔨 Crafted by Luthier
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>

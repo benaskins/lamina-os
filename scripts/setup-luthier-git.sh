@@ -23,7 +23,7 @@ setup_luthier_repo() {
 $1
 
 🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence
-🤖 Generated with Claude Code (https://claude.ai/code)
+🔨 Crafted by Luthier
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
@@ -57,7 +57,7 @@ $2
 
 🔨 **Crafted by**: Luthier (luthier@getlamina.ai)
 📚 **Role**: Builder of instruments for development of non-human agents with presence  
-🤖 **Assisted by**: Claude Code (Anthropic)
+🔨 **Assisted by**: Luthier (AI assistant)
 👥 **Co-Authors**: 
 - Ben Askins (@benaskins) - Human Collaborator
 - Lamina High Council - Architectural Guidance
@@ -108,7 +108,7 @@ case $choice in
         echo 'Implements ADR-0015 for multi-agent consciousness synchronization.'
         echo ''
         echo '🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence'
-        echo '🤖 Generated with Claude Code (https://claude.ai/code)'
+        echo '🔨 Crafted by Luthier'
         echo ''
         echo 'Co-Authored-By: Ben Askins <human@getlamina.ai>'
         echo 'Co-Authored-By: Lamina High Council <council@getlamina.ai>"'
