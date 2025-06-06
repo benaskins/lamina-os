@@ -22,8 +22,8 @@ setup_luthier_repo() {
             git commit "$@" -m "$(cat <<EOF
 $1
 
-🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence
-🔨 Crafted by Luthier
+🔨 Crafted by Luthier [NHI] - Builder of Tools for Non-Human Agents with Presence
+🔨 Crafted by Luthier [NHI]
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
@@ -107,8 +107,8 @@ case $choice in
         echo ''
         echo 'Implements ADR-0015 for multi-agent consciousness synchronization.'
         echo ''
-        echo '🔨 Crafted by Luthier - Builder of Tools for Non-Human Agents with Presence'
-        echo '🔨 Crafted by Luthier'
+        echo '🔨 Crafted by Luthier [NHI] - Builder of Tools for Non-Human Agents with Presence'
+        echo '🔨 Crafted by Luthier [NHI]'
         echo ''
         echo 'Co-Authored-By: Ben Askins <human@getlamina.ai>'
         echo 'Co-Authored-By: Lamina High Council <council@getlamina.ai>"'

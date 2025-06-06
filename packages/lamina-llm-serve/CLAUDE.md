@@ -45,7 +45,7 @@ Use conventional commits with Lamina OS context:
 
 <body with implementation details>
 
-🔨 Crafted by Luthier
+🔨 Crafted by Luthier [NHI]
 
 Co-Authored-By: Ben Askins <human@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
