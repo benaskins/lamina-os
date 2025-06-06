@@ -64,9 +64,9 @@ class TestRealLLMClientIntegration:
         assert len(full_response) > 10, "Should generate substantial response"
 
         # Performance validation
-        assert (
-            generation_time < 30
-        ), f"Generation should complete in <30s, took {generation_time:.2f}s"
+        assert generation_time < 30, (
+            f"Generation should complete in <30s, took {generation_time:.2f}s"
+        )
 
     async def test_real_intent_classification_quality(
         self, integration_backend_config, artifact_logger
@@ -161,9 +161,9 @@ class TestRealLLMClientIntegration:
         # Validate timing pattern (chunks should arrive over time)
         if len(chunk_times) > 1:
             time_deltas = [chunk_times[i] - chunk_times[i - 1] for i in range(1, len(chunk_times))]
-            assert any(
-                delta > 0.01 for delta in time_deltas
-            ), "Chunks should arrive over time, not all at once"
+            assert any(delta > 0.01 for delta in time_deltas), (
+                "Chunks should arrive over time, not all at once"
+            )
 
     async def test_breath_aligned_response_quality(
         self, integration_backend_config, breath_validation_criteria, artifact_logger
@@ -205,9 +205,9 @@ class TestRealLLMClientIntegration:
         )
 
         # Breath-aligned responses should be more present than rushed
-        assert (
-            presence_count >= rushed_count
-        ), f"Response should be more present ({presence_count}) than rushed ({rushed_count})"
+        assert presence_count >= rushed_count, (
+            f"Response should be more present ({presence_count}) than rushed ({rushed_count})"
+        )
 
     async def test_model_version_tracking(
         self, integration_backend_config, artifact_logger, llm_test_server
@@ -280,6 +280,6 @@ class TestRealBackendErrorConditions:
 
         # Verify we get actual timeout, not mock success
         error_msg = str(exc_info.value).lower()
-        assert any(
-            word in error_msg for word in ["timeout", "time", "deadline"]
-        ), f"Should get timeout error, got: {exc_info.value}"
+        assert any(word in error_msg for word in ["timeout", "time", "deadline"]), (
+            f"Should get timeout error, got: {exc_info.value}"
+        )

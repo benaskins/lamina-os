@@ -39,7 +39,7 @@ class AgentCLI:
                     return
 
             raise RuntimeError(
-                "Not in a lamina sanctuary. " "Run 'lamina sanctuary init <name>' to create one."
+                "Not in a lamina sanctuary. Run 'lamina sanctuary init <name>' to create one."
             )
 
     def create_agent(

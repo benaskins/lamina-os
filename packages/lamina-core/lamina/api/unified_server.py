@@ -255,7 +255,6 @@ async def agent_interaction(
         target_agent=request.target_agent,
         interaction_type="agent_to_agent",
     ):
-
         logger.info(
             f"Agent interaction: {agent_name} -> {request.target_agent}",
             extra={

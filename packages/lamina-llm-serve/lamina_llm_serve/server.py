@@ -40,9 +40,7 @@ class LLMServer:
     def __init__(self, manifest_path: str = "models.yaml", models_dir: str = "models"):
         self.app = Flask(__name__)
         self.model_manager = ModelManager(manifest_path, models_dir)
-        self.active_servers = (
-            {}
-        )  # model_name -> {'process': process, 'port': port, 'backend': backend}
+        self.active_servers = {}  # model_name -> {'process': process, 'port': port, 'backend': backend}
         self.base_port = 8081  # Start port allocation from here
 
         self._setup_routes()

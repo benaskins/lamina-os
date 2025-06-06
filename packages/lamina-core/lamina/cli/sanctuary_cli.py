@@ -308,11 +308,11 @@ PARAMETER top_p 0.9
 
 SYSTEM \"\"\"You are {agent_name}, a helpful AI assistant.
 
-{AGENT_TEMPLATES.get(template, {}).get('description', 'An elegant AI assistant.')}
+{AGENT_TEMPLATES.get(template, {}).get("description", "An elegant AI assistant.")}
 
-Personality traits: {', '.join(AGENT_TEMPLATES.get(template, {}).get('personality_traits', ['helpful', 'elegant']))}
+Personality traits: {", ".join(AGENT_TEMPLATES.get(template, {}).get("personality_traits", ["helpful", "elegant"]))}
 
-Maintain a {AGENT_TEMPLATES.get(template, {}).get('communication_style', 'elegant')} communication style.
+Maintain a {AGENT_TEMPLATES.get(template, {}).get("communication_style", "elegant")} communication style.
 \"\"\"
 """
 
