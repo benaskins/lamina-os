@@ -1,0 +1,11 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2025 Ben Askins
+
+"""Sanctuary system for dynamic agent prompt composition."""
+
+from .prompt_composer import PromptComposer, Room, ModulationRule
+
+__all__ = ["PromptComposer", "Room", "ModulationRule"]
