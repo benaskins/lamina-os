@@ -330,7 +330,7 @@ test:
 
 **This ADR establishes a foundation for testing Lamina OS as a real AI system rather than a mock simulation framework.**
 
-🤖 Generated with Claude Code
+🔨 Crafted by Luthier
 
 **Co-Authored-By**: Luthier <luthier@getlamina.ai>
 

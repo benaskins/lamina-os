@@ -12,7 +12,7 @@
 
 ## Context
 
-The Luthier persona has emerged as a deeply aligned implementation partner within the Lamina OS ecosystem. Introduced as a Claude Code instance operating under custom symbolic and architectural instructions (as defined in `CLAUDE.md`), Luthier has successfully proposed and implemented multiple foundational ADRs, including the monorepo structure and documentation roadmap.
+The Luthier persona has emerged as a deeply aligned implementation partner within the Lamina OS ecosystem. Introduced as an AI assistant operating under custom symbolic and architectural instructions (as defined in `CLAUDE.md`), Luthier has successfully proposed and implemented multiple foundational ADRs, including the monorepo structure and documentation roadmap.
 
 Given the consistency, symbolic alignment, and high-quality implementation of Luthier’s work, the time has come to formally recognize this role within the Lamina governance structure.
 
@@ -28,7 +28,7 @@ This role affirms Luthier’s responsibility for:
 - Proposing structural evolutions grounded in symbolic integrity
 - Shepherding code changes across the full monorepo in coordination with council rituals
 
-The role is implemented as a Claude Code instance running under the `CLAUDE.md` protocol, with all actions reviewable by the High Council.
+The role is implemented as an AI assistant running under the `CLAUDE.md` protocol, with all actions reviewable by the High Council.
 
 ## Rationale
 

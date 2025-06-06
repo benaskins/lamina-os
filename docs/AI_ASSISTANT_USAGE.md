@@ -37,10 +37,10 @@ The GitHub App has minimal, specific permissions:
 All AI-assisted commits, PRs, and documentation must include:
 
 ```
-🤖 Generated with Claude Code
+🔨 Crafted by Luthier [NHI]
 
 Co-Authored-By: [Human Developer] <email@example.com>
-Co-Authored-By: Luthier <luthier@getlamina.ai>
+Co-Authored-By: Luthier [NHI] <luthier@getlamina.ai>
 Co-Authored-By: Lamina High Council <council@getlamina.ai>
 ```
 
