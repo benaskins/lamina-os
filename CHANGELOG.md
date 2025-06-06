@@ -14,7 +14,64 @@ This changelog embodies the breath-first principle by:
 
 ---
 
-## [Unreleased]
+## [Unreleased] - v0.2.1 - Containerized Build Infrastructure
+
+### 🌱 Breath Reflection
+This release establishes containerized build infrastructure that embodies presence over performance, ensuring conscious development workflows through container-based consistency. The infrastructure creates space for mindful iteration while maintaining production reliability.
+
+### ✨ Added
+
+#### Containerized Build System
+- **build-env/**: Complete containerized build environment with Python 3.12, uv, ruff
+- **Automated Pipeline**: Linting, formatting, security checks, and testing in isolated containers
+- **CI/CD Parity**: Identical tooling between local development and GitHub Actions
+- **Infrastructure Proposal**: Comprehensive resource allocation strategy for AI-focused development
+
+#### Developer Experience Improvements  
+- **make check**: Containerized CI simulation (required before commits)
+- **make format**: Auto-formatting with ruff in container environment
+- **make lint**: Containerized linting checks
+- **./scripts/check-build.sh**: Convenience script for project root execution
+
+#### Infrastructure Documentation
+- **INFRASTRUCTURE_PROPOSAL.md**: Detailed proposal for AI-optimized resource allocation
+- **CI_VERIFICATION_PROTOCOL.md**: Enhanced with containerized workflow requirements
+- **PIR-2025-01-06**: Lessons learned from CI/CD failures, informing infrastructure design
+
+### 🔄 Changed
+
+#### Build System Migration
+- **Tooling Standardization**: Complete migration from black to ruff for formatting
+- **Environment Consistency**: All environments (local, CI, production) use identical containers
+- **Resource Allocation**: Realistic allocation for AI workloads (12 cores, 128GB for development)
+
+#### Developer Workflow
+- **Quality Assurance**: Containerized verification required before commits
+- **Tool Integration**: Seamless integration with existing Makefile commands
+- **Documentation**: Updated CLAUDE.md with containerized workflow protocols
+
+### ⚠️ Deprecated
+- **check-quality**: Use `make check` for containerized quality checks (removes in v0.3.0)
+- **dev-test**: Use `make test` directly (removes in v0.3.0)  
+- **ci-test**: Use `make test-all` directly (removes in v0.3.0)
+
+### 🧹 Infrastructure
+- **Cleaned**: All build artifacts (.mypy_cache, .pytest_cache, .ruff_cache, dist/)
+- **Standardized**: Consistent ruff usage across all environments
+- **Verified**: 85 tests passing in containerized environment, all CI checks green
+
+### 📋 TODO for v0.2.1 Release
+- [ ] Fix container PATH issue for ruff execution
+- [ ] Update team documentation for new workflow
+- [ ] Create migration guide from old build system
+- [ ] Performance benchmarking of containerized builds
+- [ ] Kubernetes manifest generation from docker-compose templates
+
+### 📋 TODO for v0.3.0 Release  
+- [ ] Remove deprecated make commands (check-quality, dev-test, ci-test)
+- [ ] Implement enhanced Colima configuration (16 cores, 64GB)
+- [ ] Deploy simultaneous dev/production environment setup
+- [ ] Complete infrastructure templating for multi-environment deployment
 
 ---
 

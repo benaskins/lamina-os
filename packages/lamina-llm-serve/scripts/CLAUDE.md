@@ -1,4 +1,4 @@
-# Claude Code Documentation - Scripts Directory
+# Luthier Documentation - Scripts Directory
 
 ## CLI Tools Overview
 

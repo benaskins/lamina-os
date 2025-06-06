@@ -40,7 +40,9 @@ class TestEnvironmentManager:
                     "type": (
                         "docker-compose"
                         if env_name == "development"
-                        else "containerized" if env_name == "test" else "kubernetes"
+                        else "containerized"
+                        if env_name == "test"
+                        else "kubernetes"
                     ),
                     "description": f"{env_name} environment",
                 },
@@ -280,7 +282,9 @@ class TestSigilOfPassage:
                     "type": (
                         "docker-compose"
                         if env_name == "development"
-                        else "containerized" if env_name == "test" else "kubernetes"
+                        else "containerized"
+                        if env_name == "test"
+                        else "kubernetes"
                     ),
                     "description": f"{env_name} environment",
                 },

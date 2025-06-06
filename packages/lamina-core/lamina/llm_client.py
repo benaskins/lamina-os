@@ -79,7 +79,6 @@ class LaminaLLMClient:
 
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.post(url, json=payload) as response:
-
                     if response.status != 200:
                         error_text = await response.text()
                         logger.error(f"LLM Serve error {response.status}: {error_text}")

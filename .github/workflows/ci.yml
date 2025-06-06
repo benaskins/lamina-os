@@ -38,9 +38,9 @@ jobs:
       if: matrix.test-tier == 'unit'
       run: uv run ruff check
     
-    - name: Format check with black
+    - name: Format check with ruff
       if: matrix.test-tier == 'unit'
-      run: uv run black --check .
+      run: uv run ruff format --check
     
     - name: Security check with bandit
       if: matrix.test-tier == 'unit'

@@ -27,6 +27,11 @@ endif
 help:
 	@echo "🌊 Lamina OS Development Toolkit"
 	@echo ""
+	@echo "🔨 Build Commands (NEW - PREFERRED):"
+	@echo "  check         Run all checks in containerized environment (CI simulation)"
+	@echo "  format        Auto-format code with ruff in container"
+	@echo "  lint          Run linting checks in container"
+	@echo ""
 	@echo "🧪 Test Commands:"
 	@echo "  test          Run unit tests only (default, fast)"
 	@echo "  test-unit     Run unit tests explicitly"  
@@ -61,11 +66,18 @@ help:
 	@echo "  setup-test-env    Set up test environment and LLM server"
 	@echo "  clean-artifacts   Clean test artifacts and logs"
 	@echo ""
+	@echo "⚠️  Legacy Commands (deprecated, will be removed in v0.3.0):"
+	@echo "  check-quality     Use 'make check' instead (containerized)"
+	@echo "  dev-test          Use 'make test' instead"
+	@echo "  ci-test           Use 'make test-all' instead"
+	@echo ""
 	@echo "Examples:"
-	@echo "  make tools-install           # Install helm + kubectl"
+	@echo "  make check                   # Run all checks (REQUIRED before commit)"
+	@echo "  make format                  # Auto-fix formatting issues"
 	@echo "  make test                    # Fast unit tests for development"
-	@echo "  make gitops-setup            # Setup production GitOps"
 	@echo "  make test-integration        # Test with real AI models"
+	@echo "  make tools-install           # Install helm + kubectl"
+	@echo "  make gitops-setup            # Setup production GitOps"
 
 # Unit Tests (Fast, Default)
 test: test-unit
@@ -193,22 +205,47 @@ clean-artifacts:
 	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "✅ Test artifacts cleaned"
 
-# Development Workflow Shortcuts
+# Development Workflow Shortcuts (DEPRECATED)
 dev-test: test-unit
+	@echo "⚠️  DEPRECATED: Use 'make test' directly instead of 'make dev-test'"
+	@echo "This command will be removed in v0.3.0"
 	@echo "💻 Development test cycle complete"
 
 ci-test: test-all
+	@echo "⚠️  DEPRECATED: Use 'make test-all' directly instead of 'make ci-test'"
+	@echo "This command will be removed in v0.3.0"
 	@echo "🚀 CI test cycle complete"
 
-# Quality Gates
+# Containerized Build System (NEW - PREFERRED)
+check:
+	@echo "🔍 Running containerized build checks (CI simulation)"
+	@echo "Using build-env/ containerized environment..."
+	@./scripts/check-build.sh
+
+format:
+	@echo "🎨 Auto-formatting code with containerized environment"
+	@echo "Using build-env/ containerized environment..."
+	@cd build-env && make format
+
+lint:
+	@echo "🔍 Running linting checks with containerized environment"
+	@echo "Using build-env/ containerized environment..."
+	@cd build-env && make lint
+
+# Quality Gates (DEPRECATED)
 check-quality:
-	@echo "🔍 Running Quality Checks"
+	@echo "⚠️  DEPRECATED: Use 'make check' for containerized quality checks"
+	@echo "This command uses direct uv commands instead of the containerized build environment"
+	@echo "Recommended: 'make check' (ensures consistency with CI/CD)"
+	@echo "This command will be removed in v0.3.0"
+	@echo ""
+	@echo "🔍 Running Quality Checks (Legacy Mode)"
 	@echo ""
 	@echo "Linting..."
 	uv run ruff check packages/lamina-core/
 	@echo ""
 	@echo "Formatting..."
-	uv run black --check packages/lamina-core/
+	uv run ruff format --check packages/lamina-core/
 	@echo ""
 	@echo "Type checking..."
 	uv run mypy packages/lamina-core/ || echo "⚠️  Type checking issues found"
@@ -216,7 +253,7 @@ check-quality:
 	@echo "Security scanning..."
 	uv run bandit -r packages/lamina-core/ || echo "⚠️  Security issues found"
 	@echo ""
-	@echo "✅ Quality checks completed"
+	@echo "✅ Quality checks completed (consider migrating to 'make check')"
 
 # Test Status
 test-status:
