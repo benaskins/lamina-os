@@ -27,6 +27,11 @@ endif
 help:
 	@echo "🌊 Lamina OS Development Toolkit"
 	@echo ""
+	@echo "🔨 Build Commands (NEW - PREFERRED):"
+	@echo "  check         Run all checks in containerized environment (CI simulation)"
+	@echo "  format        Auto-format code with ruff in container"
+	@echo "  lint          Run linting checks in container"
+	@echo ""
 	@echo "🧪 Test Commands:"
 	@echo "  test          Run unit tests only (default, fast)"
 	@echo "  test-unit     Run unit tests explicitly"  
@@ -62,10 +67,12 @@ help:
 	@echo "  clean-artifacts   Clean test artifacts and logs"
 	@echo ""
 	@echo "Examples:"
-	@echo "  make tools-install           # Install helm + kubectl"
+	@echo "  make check                   # Run all checks (REQUIRED before commit)"
+	@echo "  make format                  # Auto-fix formatting issues"
 	@echo "  make test                    # Fast unit tests for development"
-	@echo "  make gitops-setup            # Setup production GitOps"
 	@echo "  make test-integration        # Test with real AI models"
+	@echo "  make tools-install           # Install helm + kubectl"
+	@echo "  make gitops-setup            # Setup production GitOps"
 
 # Unit Tests (Fast, Default)
 test: test-unit
@@ -200,6 +207,22 @@ dev-test: test-unit
 ci-test: test-all
 	@echo "🚀 CI test cycle complete"
 
+# Containerized Build System (NEW - PREFERRED)
+check:
+	@echo "🔍 Running containerized build checks (CI simulation)"
+	@echo "Using build-env/ containerized environment..."
+	@./scripts/check-build.sh
+
+format:
+	@echo "🎨 Auto-formatting code with containerized environment"
+	@echo "Using build-env/ containerized environment..."
+	@cd build-env && make format
+
+lint:
+	@echo "🔍 Running linting checks with containerized environment"
+	@echo "Using build-env/ containerized environment..."
+	@cd build-env && make lint
+
 # Quality Gates
 check-quality:
 	@echo "🔍 Running Quality Checks"
@@ -208,7 +231,7 @@ check-quality:
 	uv run ruff check packages/lamina-core/
 	@echo ""
 	@echo "Formatting..."
-	uv run black --check packages/lamina-core/
+	uv run ruff format --check packages/lamina-core/
 	@echo ""
 	@echo "Type checking..."
 	uv run mypy packages/lamina-core/ || echo "⚠️  Type checking issues found"
