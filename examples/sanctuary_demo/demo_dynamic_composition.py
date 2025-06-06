@@ -17,48 +17,48 @@ from lamina.sanctuary import PromptComposer
 
 def demo_composition():
     """Demonstrate dynamic prompt composition from sanctuary components."""
-    
+
     # Initialize the composer with our demo sanctuary
     sanctuary_path = Path(__file__).parent
     composer = PromptComposer(sanctuary_path)
-    
+
     print("🏛️  Lamina Dynamic Prompt Composition Demo")
     print("=" * 50)
-    
+
     # Example 1: Clara in the Library
     print("\n📚 Example 1: Clara in the Library")
     print("-" * 35)
-    
+
     prompt1 = composer.compose_prompt(
         agent_name="clara",
-        room_name="library", 
+        room_name="library",
         message="Can you help me understand the philosophical implications of consciousness in AI systems?",
         context={"session_type": "research", "depth_level": "academic"},
-        active_modulations=["breath"]
+        active_modulations=["breath"],
     )
-    
+
     print("Composed Prompt:")
     print(prompt1)
-    
-    print("\n" + "="*50)
-    
-    # Example 2: Clara in the Garden  
+
+    print("\n" + "=" * 50)
+
+    # Example 2: Clara in the Garden
     print("\n🌱 Example 2: Clara in the Garden")
     print("-" * 35)
-    
+
     prompt2 = composer.compose_prompt(
         agent_name="clara",
         room_name="garden",
         message="I'm feeling stuck on this creative project. Any ideas?",
         context={"mood": "exploratory", "project_type": "creative"},
-        active_modulations=["breath"]
+        active_modulations=["breath"],
     )
-    
+
     print("Composed Prompt:")
     print(prompt2)
-    
-    print("\n" + "="*50)
-    
+
+    print("\n" + "=" * 50)
+
     # Show the difference
     print("\n🔍 Key Differences:")
     print("Library version: Scholarly tone, thorough analysis, systematic thinking")

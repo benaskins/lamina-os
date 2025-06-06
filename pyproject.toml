@@ -15,6 +15,7 @@ version = "0.2.1"
 description = "Workspace for Lamina OS packages"
 requires-python = ">=3.11"
 dependencies = [
+    "httpx>=0.28.1",
     "lamina-core",
     "pytest>=8.3.5",
     "pytest-asyncio>=1.0.0",

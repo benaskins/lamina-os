@@ -6,6 +6,6 @@
 
 """Sanctuary system for dynamic agent prompt composition."""
 
-from .prompt_composer import PromptComposer, Room, ModulationRule
+from .prompt_composer import ModulationRule, PromptComposer, Room
 
 __all__ = ["PromptComposer", "Room", "ModulationRule"]
