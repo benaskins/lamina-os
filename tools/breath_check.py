@@ -46,7 +46,7 @@ class BreathChecker:
             for pattern in reactive_patterns:
                 if re.search(pattern, line):
                     self.warnings.append(
-                        f"{file_path}:{i+1}: Consider breath-aware alternative to reactive pattern: {line.strip()}"
+                        f"{file_path}:{i + 1}: Consider breath-aware alternative to reactive pattern: {line.strip()}"
                     )
 
         # Check for breath-positive patterns
@@ -75,7 +75,7 @@ class BreathChecker:
                         break
 
                 if not has_docstring and "test_" not in file_path.name:
-                    self.issues.append(f"{file_path}:{i+1}: Missing docstring for {line.strip()}")
+                    self.issues.append(f"{file_path}:{i + 1}: Missing docstring for {line.strip()}")
 
         return len(self.issues) == 0
 
@@ -119,7 +119,7 @@ class BreathChecker:
             for pattern in rushed_phrases:
                 if re.search(pattern, line, re.IGNORECASE):
                     self.warnings.append(
-                        f"{file_path}:{i+1}: Consider breath-aware alternative to rushed language: {line.strip()}"
+                        f"{file_path}:{i + 1}: Consider breath-aware alternative to rushed language: {line.strip()}"
                     )
 
         # Check for breath-positive language

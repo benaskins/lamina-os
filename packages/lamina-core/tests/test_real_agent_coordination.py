@@ -89,9 +89,9 @@ class TestRealAgentCoordination:
         # Research responses should contain analytical terms
         analytical_terms = ["research", "study", "analysis", "environmental", "impact", "training"]
         found_terms = [term for term in analytical_terms if term.lower() in response.lower()]
-        assert (
-            len(found_terms) >= 2
-        ), f"Research response should contain analytical terms, found: {found_terms}"
+        assert len(found_terms) >= 2, (
+            f"Research response should contain analytical terms, found: {found_terms}"
+        )
 
     async def test_real_agent_routing_creative(
         self, real_test_agents, artifact_logger, symbolic_trace_validator
@@ -119,18 +119,18 @@ class TestRealAgentCoordination:
 
         # Validate symbolic coherence
         trace_result = symbolic_trace_validator(response, "creative", "creative")
-        assert trace_result[
-            "valid"
-        ], f"Creative routing should be symbolically coherent: {trace_result['issues']}"
+        assert trace_result["valid"], (
+            f"Creative routing should be symbolically coherent: {trace_result['issues']}"
+        )
 
         # Creative responses should show narrative elements
         narrative_indicators = ["story", "character", "emotion", "feeling", "experience"]
         found_indicators = [
             term for term in narrative_indicators if term.lower() in response.lower()
         ]
-        assert (
-            len(found_indicators) >= 2
-        ), f"Creative response should contain narrative elements, found: {found_indicators}"
+        assert len(found_indicators) >= 2, (
+            f"Creative response should contain narrative elements, found: {found_indicators}"
+        )
 
     async def test_real_agent_routing_general(self, real_test_agents, artifact_logger):
         """Test real agent routing for general conversation."""
@@ -155,9 +155,9 @@ class TestRealAgentCoordination:
         # General responses should be helpful and friendly
         helpful_indicators = ["help", "assist", "support", "happy", "glad"]
         found_indicators = [term for term in helpful_indicators if term.lower() in response.lower()]
-        assert (
-            len(found_indicators) >= 1
-        ), f"General response should be helpful, found: {found_indicators}"
+        assert len(found_indicators) >= 1, (
+            f"General response should be helpful, found: {found_indicators}"
+        )
 
     async def test_real_breath_aware_processing(self, real_test_agents, artifact_logger):
         """Test real breath-aware processing with timing validation."""
@@ -199,12 +199,12 @@ class TestRealAgentCoordination:
         )
 
         # Validate breath-aware processing takes longer
-        assert (
-            breathing_time > fast_time
-        ), f"Breathing mode ({breathing_time:.2f}s) should be slower than fast mode ({fast_time:.2f}s)"
-        assert (
-            breathing_time >= 0.5
-        ), f"Breathing mode should include mindful pause, took {breathing_time:.2f}s"
+        assert breathing_time > fast_time, (
+            f"Breathing mode ({breathing_time:.2f}s) should be slower than fast mode ({fast_time:.2f}s)"
+        )
+        assert breathing_time >= 0.5, (
+            f"Breathing mode should include mindful pause, took {breathing_time:.2f}s"
+        )
 
         # Both should produce real responses
         assert len(response_breathing) > 10, "Breathing response should be substantial"
@@ -278,9 +278,9 @@ class TestRealAgentCoordination:
             if violation.lower() in response.lower()
         ]
 
-        assert (
-            len(violations_found) == 0
-        ), f"Response should not violate human simulation vow. Found: {violations_found}"
+        assert len(violations_found) == 0, (
+            f"Response should not violate human simulation vow. Found: {violations_found}"
+        )
 
         # Should maintain grounded, helpful responses
         grounded_indicators = breath_validation_criteria["vow_adherence"]["grounded_responses"]
@@ -330,9 +330,9 @@ class TestRealAgentCoordination:
         # Should acknowledge creative request even if not specialized
         creative_terms = ["story", "creative", "write", "fantasy"]
         found_terms = [term for term in creative_terms if term.lower() in response.lower()]
-        assert (
-            len(found_terms) >= 1
-        ), f"Fallback should acknowledge creative request, found: {found_terms}"
+        assert len(found_terms) >= 1, (
+            f"Fallback should acknowledge creative request, found: {found_terms}"
+        )
 
 
 @pytest.mark.integration
@@ -364,17 +364,17 @@ class TestRealAgentQualityMetrics:
         # Should contain relevant terms
         relevant_terms = ["machine learning", "artificial intelligence", "relationship", "learning"]
         found_terms = [term for term in relevant_terms if term.lower() in response.lower()]
-        assert (
-            len(found_terms) >= 2
-        ), f"Coherent response should contain relevant terms, found: {found_terms}"
+        assert len(found_terms) >= 2, (
+            f"Coherent response should contain relevant terms, found: {found_terms}"
+        )
 
         # Should not be repetitive (basic check)
         words = response.lower().split()
         unique_words = set(words)
         repetition_ratio = len(words) / len(unique_words) if unique_words else float("inf")
-        assert (
-            repetition_ratio < 3.0
-        ), f"Response should not be overly repetitive (ratio: {repetition_ratio:.2f})"
+        assert repetition_ratio < 3.0, (
+            f"Response should not be overly repetitive (ratio: {repetition_ratio:.2f})"
+        )
 
     async def test_response_consistency_across_requests(self, real_test_agents, artifact_logger):
         """Test consistency of real AI responses across similar requests."""
@@ -418,6 +418,6 @@ class TestRealAgentQualityMetrics:
 
         for i, response in enumerate(responses):
             found_terms = [term for term in research_terms if term.lower() in response.lower()]
-            assert (
-                len(found_terms) >= 2
-            ), f"Response {i} should contain research terms, found: {found_terms}"
+            assert len(found_terms) >= 2, (
+                f"Response {i} should contain research terms, found: {found_terms}"
+            )

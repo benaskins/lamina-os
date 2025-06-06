@@ -287,7 +287,7 @@ async def main():
     print(f"\n🌱 Starting {len(demo_queries)} interactions...")
 
     for i, query in enumerate(demo_queries, 1):
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Interaction {i}/5")
         print(f"Human: {query}")
 
@@ -298,7 +298,7 @@ async def main():
         # Breath pause between interactions
         await asyncio.sleep(1.0)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("🙏 Multi-agent session complete")
     print(f"Total interactions: {len(coordinator.interaction_history)}")
 
