@@ -4,8 +4,22 @@ Based on lessons learned from PIR-2025-01-06 (Ruff Linting CI Failures), this do
 
 ## Required Steps Before Pushing
 
-### 1. Local CI Simulation
-Always run these commands locally before pushing:
+### 1. Use Containerized Build Environment (Recommended)
+The easiest way to ensure your code will pass CI:
+
+```bash
+# From project root
+./scripts/check-build.sh
+
+# Or from build-env directory
+cd build-env/
+make check
+```
+
+This runs exactly the same checks as CI in a containerized environment.
+
+### 2. Manual Local CI Simulation (Alternative)
+If you can't use Docker, run these commands locally:
 
 ```bash
 # Run the exact same linting tools as CI
@@ -16,13 +30,13 @@ uv run ruff format --check
 uv run pytest packages/lamina-core/tests/ -x
 ```
 
-### 2. Configuration Verification
+### 3. Configuration Verification
 Ensure your local tools match CI configuration:
 - Check `.github/workflows/ci.yml` for the exact commands
 - Verify tool versions match between local and CI environments
 - Confirm all packages are using the same linter configuration
 
-### 3. After Pushing
+### 4. After Pushing
 - Monitor the PR checks on GitHub
 - If CI fails, check the logs immediately
 - Fix any issues before proceeding with other work
