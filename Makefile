@@ -66,6 +66,11 @@ help:
 	@echo "  setup-test-env    Set up test environment and LLM server"
 	@echo "  clean-artifacts   Clean test artifacts and logs"
 	@echo ""
+	@echo "⚠️  Legacy Commands (deprecated, will be removed in v0.3.0):"
+	@echo "  check-quality     Use 'make check' instead (containerized)"
+	@echo "  dev-test          Use 'make test' instead"
+	@echo "  ci-test           Use 'make test-all' instead"
+	@echo ""
 	@echo "Examples:"
 	@echo "  make check                   # Run all checks (REQUIRED before commit)"
 	@echo "  make format                  # Auto-fix formatting issues"
@@ -200,11 +205,15 @@ clean-artifacts:
 	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "✅ Test artifacts cleaned"
 
-# Development Workflow Shortcuts
+# Development Workflow Shortcuts (DEPRECATED)
 dev-test: test-unit
+	@echo "⚠️  DEPRECATED: Use 'make test' directly instead of 'make dev-test'"
+	@echo "This command will be removed in v0.3.0"
 	@echo "💻 Development test cycle complete"
 
 ci-test: test-all
+	@echo "⚠️  DEPRECATED: Use 'make test-all' directly instead of 'make ci-test'"
+	@echo "This command will be removed in v0.3.0"
 	@echo "🚀 CI test cycle complete"
 
 # Containerized Build System (NEW - PREFERRED)
@@ -223,9 +232,14 @@ lint:
 	@echo "Using build-env/ containerized environment..."
 	@cd build-env && make lint
 
-# Quality Gates
+# Quality Gates (DEPRECATED)
 check-quality:
-	@echo "🔍 Running Quality Checks"
+	@echo "⚠️  DEPRECATED: Use 'make check' for containerized quality checks"
+	@echo "This command uses direct uv commands instead of the containerized build environment"
+	@echo "Recommended: 'make check' (ensures consistency with CI/CD)"
+	@echo "This command will be removed in v0.3.0"
+	@echo ""
+	@echo "🔍 Running Quality Checks (Legacy Mode)"
 	@echo ""
 	@echo "Linting..."
 	uv run ruff check packages/lamina-core/
@@ -239,7 +253,7 @@ check-quality:
 	@echo "Security scanning..."
 	uv run bandit -r packages/lamina-core/ || echo "⚠️  Security issues found"
 	@echo ""
-	@echo "✅ Quality checks completed"
+	@echo "✅ Quality checks completed (consider migrating to 'make check')"
 
 # Test Status
 test-status:
