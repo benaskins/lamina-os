@@ -44,11 +44,11 @@ resource "github_branch_protection" "main" {
   required_status_checks {
     strict = true
     contexts = [
-      "CI / test (3.11, unit)",
-      "CI / test (3.12, unit)",
-      "CI / test (3.13, unit)", 
-      "CI / test (3.12, integration)",
-      "CI / build"
+      "test (3.11, unit)",
+      "test (3.12, unit)",
+      "test (3.13, unit)",
+      "test (3.12, integration)",
+      "build"
     ]
   }
 
