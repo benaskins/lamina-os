@@ -161,13 +161,23 @@ class Agent(ABC):
         await self._apply_breath_modulation()
 
     async def _apply_breath_modulation(self) -> None:
-        """Apply breath-based modulation to agent state."""
-        # This is where breath-based timing and pacing would be implemented
-        # For now, it's a placeholder for the modulation logic
+        """
+        Apply breath-based modulation to agent state.
 
-        # Update internal state to reflect the breath
-        if self._breath_count % 10 == 0:
-            logger.debug(f"Agent {self.name} has taken {self._breath_count} breaths")
+        This method provides a hook for subclasses to implement custom
+        breath modulation logic. The default implementation provides
+        a simple pause to ensure breath-first operation.
+
+        Subclasses may override this to implement more sophisticated
+        modulation such as:
+        - Dynamic timing based on context
+        - State-dependent breathing patterns
+        - Integration with external timing systems
+        """
+        # Default implementation: simple breath pause
+        import asyncio
+
+        await asyncio.sleep(0.1)
 
     def apply_constraints(self, content: str) -> str:
         """

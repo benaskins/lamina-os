@@ -16,8 +16,8 @@ import asyncio
 import logging
 from pathlib import Path
 
+from lamina import get_llm_client
 from lamina.agents import Agent, AgentEssence
-from lamina.llm_client import get_llm_client
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
