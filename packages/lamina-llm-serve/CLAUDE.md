@@ -78,25 +78,66 @@ Co-Authored-By: Lamina High Council <council@getlamina.ai>
 
 ## Testing Commands
 
+**CRITICAL**: Always use `uv run` for Python commands in this workspace.
+
 ```bash
+# Environment setup (always first)
+cd packages/lamina-llm-serve
+uv sync
+
 # List all models
-python scripts/model-manager.py list
+uv run python scripts/model-manager.py list
 
 # Validate model availability
-python scripts/model-manager.py validate
+uv run python scripts/model-manager.py validate
 
 # Check backend status
-python scripts/model-manager.py backends
+uv run python scripts/model-manager.py backends
 
 # List downloadable models
-python scripts/model-manager.py list-downloadable
+uv run python scripts/model-manager.py list-downloadable
 
 # Download a model
-python scripts/model-manager.py download <model-name> --source <source>
+uv run python scripts/model-manager.py download <model-name> --source <source>
 
 # Get model suggestions
-python scripts/model-manager.py suggest --use-case conversational
+uv run python scripts/model-manager.py suggest --use-case conversational
+
+# Run package tests
+uv run pytest tests/ -v
 ```
+
+## CI Verification (CRITICAL)
+
+**HARD RULE**: Based on PIR-2025-01-06, ALWAYS run containerized verification before pushing.
+
+### Pre-Push Workflow
+```bash
+# 1. Local development (fast iteration)
+cd packages/lamina-llm-serve
+uv run pytest tests/ -x                     # Quick feedback
+uv run ruff check --fix                     # Fix linting issues
+
+# 2. MANDATORY: Full CI simulation (from project root)
+./scripts/check-build.sh                    # Containerized verification
+# OR from build-env directory:
+make check                                   # Complete CI replication
+
+# 3. Only push if containerized build passes
+git push origin feature-branch
+```
+
+### CI Pipeline Coverage
+Our CI tests this package as part of:
+- **Matrix testing**: Python 3.11, 3.12, 3.13 × [unit, integration]
+- **Linting**: `ruff check` and `ruff format --check`
+- **Package building**: Verify imports and distribution builds
+- **Integration tests**: Model downloads and server functionality (Python 3.12)
+
+### Key Lessons from PIR
+- **Never skip containerized verification** - "it should work" is unacceptable
+- **Local and CI environments differ** - only containerized builds catch all issues
+- **Package imports must work** - CI verifies `import lamina_llm_serve` succeeds
 
 ## Dependencies
 

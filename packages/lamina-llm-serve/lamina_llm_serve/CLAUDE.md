@@ -98,10 +98,42 @@ model-name:
 
 ## Testing Notes
 
+**CRITICAL**: Always use `uv run` for Python commands in this workspace.
+
+```bash
+# Environment setup (always first)
+cd packages/lamina-llm-serve
+uv sync
+
+# Run tests
+uv run pytest tests/ -v
+
+# Test with coverage
+uv run pytest tests/ --cov=lamina_llm_serve --cov-report=xml -v
+```
+
+### Test Requirements
 - ModelManager operations require valid models.yaml
 - Backend tests should check for executable availability
 - Download tests may require network access
 - Server tests should use test client, not live HTTP calls
+
+### CI Verification Protocol
+**HARD RULE**: Based on PIR-2025-01-06, ALWAYS run containerized verification before pushing.
+
+```bash
+# 1. Local development (fast iteration)
+uv run pytest tests/ -x                     # Quick feedback
+uv run ruff check --fix                     # Fix linting issues
+
+# 2. MANDATORY: Full CI simulation (from project root)
+./scripts/check-build.sh                    # Containerized verification
+
+# 3. Only push if containerized build passes
+git push origin feature-branch
+```
+
+**Key Lesson**: Never assume "it should work" - always verify with containerized builds.
 
 ## Performance Considerations
 
