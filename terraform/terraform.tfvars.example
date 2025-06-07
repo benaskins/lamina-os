@@ -1,0 +1,6 @@
+# Copy this file to terraform.tfvars and fill in your values
+# Do not commit terraform.tfvars to version control
+
+github_token      = "ghp_your_personal_access_token_here"
+repository_owner  = "benaskins"
+repository_name   = "lamina-os"

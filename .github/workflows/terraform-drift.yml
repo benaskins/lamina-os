@@ -1,0 +1,181 @@
+name: Terraform Drift Detection
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-drift.yml'
+  schedule:
+    # Run every 6 hours to detect manual changes
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  TF_CLOUD_ORGANIZATION: "lamina"
+  TF_WORKSPACE: "lamina-os-github"
+  TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
+
+jobs:
+  drift-detection:
+    name: Detect Configuration Drift
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: 1.9.1
+        
+    - name: Initialize OpenTofu
+      working-directory: ./terraform
+      run: tofu init
+      
+    - name: Check formatting
+      working-directory: ./terraform
+      run: tofu fmt -check -recursive
+      continue-on-error: true
+      
+    - name: Validate configuration
+      working-directory: ./terraform
+      run: tofu validate
+      
+    - name: Detect drift
+      id: plan
+      working-directory: ./terraform
+      run: |
+        set +e
+        tofu plan -detailed-exitcode -no-color -out=tfplan > plan_output.txt 2>&1
+        EXIT_CODE=$?
+        set -e
+        
+        cat plan_output.txt
+        
+        if [ $EXIT_CODE -eq 0 ]; then
+          echo "✅ No changes detected"
+          echo "drift_detected=false" >> $GITHUB_OUTPUT
+        elif [ $EXIT_CODE -eq 2 ]; then
+          echo "⚠️ Drift detected! Manual changes found in GitHub"
+          echo "drift_detected=true" >> $GITHUB_OUTPUT
+          
+          # Extract plan summary
+          echo "## Drift Detection Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Manual changes were made outside of Terraform:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -E "^  [+-~]" plan_output.txt >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "Run 'tofu apply' locally to restore desired state" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Plan failed with exit code $EXIT_CODE"
+          exit $EXIT_CODE
+        fi
+        
+    - name: Comment on PR (if drift detected)
+      if: github.event_name == 'pull_request' && steps.plan.outputs.drift_detected == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const issue_number = context.issue.number;
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          
+          await github.rest.issues.createComment({
+            owner: owner,
+            repo: repo,
+            issue_number: issue_number,
+            body: `⚠️ **Terraform Drift Detected**
+            
+Manual changes were made to the GitHub repository outside of Terraform.
+Please review the plan output above and either:
+1. Update the Terraform configuration to match the manual changes
+2. Run \`tofu apply\` to revert the manual changes
+
+This helps ensure all infrastructure changes go through code review.`
+          });
+          
+    - name: Create issue (if scheduled run detects drift)
+      if: github.event_name == 'schedule' && steps.plan.outputs.drift_detected == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          
+          // Check if issue already exists
+          const issues = await github.rest.issues.listForRepo({
+            owner: owner,
+            repo: repo,
+            labels: 'drift-detection',
+            state: 'open'
+          });
+          
+          if (issues.data.length === 0) {
+            await github.rest.issues.create({
+              owner: owner,
+              repo: repo,
+              title: '🚨 Terraform Drift Detected',
+              body: `The scheduled drift detection found manual changes to the GitHub repository configuration.
+              
+Check the [workflow run](${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}) for details.
+
+**Next Steps:**
+1. Review what changed manually
+2. Either update Terraform config to match, or
+3. Run \`tofu apply\` to restore desired state
+
+This issue will auto-close when drift is resolved.`,
+              labels: ['drift-detection', 'infrastructure']
+            });
+          }
+
+  terraform-checks:
+    name: Terraform PR Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install OpenTofu
+      uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: 1.9.1
+        
+    - name: Initialize OpenTofu
+      working-directory: ./terraform
+      run: tofu init
+      
+    - name: Format check
+      working-directory: ./terraform
+      run: |
+        if ! tofu fmt -check -recursive; then
+          echo "❌ Terraform files need formatting"
+          echo "Run 'tofu fmt' locally to fix"
+          exit 1
+        fi
+        
+    - name: Validate
+      working-directory: ./terraform
+      run: tofu validate
+      
+    - name: Security scan
+      uses: aquasecurity/tfsec-action@v1
+      with:
+        working_directory: ./terraform
+        soft_fail: true
+        
+    - name: Plan changes
+      working-directory: ./terraform
+      env:
+        TF_IN_AUTOMATION: true
+      run: |
+        tofu plan -no-color > plan.txt
+        
+        # Post plan as PR comment
+        echo "## Terraform Plan Output" >> $GITHUB_STEP_SUMMARY
+        echo '```hcl' >> $GITHUB_STEP_SUMMARY
+        cat plan.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY

@@ -42,9 +42,7 @@ jobs:
       if: matrix.test-tier == 'unit'
       run: uv run ruff format --check
     
-    - name: Security check with bandit
-      if: matrix.test-tier == 'unit'
-      run: uv run bandit -r packages/ || true
+    # Security check removed - now handled by dedicated security workflow
     
     # Unit Tests (Fast)
     - name: Run unit tests
