@@ -27,8 +27,8 @@ regex = '''(?i)(sanctuary[_-]?secret|sanctuary[_-]?key).{0,20}['\"]?([a-zA-Z0-9]
 tags = ["sanctuary", "secret"]
 
 # Allowlist for false positives
-[[allowlist]]
-description = "Example tokens in documentation"
+[allowlist]
+# Example tokens in documentation
 regexes = [
     '''ghp_your_personal_access_token_here''',
     '''YOUR_API_TOKEN_HERE''',
@@ -38,27 +38,15 @@ regexes = [
     '''dummy[_-]?api[_-]?key''',
 ]
 
-[[allowlist]]
-description = "Test files and fixtures"
+# Files to ignore
 paths = [
     '''.*test.*\.py''',
     '''.*tests/.*''',
     '''.*fixtures/.*''',
     '''.*examples/.*\.py''',
-]
-
-[[allowlist]]
-description = "Documentation files"
-paths = [
     '''.*\.md''',
     '''.*\.rst''',
     '''.*\.txt''',
-]
-
-# Global settings
-[[allowlist]]
-description = "Configuration and documentation files"
-paths = [
     '''.gitleaks.toml''',
     '''terraform.tfvars.example''',
     '''SECRETS_INVENTORY.md''',

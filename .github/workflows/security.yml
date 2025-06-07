@@ -36,6 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}} # Optional for GitLeaks+
+      with:
+        config-path: .gitleaks.toml
         
     - name: Run TruffleHog secret scanning
       uses: trufflesecurity/trufflehog@main
@@ -136,14 +138,7 @@ jobs:
       uses: aquasecurity/tfsec-action@v1.0.3
       with:
         working_directory: ./terraform
-        format: sarif
         soft_fail: true
-        
-    - name: Upload tfsec results to GitHub Security
-      uses: github/codeql-action/upload-sarif@v3
-      if: always()
-      with:
-        sarif_file: tfsec.sarif
 
   security-summary:
     name: Security Summary
