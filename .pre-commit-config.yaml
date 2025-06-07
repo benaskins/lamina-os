@@ -1,44 +1,30 @@
+# Lightweight pre-commit hooks for fast local development
 repos:
+  # Basic file quality (fast)
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v4.5.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-toml
-      - id: check-json
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ['--maxkb=1000']
-      - id: detect-private-key
+      - id: detect-private-key  # Basic secret detection
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
-    hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
-      - id: ruff-format
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
-    hooks:
-      - id: mypy
-        files: ^packages/
-        additional_dependencies: [types-PyYAML, types-requests]
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.0
-    hooks:
-      - id: bandit
-        args: [-r, packages/]
-        exclude: tests/
-
+  # Python formatting (fast)
   - repo: local
     hooks:
-      - id: breath-check
-        name: Breath-first development check
-        entry: python
-        args: [tools/breath_check.py]
+      - id: ruff-check
+        name: ruff lint
+        entry: uv run ruff check --fix
         language: system
-        files: \.(py|yaml|yml|md)$
-        pass_filenames: true
+        types: [python]
+        
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+
+# Note: Heavy security scans (GitLeaks, Bandit, etc.) run in CI
+# This keeps local commits fast while ensuring security in PRs

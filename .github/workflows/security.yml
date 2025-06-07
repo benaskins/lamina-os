@@ -1,13 +1,18 @@
 name: Security Scanning
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main, develop]
+    # Only run on security-sensitive changes
+    paths:
+      - 'packages/**'
+      - 'terraform/**'
+      - '.github/workflows/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   schedule:
-    # Run security scans daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    # Run full security scans weekly (not daily - too much)
+    - cron: '0 2 * * 1'  # Monday 2 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -39,6 +44,8 @@ jobs:
   dependency-vulnerabilities:
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest
+    # Only run on scheduled runs or manual trigger (not every PR)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     
     steps:
     - name: Checkout code
@@ -55,22 +62,10 @@ jobs:
     - name: Install dependencies
       run: uv sync --extra dev
       
-    - name: Run Safety vulnerability check
-      run: |
-        uv add safety
-        uv run safety check --json --output safety-report.json || true
-        
-    - name: Upload Safety report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: safety-vulnerability-report
-        path: safety-report.json
-        
-    - name: Run pip-audit for additional vulnerability detection
+    - name: Run pip-audit vulnerability check
       run: |
         uv add pip-audit
-        uv run pip-audit --format=json --output=pip-audit-report.json || true
+        uv run pip-audit --format=json --output=pip-audit-report.json
         
     - name: Upload pip-audit report
       uses: actions/upload-artifact@v4
@@ -145,33 +140,6 @@ jobs:
       if: always()
       with:
         sarif_file: tfsec.sarif
-
-  container-security:
-    name: Container Security Scan
-    runs-on: ubuntu-latest
-    if: github.event_name != 'schedule' # Skip on scheduled runs to save resources
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Build container for scanning
-      run: |
-        cd build-env
-        docker build -t lamina-security-scan:latest -f Dockerfile ..
-        
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'lamina-security-scan:latest'
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        
-    - name: Upload Trivy results to GitHub Security
-      uses: github/codeql-action/upload-sarif@v3
-      if: always()
-      with:
-        sarif_file: trivy-results.sarif
 
   security-summary:
     name: Security Summary

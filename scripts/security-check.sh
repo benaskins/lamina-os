@@ -51,23 +51,13 @@ else
 fi
 echo ""
 
-# 3. Dependency Vulnerabilities with Safety
-echo "3️⃣ Dependency Vulnerabilities (Safety)..."
-uv add safety --quiet
-if uv run safety check; then
+# 3. Dependency Vulnerabilities with pip-audit
+echo "3️⃣ Dependency Vulnerabilities (pip-audit)..."
+uv add pip-audit --quiet
+if uv run pip-audit; then
     echo "✅ No known vulnerabilities in dependencies"
 else
     echo "⚠️  Vulnerable dependencies detected. Consider updating."
-fi
-echo ""
-
-# 4. Additional vulnerability check with pip-audit
-echo "4️⃣ Additional Vulnerability Check (pip-audit)..."
-uv add pip-audit --quiet
-if uv run pip-audit; then
-    echo "✅ No additional vulnerabilities found"
-else
-    echo "⚠️  Additional vulnerabilities detected."
 fi
 echo ""
 
