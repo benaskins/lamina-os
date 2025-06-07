@@ -32,6 +32,11 @@ help:
 	@echo "  format        Auto-format code with ruff in container"
 	@echo "  lint          Run linting checks in container"
 	@echo ""
+	@echo "🔒 Security Commands:"
+	@echo "  security      Run comprehensive security checks (secrets, vulnerabilities, etc.)"
+	@echo "  security-quick Run quick security scan (secrets only)"
+	@echo "  pre-commit    Install and run pre-commit hooks"
+	@echo ""
 	@echo "🧪 Test Commands:"
 	@echo "  test          Run unit tests only (default, fast)"
 	@echo "  test-unit     Run unit tests explicitly"  
@@ -231,6 +236,35 @@ lint:
 	@echo "🔍 Running linting checks with containerized environment"
 	@echo "Using build-env/ containerized environment..."
 	@cd build-env && make lint
+
+# Security scanning (NEW)
+security:
+	@echo "🔒 Running comprehensive security checks"
+	@echo "This includes: secrets, vulnerabilities, code security, and compliance"
+	@./scripts/security-check.sh
+
+security-quick:
+	@echo "🔍 Quick security scan (secrets detection only)"
+	@if command -v gitleaks >/dev/null 2>&1; then \
+		echo "Running GitLeaks..."; \
+		gitleaks detect --config .gitleaks.toml; \
+	else \
+		echo "⚠️  GitLeaks not installed. Install with: brew install gitleaks"; \
+		echo "Falling back to basic checks..."; \
+		uv run bandit -r packages/ --severity-level high -q || true; \
+	fi
+
+pre-commit:
+	@echo "🪝 Setting up pre-commit hooks"
+	@if ! command -v pre-commit >/dev/null 2>&1; then \
+		echo "Installing pre-commit..."; \
+		uv add pre-commit; \
+	fi
+	@echo "Installing hooks..."
+	@uv run pre-commit install
+	@echo "Running hooks on all files..."
+	@uv run pre-commit run --all-files || echo "⚠️  Some hooks failed - review and fix issues"
+	@echo "✅ Pre-commit hooks installed and configured"
 
 # Quality Gates (DEPRECATED)
 check-quality:

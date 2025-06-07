@@ -1,0 +1,69 @@
+# GitLeaks configuration for Lamina OS
+# Detects secrets and sensitive information in git repositories
+
+title = "Lamina OS GitLeaks Configuration"
+
+[extend]
+# Use the default ruleset as base
+useDefault = true
+
+# Custom rules for project-specific patterns
+[[rules]]
+id = "terraform-cloud-token"
+description = "Terraform Cloud API Token"
+regex = '''(?i)(TF_API_TOKEN|terraform.cloud.token).{0,20}['\"]?([a-zA-Z0-9]{14}\.atlasv1\.[a-zA-Z0-9-_]{40,})'''
+tags = ["terraform", "api-token"]
+
+[[rules]]
+id = "lamina-api-key"
+description = "Potential Lamina API Key"
+regex = '''(?i)(lamina[_-]?api[_-]?key).{0,20}['\"]?([a-zA-Z0-9]{32,})'''
+tags = ["lamina", "api-key"]
+
+[[rules]]
+id = "sanctuary-secret"
+description = "Sanctuary configuration secrets"
+regex = '''(?i)(sanctuary[_-]?secret|sanctuary[_-]?key).{0,20}['\"]?([a-zA-Z0-9]{16,})'''
+tags = ["sanctuary", "secret"]
+
+# Allowlist for false positives
+[[allowlist]]
+description = "Example tokens in documentation"
+regexes = [
+    '''ghp_your_personal_access_token_here''',
+    '''YOUR_API_TOKEN_HERE''',
+    '''example[_-]?token''',
+    '''placeholder[_-]?key''',
+    '''test[_-]?secret''',
+    '''dummy[_-]?api[_-]?key''',
+]
+
+[[allowlist]]
+description = "Test files and fixtures"
+paths = [
+    '''.*test.*\.py''',
+    '''.*tests/.*''',
+    '''.*fixtures/.*''',
+    '''.*examples/.*\.py''',
+]
+
+[[allowlist]]
+description = "Documentation files"
+paths = [
+    '''.*\.md''',
+    '''.*\.rst''',
+    '''.*\.txt''',
+]
+
+# Global settings
+[allowlist.commits]
+# Allow specific commits if needed
+# commits = ["commit-hash-here"]
+
+[allowlist.paths]
+# Additional paths to ignore
+paths = [
+    '''.gitleaks.toml''',
+    '''terraform.tfvars.example''',
+    '''SECRETS_INVENTORY.md''',
+]

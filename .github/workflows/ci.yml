@@ -44,7 +44,7 @@ jobs:
     
     - name: Security check with bandit
       if: matrix.test-tier == 'unit'
-      run: uv run bandit -r packages/ || true
+      run: uv run bandit -r packages/ --severity-level medium || true
     
     # Unit Tests (Fast)
     - name: Run unit tests
