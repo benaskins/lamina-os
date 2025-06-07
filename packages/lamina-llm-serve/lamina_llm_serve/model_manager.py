@@ -150,7 +150,7 @@ class ModelManager:
             Name of suggested model or None
         """
         use_case = requirements.get("use_case")
-        
+
         # Start with use case default if specified
         if use_case and use_case in self.defaults:
             suggested = self.defaults[use_case]
@@ -169,7 +169,7 @@ class ModelManager:
             for model_name in self.categories[use_case]:
                 if self.is_model_available(model_name):
                     return model_name
-                    
+
         # Try explicit category parameter
         category = requirements.get("category")
         if category and category in self.categories:

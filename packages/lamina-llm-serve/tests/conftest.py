@@ -24,7 +24,7 @@ from lamina_llm_serve.server import LLMServer
 @pytest.fixture(scope="module")
 def test_models_yaml() -> Generator[str, None, None]:
     """Create a temporary models.yaml file for testing."""
-    
+
     test_config = {
         "models": {
             "test-model": {
@@ -33,7 +33,7 @@ def test_models_yaml() -> Generator[str, None, None]:
                 "size": "1.0GB",
                 "description": "Test model for regression testing",
                 "quantization": "Q4_K_M",
-                "use_cases": ["conversational", "testing"]
+                "use_cases": ["conversational", "testing"],
             },
             "llama3.2-3b-q4_k_m": {
                 "path": "llama3.2-3b-q4_k_m/Llama-3.2-3B-Instruct-Q4_K_M.gguf",
@@ -41,27 +41,27 @@ def test_models_yaml() -> Generator[str, None, None]:
                 "size": "2.0GB",
                 "description": "Efficient 3B parameter model, good for general conversation",
                 "quantization": "Q4_K_M",
-                "use_cases": ["conversational", "reasoning"]
-            }
+                "use_cases": ["conversational", "reasoning"],
+            },
         },
         "categories": {
             "conversational": ["test-model", "llama3.2-3b-q4_k_m"],
-            "testing": ["test-model"]
+            "testing": ["test-model"],
         },
         "backends": {
             "llama.cpp": {
                 "executable": "llama-server",
-                "args": ["--model", "{model_path}", "--port", "{port}"]
+                "args": ["--model", "{model_path}", "--port", "{port}"],
             }
-        }
+        },
     }
-    
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
         yaml.dump(test_config, f)
         manifest_path = f.name
-    
+
     yield manifest_path
-    
+
     # Cleanup
     Path(manifest_path).unlink(missing_ok=True)
 
@@ -69,17 +69,17 @@ def test_models_yaml() -> Generator[str, None, None]:
 @pytest.fixture(scope="module")
 def test_models_dir() -> Generator[str, None, None]:
     """Create a temporary models directory for testing."""
-    
+
     with tempfile.TemporaryDirectory() as models_dir:
         # Create fake model files for testing
         test_model_dir = Path(models_dir) / "test-model"
         test_model_dir.mkdir()
         (test_model_dir / "model.gguf").touch()
-        
+
         llama_model_dir = Path(models_dir) / "llama3.2-3b-q4_k_m"
         llama_model_dir.mkdir()
         (llama_model_dir / "Llama-3.2-3B-Instruct-Q4_K_M.gguf").touch()
-        
+
         yield str(models_dir)
 
 
