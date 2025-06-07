@@ -1,0 +1,39 @@
+# Lamina OS Build Environment - Optimized
+# syntax=docker/dockerfile:1
+
+# Base image with system dependencies
+FROM python:3.12-slim AS base
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    make \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install uv
+
+# Dependencies stage - heavily cached
+FROM base AS deps
+WORKDIR /workspace
+
+# Copy only dependency files first for maximum cache hit
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies with mount cache for uv
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=cache,target=/workspace/.venv \
+    uv sync --all-extras
+
+# Development stage - minimal rebuild
+FROM deps AS dev
+WORKDIR /workspace
+
+# Copy source code (changes frequently)
+COPY packages/ ./packages/
+
+# Verify environment is ready
+RUN uv run python -c "import sys; print(f'Python {sys.version}')" && \
+    uv run ruff --version && \
+    uv run pytest --version
+
+# Runtime stage for checks
+FROM dev AS runtime
+CMD ["bash", "-c", "echo 'Build environment ready'"]

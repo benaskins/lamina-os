@@ -1,0 +1,100 @@
+# Fast Build Environment Makefile
+.PHONY: all check format lint test build shell clean
+
+# Fast build with BuildKit and caching
+build:
+	DOCKER_BUILDKIT=1 docker build \
+		--target dev \
+		--tag lamina-build:fast \
+		--file Dockerfile.fast \
+		..
+
+# Build base layers only (for CI cache warming)
+build-base:
+	DOCKER_BUILDKIT=1 docker build \
+		--target deps \
+		--tag lamina-build:deps \
+		--file Dockerfile.fast \
+		..
+
+# Super fast checks (assumes container exists)
+check-fast:
+	docker run --rm \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast bash -c "\
+		echo '=== Ruff Lint ===' && \
+		uv run ruff check && \
+		echo '=== Ruff Format Check ===' && \
+		uv run ruff format --check && \
+		echo '=== Tests ===' && \
+		uv run pytest packages/lamina-core/tests/ -v"
+
+# Full check with build
+check: build check-fast
+
+# Parallel checks (experimental)
+check-parallel: build
+	@echo "Running parallel checks..."
+	@docker run --rm -d --name lamina-lint \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast uv run ruff check > /tmp/lint.log 2>&1 || true &
+	@docker run --rm -d --name lamina-format \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast uv run ruff format --check > /tmp/format.log 2>&1 || true &
+	@docker run --rm -d --name lamina-test \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast uv run pytest packages/lamina-core/tests/ -v > /tmp/test.log 2>&1 || true &
+	@wait
+	@echo "=== Lint Results ==="
+	@cat /tmp/lint.log
+	@echo "=== Format Results ==="
+	@cat /tmp/format.log
+	@echo "=== Test Results ==="
+	@cat /tmp/test.log
+
+# Auto-format code
+format: build
+	docker run --rm \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast bash -c "\
+		uv run ruff check --fix && \
+		uv run ruff format"
+
+# Just run linting
+lint: build
+	docker run --rm \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast bash -c "\
+		uv run ruff check && \
+		uv run ruff format --check"
+
+# Just run tests
+test: build
+	docker run --rm \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast \
+		uv run pytest packages/lamina-core/tests/ -v
+
+# Interactive shell for debugging
+shell: build
+	docker run --rm -it \
+		--mount type=bind,source=$(PWD)/..,target=/workspace \
+		lamina-build:fast bash
+
+# Check if fast container exists
+container-exists:
+	@docker images -q lamina-build:fast > /dev/null || (echo "❌ Fast container not built. Run 'make build' first." && exit 1)
+
+# Quick checks if container exists, full build if not
+smart-check:
+	@if docker images -q lamina-build:fast > /dev/null 2>&1; then \
+		echo "🚀 Using cached container..."; \
+		$(MAKE) check-fast; \
+	else \
+		echo "🔨 Building container first..."; \
+		$(MAKE) check; \
+	fi
+
+# Clean up
+clean:
+	docker rmi lamina-build:fast lamina-build:deps || true

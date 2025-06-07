@@ -10,8 +10,15 @@ The primary CLI tool for all model management operations. Provides a rich comman
 
 #### Command Structure
 
+**CRITICAL**: Always use `uv run` for Python commands in this workspace.
+
 ```bash
-python scripts/model-manager.py [global-options] <command> [command-options]
+# Environment setup (always first)
+cd packages/lamina-llm-serve
+uv sync
+
+# Run CLI tool
+uv run python scripts/model-manager.py [global-options] <command> [command-options]
 ```
 
 #### Global Options
@@ -23,33 +30,33 @@ python scripts/model-manager.py [global-options] <command> [command-options]
 
 **Model Information**
 ```bash
-list                    # List all models with status indicators
-validate               # Validate model availability
-info <model-name>      # Detailed model information
-stats                  # Collection statistics
+uv run python scripts/model-manager.py list                    # List all models with status indicators
+uv run python scripts/model-manager.py validate               # Validate model availability
+uv run python scripts/model-manager.py info <model-name>      # Detailed model information
+uv run python scripts/model-manager.py stats                  # Collection statistics
 ```
 
 **Backend Operations**
 ```bash
-backends               # Check backend availability and versions
+uv run python scripts/model-manager.py backends               # Check backend availability and versions
 ```
 
 **Model Discovery**
 ```bash
-suggest                # Suggest models based on requirements
+uv run python scripts/model-manager.py suggest                # Suggest models based on requirements
   --use-case <case>    # Filter by use case (conversational, analytical, etc.)
   --category <cat>     # Filter by category (lightweight, balanced, reasoning)
 ```
 
 **Download Operations**
 ```bash
-list-downloadable      # List all downloadable models
+uv run python scripts/model-manager.py list-downloadable      # List all downloadable models
   --source <source>    # Filter by source (huggingface, ollama)
 
-download <model>       # Download a specific model
+uv run python scripts/model-manager.py download <model>       # Download a specific model
   --source <source>    # Specify download source
 
-install <model> <path> # Install model from local path
+uv run python scripts/model-manager.py install <model> <path> # Install model from local path
 ```
 
 ## Implementation Patterns
@@ -110,6 +117,14 @@ args.func(manager, args)
    - Invalid/missing models
    - Backend unavailability
    - Network issues (for downloads)
+
+4. **Verify with containerized CI** (MANDATORY):
+   ```bash
+   # From project root - ALWAYS run before pushing
+   ./scripts/check-build.sh
+   ```
+   
+   **PIR Lesson**: Never assume CLI changes work without containerized verification.
 
 ## CLI Design Principles
 
