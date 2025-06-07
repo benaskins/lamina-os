@@ -1,0 +1,42 @@
+# Secure Lamina OS Build Environment
+# Alpine-based for minimal attack surface
+
+# Use specific Python Alpine image with digest pinning
+FROM python:3.12-alpine3.19
+
+# Install security updates
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache \
+        git \
+        curl \
+        make \
+        gcc \
+        musl-dev \
+        linux-headers && \
+    rm -rf /var/cache/apk/*
+
+# Install uv for Python package management
+RUN pip install --no-cache-dir uv
+
+# Create non-root user
+RUN addgroup -g 1001 -S lamina && \
+    adduser -u 1001 -S lamina -G lamina
+
+# Create workspace with correct permissions
+RUN mkdir -p /workspace && \
+    chown -R lamina:lamina /workspace
+
+# Switch to non-root user
+USER lamina
+WORKDIR /workspace
+
+# Copy project files (as non-root)
+COPY --chown=lamina:lamina pyproject.toml uv.lock ./
+COPY --chown=lamina:lamina packages/ ./packages/
+
+# Install dependencies as non-root
+RUN uv sync --extra dev
+
+# Default command runs all checks
+CMD ["make", "check"]
