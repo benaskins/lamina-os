@@ -56,12 +56,8 @@ paths = [
 ]
 
 # Global settings
-[allowlist.commits]
-# Allow specific commits if needed
-# commits = ["commit-hash-here"]
-
-[allowlist.paths]
-# Additional paths to ignore
+[[allowlist]]
+description = "Configuration and documentation files"
 paths = [
     '''.gitleaks.toml''',
     '''terraform.tfvars.example''',
