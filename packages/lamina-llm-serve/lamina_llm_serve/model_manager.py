@@ -149,14 +149,28 @@ class ModelManager:
         Returns:
             Name of suggested model or None
         """
-        # Start with use case default if specified
         use_case = requirements.get("use_case")
+
+        # Start with use case default if specified
         if use_case and use_case in self.defaults:
             suggested = self.defaults[use_case]
             if self.is_model_available(suggested):
                 return suggested
 
-        # Try category-based selection
+        # Try to match models by use_case in model metadata
+        if use_case:
+            for model_name, model_info in self.models.items():
+                model_use_cases = model_info.get("use_cases", [])
+                if use_case in model_use_cases and self.is_model_available(model_name):
+                    return model_name
+
+        # Try category-based selection (categories is use_case mapped to model lists)
+        if use_case and use_case in self.categories:
+            for model_name in self.categories[use_case]:
+                if self.is_model_available(model_name):
+                    return model_name
+
+        # Try explicit category parameter
         category = requirements.get("category")
         if category and category in self.categories:
             for model_name in self.categories[category]:

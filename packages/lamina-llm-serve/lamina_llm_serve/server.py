@@ -193,6 +193,10 @@ class LLMServer:
         def chat_completions():
             """OpenAI-compatible chat completions endpoint"""
             try:
+                # Check content type first
+                if not request.is_json:
+                    return jsonify({"error": "Content-Type must be application/json"}), 400
+
                 request_data = request.get_json()
                 if not request_data:
                     return jsonify({"error": "Invalid JSON request"}), 400

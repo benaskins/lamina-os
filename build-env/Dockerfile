@@ -23,8 +23,8 @@ WORKDIR /workspace
 COPY pyproject.toml uv.lock ./
 COPY packages/ ./packages/
 
-# Install dependencies
-RUN uv sync --extra dev
+# Install all dependencies including dev tools
+RUN uv sync --all-extras
 
 # Default command runs all checks
 CMD ["make", "check"]

@@ -11,7 +11,7 @@ lamina-llm-serve = { workspace = true }
 
 [project]
 name = "lamina-os-workspace"
-version = "0.2.0"
+version = "0.2.1"
 description = "Workspace for Lamina OS packages"
 requires-python = ">=3.11"
 dependencies = [

@@ -10,6 +10,10 @@ on:
       - '.github/workflows/**'
       - 'pyproject.toml'
       - 'uv.lock'
+      - 'build-env/**'
+      - '.gitleaks.toml'
+      - '.pre-commit-config.yaml'
+      - 'scripts/**'
   schedule:
     # Run full security scans weekly (not daily - too much)
     - cron: '0 2 * * 1'  # Monday 2 AM UTC
