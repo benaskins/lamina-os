@@ -7,6 +7,24 @@ on:
     branches: [main, develop]
 
 jobs:
+  # Terraform drift detection for infrastructure changes
+  terraform-drift:
+    name: Terraform Drift Check
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' && 
+      contains(github.event.pull_request.labels.*.name, 'infrastructure') ||
+      contains(github.event.pull_request.title, 'terraform') ||
+      contains(github.event.pull_request.title, 'Terraform')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run drift detection
+      uses: ./.github/workflows/terraform-drift.yml
+      with:
+        workflow_call: true
+
   test:
     runs-on: ubuntu-latest
     strategy:
