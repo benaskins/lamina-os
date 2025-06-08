@@ -1,0 +1,143 @@
+# 🜄 Lamina OS Production K3s Configuration
+# Optimized for Apple Silicon Mac hardware
+# Production-grade single-node cluster with high availability services
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k3s-production-config
+  namespace: kube-system
+data:
+  config.yaml: |
+    # K3s server configuration for mac production
+    
+    # Disable default ingress (we'll install nginx-ingress)
+    disable:
+      - traefik
+      - servicelb  # Use MetalLB instead
+    
+    # Cluster networking
+    cluster-cidr: "10.42.0.0/16"
+    service-cidr: "10.43.0.0/16"
+    cluster-dns: "10.43.0.10"
+    
+    # Performance optimizations for M3 Ultra (512GB RAM)
+    kubelet-arg:
+      - "--max-pods=1000"                   # High pod density for massive memory
+      - "--kube-reserved=cpu=4000m,memory=16Gi"  # Substantial k8s resources
+      - "--system-reserved=cpu=2000m,memory=8Gi"  # Reserve for macOS + background
+      - "--eviction-hard=memory.available<32Gi"   # Large safety buffer
+      - "--eviction-soft=memory.available<64Gi"   # Gradual eviction threshold
+      - "--eviction-soft-grace-period=memory.available=300s"
+      - "--image-gc-high-threshold=85"      # More aggressive cleanup for many pods
+      - "--image-gc-low-threshold=75"
+      - "--serialize-image-pulls=false"     # Parallel image pulls (fast SSD)
+      - "--cpu-manager-policy=static"       # CPU pinning for performance
+      - "--topology-manager-policy=single-numa-node"  # NUMA awareness
+    
+    # API server optimizations for high-throughput workloads
+    kube-apiserver-arg:
+      - "--max-requests-inflight=2000"     # Handle massive concurrent requests
+      - "--max-mutating-requests-inflight=1000"
+      - "--request-timeout=600s"           # Extended timeout for large model operations
+      - "--target-ram-mb=8192"             # Large API server memory cache
+      - "--watch-cache-sizes=persistentvolumes#1000,nodes#1000,pods#5000"
+    
+    # Controller manager optimizations for large clusters
+    kube-controller-manager-arg:
+      - "--concurrent-deployment-syncs=50"  # Much faster deployments
+      - "--concurrent-service-syncs=25"
+      - "--concurrent-namespace-syncs=20"
+      - "--concurrent-resource-quota-syncs=10"
+      - "--node-monitor-grace-period=60s"   # Longer grace for heavy workloads
+    
+    # etcd optimizations for massive scale and fast SSD
+    etcd-arg:
+      - "--quota-backend-bytes=53687091200"  # 50GB etcd database (huge clusters)
+      - "--auto-compaction-retention=30m"    # Very frequent compaction
+      - "--auto-compaction-mode=periodic"
+      - "--max-request-bytes=10485760"       # 10MB max request size
+      - "--grpc-keepalive-timeout=10s"       # Faster keepalive for responsiveness
+      - "--grpc-keepalive-interval=5s"
+    
+    # Flannel networking (optimized for single node)
+    flannel-backend: "host-gw"  # Fastest option for single node
+    
+    # Data directory on fast SSD
+    data-dir: "/opt/lamina/k3s"
+    
+    # Enable features needed for production
+    feature-gates:
+      - "MixedProtocolLBService=true"       # Mixed protocol load balancers
+      - "EphemeralContainers=true"          # Debugging support
+      - "CSIStorageCapacity=true"           # Storage capacity tracking
+---
+# Mac-specific storage class for fast NVMe SSD
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mac-ssd-fast
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: rancher.io/local-path
+parameters:
+  # Store on fast SSD with optimized mount options
+  basePath: /opt/lamina/storage
+  mountOptions: "noatime,nodiratime"
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+---
+# Resource quotas for production namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: lamina-production-quota
+  namespace: lamina-production
+spec:
+  hard:
+    # Memory allocation (Conservative - sharing with Colima)
+    # Reserve 256GB for: macOS (64GB) + Colima (32GB) + Buffer (160GB)
+    requests.memory: "200Gi"
+    limits.memory: "256Gi"
+    
+    # CPU allocation (Conservative - sharing with development)
+    # Reserve 14 cores for: macOS (4) + Colima (4) + Development (6)
+    requests.cpu: "12"
+    limits.cpu: "14"
+    
+    # Storage allocation (Realistic disk usage)
+    # ~400GB for models/data, leaving 400GB for macOS/Colima/development
+    requests.storage: "300Gi"
+    persistentvolumeclaims: "50"
+    
+    # Object limits for realistic production deployment
+    pods: "200"
+    services: "50"
+    secrets: "100"
+    configmaps: "100"
+    replicationcontrollers: "20"
+    deployments.apps: "50"
+    statefulsets.apps: "10"
+---
+# Network policy for production security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lamina-production-netpol
+  namespace: lamina-production
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-production
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  egress:
+  - to: []  # Allow all egress for model downloads

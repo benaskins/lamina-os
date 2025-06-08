@@ -1,0 +1,89 @@
+{{- if .Values.grafana.enabled }}
+---
+# Grafana ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: {{ .Values.namespace }}
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    {{- if .Values.prometheus.enabled }}
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus:9090
+      isDefault: true
+    {{- end }}
+    {{- if .Values.loki.enabled }}
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki:3100
+    {{- end }}
+---
+# Grafana Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: {{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}
+        imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "{{ .Values.grafana.adminPassword }}"
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        volumeMounts:
+        - name: grafana-datasources
+          mountPath: /etc/grafana/provisioning/datasources
+        - name: grafana-storage
+          mountPath: /var/lib/grafana
+        resources:
+{{ toYaml .Values.grafana.resources | indent 10 }}
+      volumes:
+      - name: grafana-datasources
+        configMap:
+          name: grafana-datasources
+      - name: grafana-storage
+        emptyDir: {}
+---
+# Grafana Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: grafana
+spec:
+  type: {{ .Values.serviceExposure.type | default .Values.grafana.service.type }}
+  selector:
+    app: grafana
+  ports:
+  - port: {{ .Values.grafana.service.port }}
+    targetPort: 3000
+    {{- if and (eq (.Values.serviceExposure.type | default .Values.grafana.service.type) "NodePort") .Values.serviceExposure.grafana.nodePort }}
+    nodePort: {{ .Values.serviceExposure.grafana.nodePort }}
+    {{- end }}
+    name: http
+{{- end }}

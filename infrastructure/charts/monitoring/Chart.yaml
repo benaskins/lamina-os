@@ -1,0 +1,15 @@
+apiVersion: v2
+name: monitoring
+description: Simple monitoring stack for Lamina OS
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - monitoring
+  - prometheus
+  - grafana
+  - loki
+  - vector
+maintainers:
+  - name: Lamina Team
+    email: support@getlamina.ai
