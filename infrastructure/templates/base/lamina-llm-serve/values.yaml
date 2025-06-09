@@ -59,6 +59,7 @@ securityContext:
   runAsGroup: 1000
 
 # Node selection
-nodeSelector: {}
+nodeSelector: 
+  kubernetes.io/hostname: "colima-production"  # Default for Colima target
 tolerations: []
 affinity: {}

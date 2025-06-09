@@ -3,19 +3,26 @@
 # This script completely removes the k3s cluster and Colima environment
 # WITH VERIFICATION at each step
 #
-# Usage: ./teardown.sh [--env ENVIRONMENT]
+# Usage: ./teardown.sh [--env ENVIRONMENT] [--resources-only]
 # Example: ./teardown.sh --env production
+# Example: ./teardown.sh --env production --resources-only
 
 # Parse command line arguments
 ENV="production"  # Default environment
+RESOURCES_ONLY=false
 while [ $# -gt 0 ]; do
     case $1 in
         --env)
             ENV="$2"
             shift 2
             ;;
+        --resources-only)
+            RESOURCES_ONLY=true
+            shift 1
+            ;;
         *)
             printf "Error: Unknown argument: %s\n" "$1" >&2
+            printf "Usage: %s [--env ENVIRONMENT] [--resources-only]\n" "$0" >&2
             exit 1
             ;;
     esac
@@ -104,19 +111,33 @@ verify_removed() {
 confirm_teardown() {
     section "TEARDOWN CONFIRMATION"
     
-    lamina_warn "This will completely destroy the production cluster and all data!"
-    echo "This includes:"
-    echo "  • k3d production cluster"
-    echo "  • All deployed applications and data"
-    echo "  • Colima production profile"
-    echo "  • All persistent volumes"
-    echo "  • All logs not yet ingested"
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        lamina_warn "This will remove all deployed applications but preserve the cluster!"
+        echo "This includes:"
+        echo "  • All Helm releases and applications"
+        echo "  • All deployed namespaces and resources"
+        echo "  • All application data (not persistent volumes)"
+        echo
+        echo "This preserves:"
+        echo "  • k3s cluster and Colima VM"
+        echo "  • Cluster configuration"
+        echo "  • Persistent volumes (if any)"
+        echo "  • Network configuration"
+    else
+        lamina_warn "This will completely destroy the production cluster and all data!"
+        echo "This includes:"
+        echo "  • k3d production cluster"
+        echo "  • All deployed applications and data"
+        echo "  • Colima production profile"
+        echo "  • All persistent volumes"
+        echo "  • All logs not yet ingested"
+    fi
     echo
     
     # Show what will be removed
     lamina_info "Current state:"
     if command -v k3d >/dev/null 2>&1 && k3d cluster list | grep -q production; then
-        echo "  • k3d cluster: production (ACTIVE)"
+        echo "  • k3s cluster: production (ACTIVE)"
     fi
     if command -v colima >/dev/null 2>&1 && colima list 2>/dev/null | grep -q colima-production; then
         echo "  • Colima profile: colima-production"
@@ -128,7 +149,11 @@ confirm_teardown() {
     
     echo
     # Auto-confirm teardown for automation
-    lamina_log "Auto-confirming teardown for automation..."
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        lamina_log "Auto-confirming resources-only cleanup for automation..."
+    else
+        lamina_log "Auto-confirming full teardown for automation..."
+    fi
     
 }
 
@@ -196,6 +221,18 @@ remove_helm_releases() {
         lamina_warn "$remaining Helm releases still remain"
     else
         lamina_log "All Helm releases successfully removed"
+    fi
+    
+    # Clean up released persistent volumes to prevent future binding issues
+    lamina_progress "Cleaning up released persistent volumes..."
+    if kubectl get pv >/dev/null 2>&1; then
+        released_pvs=$(kubectl get pv -o jsonpath='{.items[?(@.status.phase=="Released")].metadata.name}' 2>/dev/null || echo "")
+        if [ -n "$released_pvs" ]; then
+            echo "$released_pvs" | xargs kubectl delete pv 2>/dev/null || true
+            lamina_log "Cleaned up released persistent volumes"
+        else
+            lamina_log "No released persistent volumes found"
+        fi
     fi
     
     # Clean up namespaces that might have been left behind
@@ -379,41 +416,63 @@ verify_teardown_complete() {
     
     verification_passed=true
     
-    # Check k3d clusters
-    lamina_progress "Checking for k3d clusters..."
-    if k3d cluster list | grep -q "production"; then
-        lamina_error "k3d production cluster still exists"
-        verification_passed=false
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        # Resources-only mode: only check that Helm releases are gone
+        lamina_progress "Checking for remaining Helm releases..."
+        remaining=$(helm list --all-namespaces 2>/dev/null | grep -v NAME | wc -l | tr -d ' ')
+        if [ "$remaining" -gt 0 ]; then
+            lamina_error "$remaining Helm releases still remain"
+            verification_passed=false
+        else
+            lamina_log "All Helm releases successfully removed ✓"
+        fi
+        
+        # Verify cluster is still accessible
+        lamina_progress "Verifying cluster is still accessible..."
+        if kubectl cluster-info >/dev/null 2>&1; then
+            lamina_log "Cluster still accessible ✓"
+        else
+            lamina_error "Cluster is no longer accessible"
+            verification_passed=false
+        fi
     else
-        lamina_log "No k3d production cluster found ✓"
-    fi
-    
-    # Check Colima profiles
-    lamina_progress "Checking for Colima profiles..."
-    if colima list 2>/dev/null | grep -q "colima-production"; then
-        lamina_error "Colima production profile still exists"
-        verification_passed=false
-    else
-        lamina_log "No Colima production profile found ✓"
-    fi
-    
-    # Check Docker resources
-    lamina_progress "Checking for Docker resources..."
-    docker_resources=$(docker ps -a --filter "name=k3d-production" --format "{{.Names}}" 2>/dev/null | wc -l | tr -d ' ')
-    if [ "$docker_resources" -gt 0 ]; then
-        lamina_error "$docker_resources Docker containers still exist"
-        verification_passed=false
-    else
-        lamina_log "No k3d Docker containers found ✓"
-    fi
-    
-    # Check kubectl contexts
-    lamina_progress "Checking for kubectl contexts..."
-    if kubectl config get-contexts 2>/dev/null | grep -q "k3d-production"; then
-        lamina_error "kubectl contexts still exist for k3d-production"
-        verification_passed=false
-    else
-        lamina_log "No k3d kubectl contexts found ✓"
+        # Full teardown mode: check everything is gone
+        # Check k3d clusters
+        lamina_progress "Checking for k3d clusters..."
+        if k3d cluster list | grep -q "production"; then
+            lamina_error "k3d production cluster still exists"
+            verification_passed=false
+        else
+            lamina_log "No k3d production cluster found ✓"
+        fi
+        
+        # Check Colima profiles
+        lamina_progress "Checking for Colima profiles..."
+        if colima list 2>/dev/null | grep -q "colima-production"; then
+            lamina_error "Colima production profile still exists"
+            verification_passed=false
+        else
+            lamina_log "No Colima production profile found ✓"
+        fi
+        
+        # Check Docker resources
+        lamina_progress "Checking for Docker resources..."
+        docker_resources=$(docker ps -a --filter "name=k3d-production" --format "{{.Names}}" 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$docker_resources" -gt 0 ]; then
+            lamina_error "$docker_resources Docker containers still exist"
+            verification_passed=false
+        else
+            lamina_log "No k3d Docker containers found ✓"
+        fi
+        
+        # Check kubectl contexts
+        lamina_progress "Checking for kubectl contexts..."
+        if kubectl config get-contexts 2>/dev/null | grep -q "k3d-production"; then
+            lamina_error "kubectl contexts still exist for k3d-production"
+            verification_passed=false
+        else
+            lamina_log "No k3d kubectl contexts found ✓"
+        fi
     fi
     
     [ "$verification_passed" = "true" ]
@@ -427,15 +486,26 @@ display_completion_message() {
     if [ "$status" = "success" ]; then
         echo
         printf "%s╔══════════════════════════════════════════════════════════╗%s\n" "$GREEN" "$NC"
-        printf "%s║           TEARDOWN COMPLETED SUCCESSFULLY! 🧹            ║%s\n" "$GREEN" "$NC"
-        printf "%s╠══════════════════════════════════════════════════════════╣%s\n" "$GREEN" "$NC"
-        printf "%s║%s ✅ All components successfully removed\n" "$GREEN" "$NC"
+        if [ "$RESOURCES_ONLY" = "true" ]; then
+            printf "%s║         RESOURCES CLEANUP COMPLETED! 🧹                  ║%s\n" "$GREEN" "$NC"
+            printf "%s╠══════════════════════════════════════════════════════════╣%s\n" "$GREEN" "$NC"
+            printf "%s║%s ✅ All applications successfully removed\n" "$GREEN" "$NC"
+            printf "%s║%s ✅ Cluster infrastructure preserved\n" "$GREEN" "$NC"
+        else
+            printf "%s║           TEARDOWN COMPLETED SUCCESSFULLY! 🧹            ║%s\n" "$GREEN" "$NC"
+            printf "%s╠══════════════════════════════════════════════════════════╣%s\n" "$GREEN" "$NC"
+            printf "%s║%s ✅ All components successfully removed\n" "$GREEN" "$NC"
+        fi
         printf "%s║%s Duration: %dm %ds\n" "$GREEN" "$NC" $((duration/60)) $((duration%60))
         printf "%s╚══════════════════════════════════════════════════════════╝%s\n" "$GREEN" "$NC"
     else
         echo
         printf "%s╔══════════════════════════════════════════════════════════╗%s\n" "$RED" "$NC"
-        printf "%s║           TEARDOWN COMPLETED WITH ERRORS! ⚠️             ║%s\n" "$RED" "$NC"
+        if [ "$RESOURCES_ONLY" = "true" ]; then
+            printf "%s║        RESOURCES CLEANUP COMPLETED WITH ERRORS! ⚠️       ║%s\n" "$RED" "$NC"
+        else
+            printf "%s║           TEARDOWN COMPLETED WITH ERRORS! ⚠️             ║%s\n" "$RED" "$NC"
+        fi
         printf "%s╠══════════════════════════════════════════════════════════╣%s\n" "$RED" "$NC"
         printf "%s║%s Some components may still exist\n" "$RED" "$NC"
         printf "%s║%s Duration: %dm %ds\n" "$RED" "$NC" $((duration/60)) $((duration%60))
@@ -443,25 +513,41 @@ display_completion_message() {
     fi
     
     echo
-    echo "The system is ready for a fresh setup."
-    echo "Run './setup.sh --env production' to recreate the cluster."
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        echo "Cluster infrastructure preserved and ready for redeployment."
+        echo "Run './setup.sh --env $ENV' to redeploy applications."
+    else
+        echo "The system is ready for a fresh setup."
+        echo "Run './setup.sh --env production' to recreate the cluster."
+    fi
 }
 
 # Main execution
 main() {
     clear
     printf "%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n" "$PURPLE" "$NC"
-    printf "%s     %s CLUSTER TEARDOWN       %s\n" "$PURPLE" "$(echo "$ENV" | tr '[:lower:]' '[:upper:]')" "$NC"
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        printf "%s     %s RESOURCES CLEANUP       %s\n" "$PURPLE" "$(echo "$ENV" | tr '[:lower:]' '[:upper:]')" "$NC"
+    else
+        printf "%s     %s CLUSTER TEARDOWN       %s\n" "$PURPLE" "$(echo "$ENV" | tr '[:lower:]' '[:upper:]')" "$NC"
+    fi
     printf "%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n" "$PURPLE" "$NC"
     
     confirm_teardown
     
-    # Execute teardown steps
-    remove_helm_releases
-    remove_k3d_cluster
-    remove_colima_profile
-    cleanup_docker_resources
-    reset_kubectl_context
+    # Execute teardown steps based on mode
+    if [ "$RESOURCES_ONLY" = "true" ]; then
+        # Resources-only mode: just remove applications
+        remove_helm_releases
+        lamina_log "Resources-only cleanup completed - cluster preserved"
+    else
+        # Full teardown mode: remove everything
+        remove_helm_releases
+        remove_k3d_cluster
+        remove_colima_profile
+        cleanup_docker_resources
+        reset_kubectl_context
+    fi
     
     # Verify and report
     teardown_end=$(date +%s)

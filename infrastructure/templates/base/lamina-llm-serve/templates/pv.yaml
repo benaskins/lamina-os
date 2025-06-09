@@ -11,9 +11,17 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain  # Keep data when PVC is deleted
-  storageClassName: lamina-host-storage
+  storageClassName: {{ .Values.models.storage.storageClass | default "lamina-host-storage" }}
   hostPath:
     path: /lamina-data/models
     type: DirectoryOrCreate
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ index .Values.nodeSelector "kubernetes.io/hostname" | default "colima-production" }}
 # Note: StorageClass is created by istio-config chart to avoid duplication
 {{- end }}

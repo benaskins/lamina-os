@@ -32,11 +32,9 @@ printf "SETUP SCRIPT STARTING - ENVIRONMENT: %s\n" "$ENV"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET_DIR="$SCRIPT_DIR"
 INFRA_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-TEMPLATES_DIR="$INFRA_DIR/templates"
-CHARTS_DIR="$TEMPLATES_DIR/charts"
-LIB_DIR="$TEMPLATES_DIR/scripts"
-VALUES_DIR="$TARGET_DIR/values"
-CONFIGS_DIR="$TARGET_DIR/configs"
+BASE_CHARTS_DIR="$INFRA_DIR/templates/base"
+TARGET_CHARTS_DIR="$INFRA_DIR/templates/targets/colima-k3s"
+ENV_VALUES_DIR="$INFRA_DIR/environments"
 ENV_DIR="$INFRA_DIR/../environments/$ENV"
 
 # Colors for output (POSIX compatible)
@@ -250,7 +248,7 @@ install_metallb() {
         --timeout=300s
     
     # Install/upgrade MetalLB configuration (idempotent)
-    helm upgrade --install metallb-config "$CONFIGS_DIR/metallb" \
+    helm upgrade --install metallb-config "$TARGET_CHARTS_DIR/metallb" \
         --namespace metallb-system \
         --wait
     
@@ -289,10 +287,22 @@ install_istio() {
 install_monitoring() {
     lamina_log "Installing monitoring stack..."
     
+    # Extract monitoring values from environment config
+    local env_values="$ENV_VALUES_DIR/$ENV/values.yaml"
+    local temp_values="/tmp/monitoring-values.yaml"
+    
+    # Extract monitoring section for this deployment
+    if command -v yq >/dev/null 2>&1; then
+        yq eval '.monitoring' "$env_values" > "$temp_values"
+    else
+        # Fallback - use the entire environment file and let Helm ignore non-matching keys
+        cp "$env_values" "$temp_values"
+    fi
+    
     # Install/upgrade monitoring stack (Prometheus, Grafana, Loki, Vector) - idempotent
-    helm upgrade --install monitoring "$CHARTS_DIR/monitoring" \
+    helm upgrade --install monitoring "$BASE_CHARTS_DIR/monitoring" \
         --namespace monitoring \
-        --values "$VALUES_DIR/monitoring-values.yaml" \
+        --values "$temp_values" \
         --wait
     
     lamina_log "Monitoring stack installed"
@@ -302,10 +312,22 @@ install_monitoring() {
 install_observability() {
     lamina_log "Installing observability stack..."
     
+    # Extract observability values from environment config
+    local env_values="$ENV_VALUES_DIR/$ENV/values.yaml"
+    local temp_values="/tmp/observability-values.yaml"
+    
+    # Extract observability section for this deployment
+    if command -v yq >/dev/null 2>&1; then
+        yq eval '.observability' "$env_values" > "$temp_values"
+    else
+        # Fallback - use the entire environment file and let Helm ignore non-matching keys
+        cp "$env_values" "$temp_values"
+    fi
+    
     # Install/upgrade observability stack (Jaeger, Kiali) - idempotent
-    helm upgrade --install observability "$CHARTS_DIR/observability" \
+    helm upgrade --install observability "$BASE_CHARTS_DIR/observability" \
         --namespace observability \
-        --values "$VALUES_DIR/observability-values.yaml" \
+        --values "$temp_values" \
         --wait
     
     lamina_log "Observability stack installed"
@@ -317,12 +339,12 @@ install_istio_config() {
     
     # Update chart dependencies before installation
     lamina_progress "Updating chart dependencies for colima-service-mesh..."
-    cd "$TARGET_DIR/charts/colima-service-mesh"
+    cd "$TARGET_CHARTS_DIR/colima-service-mesh"
     helm dependency update
     cd - >/dev/null
     
     # Install/upgrade Istio configuration (mTLS, gateways, telemetry) - idempotent
-    helm upgrade --install colima-service-mesh "$TARGET_DIR/charts/colima-service-mesh" \
+    helm upgrade --install colima-service-mesh "$TARGET_CHARTS_DIR/colima-service-mesh" \
         --namespace istio-system \
         --wait
     
@@ -332,6 +354,18 @@ install_istio_config() {
 # Install Lamina LLM Serve
 install_lamina_llm_serve() {
     lamina_log "Installing Lamina LLM Serve..."
+    
+    # Clean up any released persistent volumes that might conflict
+    lamina_progress "Cleaning up any released persistent volumes..."
+    if kubectl get pv >/dev/null 2>&1; then
+        released_pvs=$(kubectl get pv -o jsonpath='{.items[?(@.status.phase=="Released")].metadata.name}' 2>/dev/null || echo "")
+        if [ -n "$released_pvs" ]; then
+            echo "$released_pvs" | xargs kubectl delete pv 2>/dev/null || true
+            lamina_log "Cleaned up released persistent volumes"
+        else
+            lamina_log "No released persistent volumes found"
+        fi
+    fi
     
     # Build and load lamina-llm-serve Docker image
     local package_dir="$INFRA_DIR/../packages/lamina-llm-serve"
@@ -353,10 +387,22 @@ install_lamina_llm_serve() {
         lamina_warn "No Dockerfile or image tar found, assuming image is already available"
     fi
     
+    # Extract lamina-llm-serve values from environment config
+    local env_values="$ENV_VALUES_DIR/$ENV/values.yaml"
+    local temp_values="/tmp/lamina-llm-serve-values.yaml"
+    
+    # Extract lamina-llm-serve section for this deployment
+    if command -v yq >/dev/null 2>&1; then
+        yq eval '.lamina-llm-serve' "$env_values" > "$temp_values"
+    else
+        # Fallback - use the entire environment file and let Helm ignore non-matching keys
+        cp "$env_values" "$temp_values"
+    fi
+    
     # Install/upgrade Lamina LLM Serve chart - idempotent
-    helm upgrade --install lamina-llm-serve "$CHARTS_DIR/lamina-llm-serve" \
+    helm upgrade --install lamina-llm-serve "$BASE_CHARTS_DIR/lamina-llm-serve" \
         --namespace lamina-llm-serve \
-        --values "$VALUES_DIR/lamina-llm-serve-values.yaml" \
+        --values "$temp_values" \
         --wait
     
     # Force rolling restart to pick up rebuilt image

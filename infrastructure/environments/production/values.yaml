@@ -1,0 +1,238 @@
+# Production environment configuration
+# Scaled and hardened for production deployment
+
+# Global configuration
+global:
+  target: production
+  environment: production
+  
+# Lamina LLM Serve configuration
+lamina-llm-serve:
+  replicaCount: 3  # HA for production
+  
+  image:
+    repository: lamina-llm-serve
+    tag: "stable"  # Use tagged releases in production
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  ingress:
+    enabled: true
+    hostname: llm.lamina.ai  # Production domain
+  
+  istio:
+    enabled: true
+    gateway: istio-system/lamina-gateway
+  
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+  
+  # Model configuration
+  models:
+    downloadOnStartup: false  # Pre-loaded in production
+    storage:
+      size: 500Gi  # Larger storage for production
+      storageClass: "fast-ssd"
+  
+  env:
+    - name: PYTHONPATH
+      value: "/app"
+    - name: FLASK_ENV
+      value: "production"
+  
+  healthCheck:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    failureThreshold: 3
+  
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+    runAsGroup: 1000
+
+# Monitoring stack configuration
+monitoring:
+  namespace: monitoring
+  
+  prometheus:
+    enabled: true
+    image:
+      repository: prom/prometheus
+      tag: v2.45.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+    retention: 30d  # Longer retention for production
+    scrapeInterval: 15s  # More frequent scraping
+    persistence:
+      enabled: true
+      size: 200Gi
+  
+  loki:
+    enabled: true
+    image:
+      repository: grafana/loki
+      tag: 2.9.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    persistence:
+      enabled: true
+      size: 200Gi
+  
+  vector:
+    enabled: true
+    image:
+      repository: timberio/vector
+      tag: 0.34.0-alpine
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  
+  grafana:
+    enabled: true
+    image:
+      repository: grafana/grafana
+      tag: 10.0.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    adminPassword: "${GRAFANA_ADMIN_PASSWORD}"  # From secret
+    service:
+      type: ClusterIP
+      port: 3000
+    persistence:
+      enabled: true
+      size: 50Gi
+  
+  kubeStateMetrics:
+    enabled: true
+    image:
+      repository: registry.k8s.io/kube-state-metrics/kube-state-metrics
+      tag: v2.10.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  
+  ingress:
+    enabled: true
+    className: "nginx"
+    grafana:
+      host: grafana.lamina.ai
+      path: /
+      pathType: Prefix
+    prometheus:
+      host: prometheus.lamina.ai
+      path: /
+      pathType: Prefix
+    tls: true
+    secretName: "lamina-tls"
+  
+  serviceExposure:
+    type: ClusterIP
+
+# Observability stack configuration
+observability:
+  namespace: observability
+  
+  jaeger:
+    enabled: true
+    strategy: production  # Distributed setup
+    replicas: 3  # HA for production
+    
+    collector:
+      image: jaegertracing/jaeger-collector:1.61.0
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+    
+    query:
+      image: jaegertracing/jaeger-query:1.61.0
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+      
+      service:
+        type: ClusterIP
+        ports:
+          - port: 16686
+            targetPort: 16686
+            name: query
+  
+  kiali:
+    enabled: true
+    replicas: 2  # HA for production
+    
+    auth:
+      strategy: openid  # Proper auth for production
+    
+    external_services:
+      prometheus:
+        url: http://prometheus.monitoring.svc.cluster.local:9090
+      jaeger:
+        in_cluster_url: http://jaeger-query.observability.svc.cluster.local:16686
+        use_grpc: true
+        grpc_port: 9090
+      grafana:
+        in_cluster_url: http://grafana.monitoring.svc.cluster.local:3000
+        url: http://grafana.monitoring.svc.cluster.local:3000
+    
+    service:
+      type: ClusterIP
+      port: 20001
+    
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  
+  opentelemetry:
+    enabled: true  # Enable for production observability
