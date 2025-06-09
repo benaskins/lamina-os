@@ -64,7 +64,9 @@ grafana:
     limits:
       cpu: 200m
       memory: 256Mi
-  adminPassword: admin
+  # adminPassword will be generated or provided via secret
+  existingSecret: ""
+  secretKey: "admin-password"
   service:
     type: ClusterIP
     port: 3000

@@ -1,5 +1,19 @@
 {{- if .Values.grafana.enabled }}
 ---
+# Grafana Admin Password Secret (Generated)
+{{- if not .Values.grafana.existingSecret }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-admin-secret
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: grafana
+type: Opaque
+data:
+  {{ .Values.grafana.secretKey }}: {{ "admin" | b64enc }}
+{{- end }}
+---
 # Grafana ConfigMap
 apiVersion: v1
 kind: ConfigMap
@@ -50,7 +64,10 @@ spec:
         - containerPort: 3000
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
-          value: "{{ .Values.grafana.adminPassword }}"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.grafana.existingSecret | default "grafana-admin-secret" }}
+              key: {{ .Values.grafana.secretKey }}
         - name: GF_USERS_ALLOW_SIGN_UP
           value: "false"
         volumeMounts:
