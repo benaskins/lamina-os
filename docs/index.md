@@ -2,6 +2,10 @@
 
 **A breath-first AI development framework**
 
+> ⚠️ **PRE-ALPHA SOFTWARE WARNING**
+> 
+> Lamina OS is currently in pre-alpha development and is NOT suitable for production use. The framework is under active development with rapidly changing APIs, incomplete features, and potential security vulnerabilities. Use for research, experimentation, and development only. Do not deploy in production environments or use with sensitive data.
+
 ---
 
 Lamina OS is a presence-aware AI development framework that prioritizes ethical, mindful, and technically sophisticated approaches to building AI systems. Built on breath-first principles, it provides the foundation for creating AI agents that operate with deliberate intention and embedded ethical constraints.

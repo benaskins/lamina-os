@@ -8,6 +8,10 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![License: MPL-2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
+> ⚠️ **PRE-ALPHA SOFTWARE WARNING**
+> 
+> Lamina OS is currently in pre-alpha development and is NOT suitable for production use. The framework is under active development with rapidly changing APIs, incomplete features, and potential security vulnerabilities. Use for research, experimentation, and development only. Do not deploy in production environments or use with sensitive data.
+
 Lamina OS is a symbolic operating system framework that enables developers to build **non-human agents of presence** with **breath-based modulation** — mindful, deliberate operations that prioritize attunement over speed. Instead of traditional reactive AI systems, Lamina agents operate through rhythmic constraint application and symbolic reasoning.
 
 ## 🌱 Core Philosophy
