@@ -1,0 +1,73 @@
+# Vector configuration for trace correlation
+{{- if .Values.vector.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vector-tracing-config
+  namespace: {{ .Values.namespace }}
+data:
+  vector-tracing.toml: |
+    # Enhanced Vector config with tracing support
+    [sources.kubernetes_logs]
+    type = "kubernetes_logs"
+    
+    [transforms.parse_logs]
+    type = "remap"
+    inputs = ["kubernetes_logs"]
+    source = '''
+    # Standard fields
+    .namespace = .kubernetes.pod_namespace
+    .pod = .kubernetes.pod_name
+    .container = .kubernetes.container_name
+    .node = .kubernetes.pod_node_name
+    
+    # Extract trace information from logs
+    if match(.message, r'trace[_-]?id[:\s=]+([a-f0-9-]+)') {
+        .trace_id = capture(.message, r'trace[_-]?id[:\s=]+([a-f0-9-]+)')[0]
+    }
+    
+    if match(.message, r'span[_-]?id[:\s=]+([a-f0-9-]+)') {
+        .span_id = capture(.message, r'span[_-]?id[:\s=]+([a-f0-9-]+)')[0]
+    }
+    
+    # Parse structured JSON logs
+    if is_string(.message) && starts_with(.message, "{") {
+        parsed = parse_json(.message) ?? {}
+        .trace_id = parsed.trace_id ?? .trace_id
+        .span_id = parsed.span_id ?? .span_id
+        .level = parsed.level ?? parsed.severity ?? .level
+    }
+    '''
+    
+    [sinks.loki]
+    type = "loki"
+    inputs = ["parse_logs"]
+    endpoint = "http://loki:3100"
+    encoding.codec = "json"
+    
+    # Enhanced labels for trace correlation
+    labels.namespace = "{{ "{{ namespace }}" }}"
+    labels.pod = "{{ "{{ pod }}" }}"
+    labels.container = "{{ "{{ container }}" }}"
+    labels.node = "{{ "{{ node }}" }}"
+    labels.trace_id = "{{ "{{ trace_id }}" }}"
+    labels.span_id = "{{ "{{ span_id }}" }}"
+    labels.level = "{{ "{{ level }}" }}"
+    
+    # Send trace context to Jaeger via HTTP
+    [sinks.jaeger_logs]
+    type = "http"
+    inputs = ["parse_logs"]
+    uri = "http://jaeger-collector.observability.svc.cluster.local:14268/api/traces"
+    method = "post"
+    
+    # Only send if we have trace data
+    condition = 'exists(.trace_id)'
+    
+    # Format for Jaeger ingestion
+    encoding.codec = "json"
+    
+    # Add Jaeger-specific headers
+    headers.Content-Type = "application/json"
+{{- end }}

@@ -1,0 +1,148 @@
+# Istio Configuration for Lamina Production
+
+# Global mesh configuration
+mesh:
+  # Default mTLS policy
+  mtls:
+    mode: STRICT  # Enforce mTLS for all services
+  
+  # Distributed tracing
+  tracing:
+    enabled: true
+    jaeger:
+      address: jaeger-collector.observability.svc.cluster.local:14268
+    sampling: 1.0  # 100% sampling for development
+  
+  # Traffic management
+  traffic:
+    # Default destination rules
+    destinationRule:
+      trafficPolicy:
+        tls:
+          mode: ISTIO_MUTUAL
+
+# Ingress Gateway configuration  
+ingressGateway:
+  enabled: false  # Using official istio-gateway Helm chart instead
+  name: istio-ingressgateway
+  namespace: istio-gateway
+  
+  # Service configuration
+  service:
+    type: LoadBalancer  # Use MetalLB for external access
+    ports:
+      - port: 15021
+        targetPort: 15021
+        name: status-port
+        protocol: TCP
+      - port: 80
+        targetPort: 8080
+        name: http2
+        protocol: TCP
+      - port: 443
+        targetPort: 8443
+        name: https
+        protocol: TCP
+  
+  # Resource allocation
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  
+  # Autoscaling for production
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+
+# Gateway configuration
+gateway:
+  enabled: true
+  name: lamina-gateway
+  
+  # HTTP/HTTPS configuration with automatic TLS
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "*"
+      tls:
+        mode: SIMPLE
+        credentialName: lamina-tls-cert
+
+# Telemetry configuration
+telemetry:
+  enabled: true
+  
+  # Jaeger tracing
+  tracing:
+    providers:
+      jaeger:
+        service: jaeger-collector.observability.svc.cluster.local
+        port: 14268
+  
+  # Metrics for Prometheus
+  metrics:
+    providers:
+      prometheus:
+        configOverride:
+          metric_relabeling_configs:
+            - source_labels: [__name__]
+              regex: 'istio_.*'
+              target_label: __tmp_istio_metric
+  
+  # Access logs
+  accessLogs:
+    enabled: true
+    format: |
+      [%START_TIME%] "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%"
+      %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT%
+      %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% "%REQ(X-FORWARDED-FOR)%"
+      "%REQ(USER-AGENT)%" "%REQ(X-REQUEST-ID)%" "%REQ(:AUTHORITY)%" "%UPSTREAM_HOST%"
+      outbound|%UPSTREAM_CLUSTER% trace_id=%REQ(X-TRACE-ID)%
+
+# Security policies
+security:
+  peerAuthentication:
+    # Default to strict mTLS
+    default:
+      mtls:
+        mode: STRICT
+  
+  authorizationPolicy:
+    # Default deny-all policy (services must explicitly allow traffic)
+    enabled: false  # Start permissive, tighten later
+
+# Service mesh configuration
+serviceMesh:
+  # Automatic sidecar injection
+  sidecarInjection:
+    enabled: true
+    namespaces:
+      - lamina-system
+      - default
+  
+  # Circuit breaker defaults
+  circuitBreaker:
+    consecutiveErrors: 5
+    interval: 30s
+    baseEjectionTime: 30s
+    maxEjectionPercent: 50
+
+# Kiali integration
+kiali:
+  enabled: true
+  namespace: observability

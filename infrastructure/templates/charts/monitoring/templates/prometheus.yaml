@@ -82,7 +82,12 @@ spec:
         configMap:
           name: prometheus-config
       - name: prometheus-storage
+        {{- if .Values.prometheus.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: prometheus-data-pvc
+        {{- else }}
         emptyDir: {}
+        {{- end }}
 ---
 # Prometheus Service
 apiVersion: v1
@@ -103,6 +108,27 @@ spec:
     nodePort: {{ .Values.serviceExposure.prometheus.nodePort }}
     {{- end }}
     name: http
+---
+# Prometheus PersistentVolumeClaim
+{{- if .Values.prometheus.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data-pvc
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: prometheus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.prometheus.persistence.size | default "50Gi" }}
+  storageClassName: lamina-host-storage
+  selector:
+    matchLabels:
+      app: prometheus
+{{- end }}
 ---
 # Prometheus ServiceAccount and RBAC
 apiVersion: v1

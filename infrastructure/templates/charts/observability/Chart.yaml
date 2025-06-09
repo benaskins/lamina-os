@@ -1,0 +1,14 @@
+apiVersion: v2
+name: observability
+description: Observability stack for Istio service mesh
+type: application
+version: 0.1.0
+appVersion: "1.0"
+keywords:
+  - observability
+  - tracing
+  - jaeger
+  - kiali
+maintainers:
+  - name: Lamina Team
+    email: support@getlamina.ai

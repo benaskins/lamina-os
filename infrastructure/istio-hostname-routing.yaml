@@ -1,0 +1,93 @@
+# Gateway Configuration for hostname-based routing
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: lamina-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.lamina.local"  # Accept all subdomains of lamina.local
+
+---
+# VirtualService for Grafana
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - "grafana.lamina.local"
+  gateways:
+  - lamina-gateway
+  http:
+  - route:
+    - destination:
+        host: grafana.monitoring.svc.cluster.local
+        port:
+          number: 3000
+
+---
+# VirtualService for Prometheus
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: prometheus-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - "prom.lamina.local"
+  gateways:
+  - lamina-gateway
+  http:
+  - route:
+    - destination:
+        host: prometheus.monitoring.svc.cluster.local
+        port:
+          number: 9090
+
+---
+# VirtualService for Jaeger
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: jaeger-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - "jaeger.lamina.local"
+  gateways:
+  - lamina-gateway
+  http:
+  - route:
+    - destination:
+        host: jaeger-query.observability.svc.cluster.local
+        port:
+          number: 16686
+
+---
+# VirtualService for Kiali
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kiali-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - "kiali.lamina.local"
+  gateways:
+  - lamina-gateway
+  http:
+  - route:
+    - destination:
+        host: kiali.observability.svc.cluster.local
+        port:
+          number: 20001

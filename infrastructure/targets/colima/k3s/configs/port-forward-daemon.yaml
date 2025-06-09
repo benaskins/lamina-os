@@ -1,0 +1,62 @@
+# Port Forwarding Daemon for Production Services
+# This runs in the cluster and maintains SSH tunnels to expose services
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: port-forward-script
+  namespace: kube-system
+data:
+  forward.sh: |
+    #!/bin/sh
+    echo "Starting port forwarding daemon..."
+    
+    # Forward Grafana LoadBalancer
+    ssh -N -L 3000:192.168.5.240:3000 \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o ServerAliveInterval=30 \
+        -o ServerAliveCountMax=3 \
+        host.docker.internal &
+    
+    # Forward Prometheus LoadBalancer  
+    ssh -N -L 9090:192.168.5.241:9090 \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o ServerAliveInterval=30 \
+        -o ServerAliveCountMax=3 \
+        host.docker.internal &
+    
+    # Keep running
+    while true; do
+      sleep 60
+      echo "Port forwarding active..."
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: port-forwarder
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: port-forwarder
+  template:
+    metadata:
+      labels:
+        app: port-forwarder
+    spec:
+      hostNetwork: true
+      containers:
+      - name: forwarder
+        image: alpine:latest
+        command: ["/bin/sh", "/scripts/forward.sh"]
+        volumeMounts:
+        - name: script
+          mountPath: /scripts
+      volumes:
+      - name: script
+        configMap:
+          name: port-forward-script
+          defaultMode: 0755

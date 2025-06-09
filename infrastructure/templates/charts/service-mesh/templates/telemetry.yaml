@@ -1,0 +1,62 @@
+# Telemetry configuration for distributed tracing
+{{- if .Values.telemetry.enabled }}
+---
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: default-tracing
+  namespace: istio-system
+spec:
+  # Configure distributed tracing
+  tracing:
+  - providers:
+    - name: jaeger
+  
+  # Configure metrics collection
+  {{- if .Values.telemetry.metrics }}
+  metrics:
+  - providers:
+    - name: prometheus
+  {{- end }}
+  
+  # Configure access logs
+  {{- if .Values.telemetry.accessLogs.enabled }}
+  accessLogging:
+  - providers:
+    - name: otel
+  {{- end }}
+
+---
+# Telemetry for Lamina services
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: lamina-telemetry
+  namespace: lamina-system
+spec:
+  # Enhanced tracing for Lamina services
+  tracing:
+  - providers:
+    - name: jaeger
+    customTags:
+      lamina_service:
+        header:
+          name: "x-lamina-service"
+      lamina_version:
+        header:
+          name: "x-lamina-version"
+  
+  # Detailed metrics for Lamina
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    - match:
+        metric: ALL_METRICS
+      tagOverrides:
+        lamina_service:
+          operation: UPSERT
+          value: |
+            has(request.headers["x-lamina-service"]) ? request.headers["x-lamina-service"] : "unknown"
+
+{{- end }}

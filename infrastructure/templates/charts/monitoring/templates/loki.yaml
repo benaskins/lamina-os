@@ -78,7 +78,33 @@ spec:
         configMap:
           name: loki-config
       - name: loki-storage
+        {{- if .Values.loki.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: loki-data-pvc
+        {{- else }}
         emptyDir: {}
+        {{- end }}
+---
+# Loki PersistentVolumeClaim
+{{- if .Values.loki.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: loki-data-pvc
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: loki
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.loki.persistence.size | default "50Gi" }}
+  storageClassName: lamina-host-storage
+  selector:
+    matchLabels:
+      app: loki
+{{- end }}
 ---
 # Loki Service
 apiVersion: v1

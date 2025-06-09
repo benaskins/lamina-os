@@ -1,0 +1,28 @@
+# Custom Lima template for Colima - ARM64 only
+# This eliminates guest agent warnings for unused architectures
+
+# VM settings
+cpus: null  # Will be set by colima start --cpu
+memory: null  # Will be set by colima start --memory
+disk: null  # Will be set by colima start --disk
+
+# Architecture - explicit ARM64 only
+arch: "aarch64"
+
+# Guest agent configuration - only for our architecture
+agents:
+  - arch: "aarch64"
+    # Let Lima auto-detect the ARM64 guest agent or skip if not available
+
+# Disable agent detection for other architectures
+# This prevents the warning messages
+provision:
+  - mode: system
+    script: |
+      #!/bin/bash
+      # Skip guest agent setup for non-ARM64 architectures
+      echo "Skipping unnecessary guest agent detection"
+
+# Network configuration
+networks:
+  - vzNAT: true

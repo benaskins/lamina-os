@@ -1,4 +1,4 @@
-{{- if .Values.services.lamina-llm-serve.enabled }}
+{{- if index .Values.services "lamina-llm-serve" "enabled" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,9 +8,9 @@ metadata:
     {{- include "lamina.labels" . | nindent 4 }}
     app.kubernetes.io/component: lamina-llm-serve
 spec:
-  type: {{ .Values.services.lamina-llm-serve.service.type }}
+  type: {{ index .Values.services "lamina-llm-serve" "service" "type" }}
   ports:
-  {{- range .Values.services.lamina-llm-serve.service.ports }}
+  {{- range index .Values.services "lamina-llm-serve" "service" "ports" }}
   - port: {{ . }}
     targetPort: {{ . }}
     protocol: TCP

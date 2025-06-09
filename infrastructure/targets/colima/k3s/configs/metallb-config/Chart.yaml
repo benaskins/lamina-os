@@ -1,0 +1,9 @@
+apiVersion: v2
+name: metallb-config
+description: MetalLB configuration for Lamina production
+type: application
+version: 0.1.0
+keywords:
+  - metallb
+  - configuration
+  - loadbalancer

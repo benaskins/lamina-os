@@ -1,0 +1,19 @@
+{{- if .Values.models.storage }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "lamina-llm-serve.fullname" . }}-models-pv
+  labels:
+    {{- include "lamina-llm-serve.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.models.storage.size }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain  # Keep data when PVC is deleted
+  storageClassName: lamina-host-storage
+  hostPath:
+    path: /lamina-data/models
+    type: DirectoryOrCreate
+# Note: StorageClass is created by istio-config chart to avoid duplication
+{{- end }}

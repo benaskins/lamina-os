@@ -1,0 +1,45 @@
+# MetalLB Helm Chart Values for Mac Production
+# Using official MetalLB Helm chart
+
+# Controller configuration
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+
+# Speaker configuration
+speaker:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+  # Tolerate control plane nodes
+  tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+
+# FRR mode disabled (using native L2 mode)
+frrk8s:
+  enabled: false
+
+# Prometheus metrics
+prometheus:
+  serviceMonitor:
+    enabled: false  # Enable when Prometheus Operator is installed
+  prometheusRule:
+    enabled: false
+
+# CRDs should be installed
+crds:
+  enabled: true

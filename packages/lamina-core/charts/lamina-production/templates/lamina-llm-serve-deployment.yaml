@@ -1,4 +1,4 @@
-{{- if .Values.services.lamina-llm-serve.enabled }}
+{{- if index .Values.services "lamina-llm-serve" "enabled" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,7 +8,7 @@ metadata:
     {{- include "lamina.labels" . | nindent 4 }}
     app.kubernetes.io/component: lamina-llm-serve
 spec:
-  replicas: {{ .Values.services.lamina-llm-serve.replicaCount }}
+  replicas: {{ index .Values.services "lamina-llm-serve" "replicaCount" }}
   selector:
     matchLabels:
       {{- include "lamina.selectorLabels" . | nindent 6 }}

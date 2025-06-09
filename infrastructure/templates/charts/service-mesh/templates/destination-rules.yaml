@@ -1,0 +1,152 @@
+# Default Destination Rules for mTLS and traffic policies
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: default-mtls
+  namespace: istio-system
+spec:
+  host: "*.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: {{ .Values.serviceMesh.circuitBreaker.consecutiveErrors }}
+      interval: {{ .Values.serviceMesh.circuitBreaker.interval }}
+      baseEjectionTime: {{ .Values.serviceMesh.circuitBreaker.baseEjectionTime }}
+      maxEjectionPercent: {{ .Values.serviceMesh.circuitBreaker.maxEjectionPercent }}
+
+---
+# Destination rule for Lamina services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: lamina-services
+  namespace: lamina-system
+spec:
+  host: "*.lamina-system.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 200
+        maxRequestsPerConnection: 20
+    outlierDetection:
+      consecutive5xxErrors: {{ .Values.serviceMesh.circuitBreaker.consecutiveErrors }}
+      interval: {{ .Values.serviceMesh.circuitBreaker.interval }}
+      baseEjectionTime: {{ .Values.serviceMesh.circuitBreaker.baseEjectionTime }}
+      maxEjectionPercent: {{ .Values.serviceMesh.circuitBreaker.maxEjectionPercent }}
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: canary
+    labels:
+      version: canary
+
+---
+# Destination rule for observability services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: observability-services
+  namespace: observability
+spec:
+  host: "*.observability.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+
+---
+# Destination rule for monitoring services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: monitoring-services
+  namespace: monitoring
+spec:
+  host: "*.monitoring.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+
+---
+# Specific overrides for external-facing services (no Istio sidecar)
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: kubernetes-api-server
+  namespace: istio-system
+spec:
+  host: kubernetes.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE  # API server has no sidecar
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: grafana-external
+  namespace: istio-system
+spec:
+  host: grafana.monitoring.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE  # Grafana has no sidecar
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: jaeger-external
+  namespace: istio-system
+spec:
+  host: jaeger-query.observability.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE  # Jaeger has no sidecar
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: kiali-external
+  namespace: istio-system
+spec:
+  host: kiali.observability.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE  # Kiali has no sidecar
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: prometheus-external
+  namespace: istio-system
+spec:
+  host: prometheus.monitoring.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE  # Prometheus has no sidecar

@@ -16,6 +16,9 @@ prometheus:
       memory: 512Mi
   retention: 7d
   scrapeInterval: 30s
+  persistence:
+    enabled: true
+    size: 50Gi
 
 loki:
   enabled: true
@@ -30,6 +33,9 @@ loki:
     limits:
       cpu: 200m
       memory: 256Mi
+  persistence:
+    enabled: true
+    size: 50Gi
 
 vector:
   enabled: true
@@ -62,6 +68,9 @@ grafana:
   service:
     type: ClusterIP
     port: 3000
+  persistence:
+    enabled: true
+    size: 10Gi
 
 kubeStateMetrics:
   enabled: true
@@ -99,9 +108,5 @@ ingress:
 
 # Service exposure configuration
 serviceExposure:
-  # For local development, use NodePort
-  type: NodePort
-  grafana:
-    nodePort: 30300
-  prometheus:
-    nodePort: 30900
+  # All traffic goes through Istio gateway
+  type: ClusterIP

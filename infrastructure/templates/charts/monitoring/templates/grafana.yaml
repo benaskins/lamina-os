@@ -58,6 +58,10 @@ spec:
           mountPath: /etc/grafana/provisioning/datasources
         - name: grafana-storage
           mountPath: /var/lib/grafana
+        - name: grafana-dashboards
+          mountPath: /var/lib/grafana/dashboards
+        - name: grafana-dashboard-provider
+          mountPath: /etc/grafana/provisioning/dashboards
         resources:
 {{ toYaml .Values.grafana.resources | indent 10 }}
       volumes:
@@ -65,7 +69,39 @@ spec:
         configMap:
           name: grafana-datasources
       - name: grafana-storage
+        {{- if .Values.grafana.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: grafana-data-pvc
+        {{- else }}
         emptyDir: {}
+        {{- end }}
+      - name: grafana-dashboards
+        configMap:
+          name: grafana-dashboards
+      - name: grafana-dashboard-provider
+        configMap:
+          name: grafana-dashboard-provider
+---
+# Grafana PersistentVolumeClaim
+{{- if .Values.grafana.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-data-pvc
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: grafana
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.grafana.persistence.size | default "10Gi" }}
+  storageClassName: lamina-host-storage
+  selector:
+    matchLabels:
+      app: grafana
+{{- end }}
 ---
 # Grafana Service
 apiVersion: v1

@@ -1,0 +1,29 @@
+# MetalLB Configuration Resources
+---
+# IP Address Pool
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: {{ .Values.ipAddressPool.name }}
+  namespace: metallb-system
+spec:
+  addresses:
+  {{- range .Values.ipAddressPool.addresses }}
+  - {{ . }}
+  {{- end }}
+---
+# L2 Advertisement
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: {{ .Values.l2Advertisement.name }}
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - {{ .Values.ipAddressPool.name }}
+  {{- if .Values.l2Advertisement.interfaces }}
+  interfaces:
+  {{- range .Values.l2Advertisement.interfaces }}
+  - {{ . }}
+  {{- end }}
+  {{- end }}

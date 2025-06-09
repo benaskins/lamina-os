@@ -1,0 +1,12 @@
+# MetalLB Configuration Values
+ipAddressPool:
+  name: production-pool
+  addresses:
+    # Colima production VM uses 192.168.5.0/24 network
+    # Reserving .240-.250 for LoadBalancer IPs
+    - 192.168.5.240-192.168.5.250
+
+l2Advertisement:
+  name: production-l2
+  # Empty means advertise on all interfaces
+  interfaces: []

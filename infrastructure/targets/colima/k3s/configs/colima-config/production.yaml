@@ -1,0 +1,55 @@
+# Colima Configuration for Production Environment
+# This file should be copied to ~/.colima/_lima/colima-production/colima.yaml
+# after creating the profile
+
+# VM Resources
+cpu: 16
+memory: 256
+disk: 500
+arch: aarch64
+
+# Container runtime
+runtime: docker
+
+# Hostname
+hostname: colima-production
+
+# Network configuration
+network:
+  # Enable reachable IP address
+  address: true
+  # DNS servers
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4
+  # Custom DNS entries
+  dnsHosts:
+    grafana.local: 192.168.5.240
+    prometheus.local: 192.168.5.241
+
+# Mounts
+mounts:
+  - location: /tmp/lamina-models
+    writable: true
+  - location: ~/dev/lamina-os-test-improvements
+    writable: false
+mountType: virtiofs
+mountInotify: true
+
+# Port forwarding
+# Note: This is configured in lima.yaml, not colima.yaml
+# See lima-overrides.yaml for port forwarding configuration
+
+# VM type
+vmType: vz
+
+# SSH configuration
+sshConfig: true
+sshAgent: false
+
+# Layer configuration
+layer: false
+
+# Kubernetes disabled (we install k3s separately)
+kubernetes:
+  enabled: false

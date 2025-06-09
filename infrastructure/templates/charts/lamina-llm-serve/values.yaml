@@ -1,0 +1,64 @@
+# Default values for lamina-llm-serve
+replicaCount: 1
+
+image:
+  repository: lamina-llm-serve
+  tag: latest
+  pullPolicy: Never  # Use local image for development
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  hostname: llm.lamina.local
+
+istio:
+  enabled: true
+  gateway: istio-system/lamina-gateway
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+
+# Model configuration
+models:
+  # Models will be downloaded at startup if not present
+  downloadOnStartup: true
+  # Storage for downloaded models
+  storage:
+    size: 100Gi  # Increased for large models
+    storageClass: "lamina-host-storage"  # Use host mount for persistence
+
+# Environment-specific configurations
+env:
+  - name: PYTHONPATH
+    value: "/app"
+  - name: FLASK_ENV
+    value: "production"
+
+# Health check configuration
+healthCheck:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  runAsGroup: 1000
+
+# Node selection
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -142,7 +142,13 @@ start_prod_environment() {
     # Start production Colima with more resources
     if [[ "$(get_colima_status $PROD_COLIMA)" != "running" ]]; then
         log "Starting Colima production profile..."
-        colima start -p $PROD_COLIMA --cpu 16 --memory 256 --disk 500 --mount-type=virtiofs
+        # Check if config file exists
+        if [[ -f "$SCRIPT_DIR/colima-production.yaml" ]]; then
+            colima start -p $PROD_COLIMA --config "$SCRIPT_DIR/colima-production.yaml"
+        else
+            # Fallback to command line options
+            colima start -p $PROD_COLIMA --cpu 16 --memory 256 --disk 500 --mount-type=virtiofs
+        fi
     fi
     
     # Set DOCKER_HOST to use production profile  
@@ -191,14 +197,24 @@ echo "k3s installation complete"
 EOF
 
     # Copy and execute in VM
-    colima ssh -p $PROD_COLIMA -- "sudo mkdir -p /opt/lamina"
-    colima ssh -p $PROD_COLIMA < /tmp/install-k3s-vm.sh
+    colima ssh -p $PROD_COLIMA -- sudo mkdir -p /opt/lamina
+    colima ssh -p $PROD_COLIMA -- bash < /tmp/install-k3s-vm.sh
+    
+    # Wait for k3s to be ready and create kubeconfig
+    log "Waiting for k3s to be ready..."
+    sleep 10
     
     # Copy kubeconfig from VM
     log "Configuring kubectl for production..."
     mkdir -p ~/.kube
-    colima ssh -p $PROD_COLIMA -- "sudo cat /etc/rancher/k3s/k3s.yaml" | \
-        sed 's/127.0.0.1/127.0.0.1/' > ~/.kube/config-prod
+    
+    # Check if k3s.yaml exists before trying to read it
+    if colima ssh -p $PROD_COLIMA -- sudo test -f /etc/rancher/k3s/k3s.yaml; then
+        colima ssh -p $PROD_COLIMA -- sudo cat /etc/rancher/k3s/k3s.yaml | \
+            sed 's/127.0.0.1/127.0.0.1/' > ~/.kube/config-prod
+    else
+        error "k3s kubeconfig not found. k3s may still be starting up."
+    fi
     
     # Merge kubeconfig
     KUBECONFIG=~/.kube/config:~/.kube/config-prod kubectl config view --flatten > ~/.kube/config-merged
