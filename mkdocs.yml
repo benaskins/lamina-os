@@ -34,7 +34,6 @@ theme:
 
 plugins:
   - search
-  - awesome-pages
 
 markdown_extensions:
   - admonition
