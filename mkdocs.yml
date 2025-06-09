@@ -1,0 +1,91 @@
+site_name: Lamina OS Documentation
+site_description: A breath-first AI development framework
+site_url: https://benaskins.github.io/lamina-os/
+repo_url: https://github.com/benaskins/lamina-os
+repo_name: benaskins/lamina-os
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.share
+    - toc.follow
+    - content.code.copy
+
+plugins:
+  - search
+  - awesome-pages
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: 
+    - Overview: guides/getting-started.md
+    - Current Capabilities: technical/current-capabilities.md
+  - Architecture:
+    - Overview: technical/architecture-vision.md
+    - Environment Management: technical/environments/README.md
+  - Guides:
+    - Development Workflow: guides/github-workflow-guide.md
+    - AI Assistant Usage: guides/AI_ASSISTANT_USAGE.md
+    - Git Attribution: guides/luthier-git-attribution-guide.md
+    - CI Verification: guides/CI_VERIFICATION_PROTOCOL.md
+  - Philosophy:
+    - Core Principles: philosophy/philosophy.md
+    - Luthier Philosophy: philosophy/luthier-philosophy.md
+    - Framework vs Implementation: philosophy/framework-vs-implementation.md
+    - Sigil Script Grimoire: philosophy/sigil-script-grimoire.md
+    - Luthier Workshop: philosophy/luthier/workshop-guide.md
+  - Technical Reference:
+    - Dependencies: technical/UV_DEPENDENCY_ANALYSIS.md
+    - Security: technical/SECRETS_INVENTORY.md
+  - Governance:
+    - ADRs: adrs/README.md
+    - High Council Reports: 
+      - Technical Report 2025-01-06: high-council/HIGH_COUNCIL_TECHNICAL_REPORT_2025-01-06.md
+      - Terminology Review: high-council/HIGH_COUNCIL_CONSCIOUSNESS_TERMINOLOGY_REVIEW.md
+      - Lore Adaptations: high-council/LORE_ADAPTATIONS.md
+    - PIR: pir/PIR-2025-01-06-ruff-linting-failures.md
+  - Releases:
+    - Roadmap: ROADMAP.md
+    - v0.2.0: releases/v0.2.0/RELEASE_NOTES_v0.2.0.md
+    - v0.1.0: releases/v0.1.0/RELEASE_NOTES_v0.1.0.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/benaskins/lamina-os
