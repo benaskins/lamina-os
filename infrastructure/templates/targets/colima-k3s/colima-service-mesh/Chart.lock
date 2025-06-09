@@ -1,6 +1,0 @@
-dependencies:
-- name: service-mesh
-  repository: file://../../../base/service-mesh
-  version: 0.1.0
-digest: sha256:26de83b0a4b4d475bb7afc95d9ce7b53b39594e8c873f5d8aa4e8fa44a27328c
-generated: "2025-06-09T20:41:08.278987+10:00"

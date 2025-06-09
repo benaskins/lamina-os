@@ -7,4 +7,4 @@ appVersion: "1.0.0"
 dependencies:
   - name: service-mesh
     version: "0.1.0"
-    repository: "file://../../../base/service-mesh"
+    repository: "file://../service-mesh"

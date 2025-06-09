@@ -133,4 +133,12 @@ temp/
 # Package manager
 node_modules/
 yarn.lock
-package-lock.json*.tar
+package-lock.json
+
+# Build artifacts
+*.tar
+*.tgz
+
+# Helm
+charts/*.tgz
+**/charts/*.tgz

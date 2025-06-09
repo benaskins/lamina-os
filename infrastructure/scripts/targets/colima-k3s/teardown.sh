@@ -206,9 +206,10 @@ remove_helm_releases() {
     }
     
     # Remove releases in dependency order
+    remove_release "lamina-llm-serve" "lamina-llm-serve"
     remove_release "observability" "observability"
     remove_release "monitoring" "monitoring"
-    remove_release "istio-config" "istio-system"
+    remove_release "colima-service-mesh" "istio-system"
     remove_release "istio-gateway" "istio-gateway"
     remove_release "istiod" "istio-system"
     remove_release "istio-base" "istio-system"
@@ -237,7 +238,7 @@ remove_helm_releases() {
     
     # Clean up namespaces that might have been left behind
     lamina_progress "Cleaning up application namespaces..."
-    for namespace in lamina-llm-serve monitoring observability istio-gateway metallb-system istio-system; do
+    for namespace in lamina-llm-serve monitoring observability istio-gateway metallb-system istio-system lamina-system; do
         if kubectl get namespace "$namespace" >/dev/null 2>&1; then
             lamina_progress "Deleting namespace $namespace..."
             kubectl delete namespace "$namespace" --timeout=60s >/dev/null 2>&1 || true
