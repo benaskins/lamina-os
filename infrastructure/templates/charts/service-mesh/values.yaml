@@ -1,6 +1,10 @@
 # Default values for service-mesh template
 # These can be overridden by target-specific values
 
+# Chart naming
+nameOverride: ""
+fullnameOverride: ""
+
 # Mesh configuration
 mesh:
   traffic:
@@ -8,6 +12,8 @@ mesh:
       trafficPolicy:
         tls:
           mode: ISTIO_MUTUAL
+  mtls:
+    mode: STRICT
 
 # Service mesh settings
 serviceMesh:
@@ -19,14 +25,33 @@ serviceMesh:
 
 # Gateway configuration
 gateway:
+  enabled: true
   name: lamina-gateway
-  hosts:
-    - "*"
-  tls:
-    enabled: true
-    credentialName: lamina-tls-cert
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "*"
+      tls:
+        mode: SIMPLE
+        credentialName: lamina-tls-cert
 
-# mTLS configuration
+# Security configuration
+security:
+  peerAuthentication:
+    default:
+      mtls:
+        mode: STRICT
+
+# mTLS configuration (legacy - kept for backward compatibility)
 mtls:
   mode: STRICT
   
@@ -48,3 +73,10 @@ virtualService:
       path: /kiali
       service: kiali.observability.svc.cluster.local
       port: 20001
+
+# Telemetry configuration
+telemetry:
+  enabled: true
+  metrics: true
+  accessLogs:
+    enabled: true

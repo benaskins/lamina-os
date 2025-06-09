@@ -315,6 +315,12 @@ install_observability() {
 install_istio_config() {
     lamina_log "Installing Istio configuration..."
     
+    # Update chart dependencies before installation
+    lamina_progress "Updating chart dependencies for colima-service-mesh..."
+    cd "$TARGET_DIR/charts/colima-service-mesh"
+    helm dependency update
+    cd - >/dev/null
+    
     # Install/upgrade Istio configuration (mTLS, gateways, telemetry) - idempotent
     helm upgrade --install colima-service-mesh "$TARGET_DIR/charts/colima-service-mesh" \
         --namespace istio-system \
