@@ -1,0 +1,78 @@
+# Gateway Configuration
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: lamina-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: gateway  # Note: This matches the istio-gateway pod label
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+---
+# VirtualService for routing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: monitoring-routes
+  namespace: istio-system
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - lamina-gateway
+  http:
+  # Route to Grafana
+  - match:
+    - uri:
+        prefix: /grafana
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: grafana.monitoring.svc.cluster.local
+        port:
+          number: 3000
+  
+  # Route to Prometheus
+  - match:
+    - uri:
+        prefix: /prometheus
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: prometheus.monitoring.svc.cluster.local
+        port:
+          number: 9090
+  
+  # Route to Jaeger
+  - match:
+    - uri:
+        prefix: /jaeger
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: jaeger-query.observability.svc.cluster.local
+        port:
+          number: 16686
+  
+  # Route to Kiali
+  - match:
+    - uri:
+        prefix: /kiali
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: kiali.observability.svc.cluster.local
+        port:
+          number: 20001

@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'lamina-llm-serve'
+    static_configs:
+      - targets: ['lamina-llm-serve:8000']
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

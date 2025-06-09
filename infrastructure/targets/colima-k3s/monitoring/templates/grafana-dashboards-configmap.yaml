@@ -1,0 +1,127 @@
+# ConfigMap for Grafana dashboards
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: {{ .Values.namespace }}
+  labels:
+    grafana_dashboard: "1"
+data:
+  cluster-setup-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "Cluster Setup & Events",
+        "uid": "cluster-setup",
+        "version": 1,
+        "timezone": "browser",
+        "panels": [
+          {
+            "title": "Setup Timeline",
+            "type": "state-timeline",
+            "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+            "targets": [
+              {
+                "expr": "{job=\"cluster-events\"} |= \"cluster.setup\" | json",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "title": "Recent Setup Events",
+            "type": "logs",
+            "gridPos": {"h": 10, "w": 12, "x": 0, "y": 8},
+            "targets": [
+              {
+                "expr": "{job=\"cluster-events\"}",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "title": "Setup Logs",
+            "type": "logs",
+            "gridPos": {"h": 10, "w": 12, "x": 12, "y": 8},
+            "targets": [
+              {
+                "expr": "{job=\"setup-logs\"}",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "title": "Component Status",
+            "type": "stat",
+            "gridPos": {"h": 4, "w": 6, "x": 0, "y": 18},
+            "targets": [
+              {
+                "expr": "sum(kube_pod_status_ready{namespace=~\"metallb-system|istio-system|monitoring|observability\"})",
+                "legendFormat": "Ready Pods",
+                "refId": "A"
+              }
+            ]
+          },
+          {
+            "title": "Setup Duration",
+            "type": "stat",
+            "gridPos": {"h": 4, "w": 6, "x": 6, "y": 18},
+            "targets": [
+              {
+                "expr": "{job=\"cluster-events\"} |= \"cluster.setup.completed\" | json | duration_seconds",
+                "refId": "A"
+              }
+            ],
+            "options": {
+              "unit": "s"
+            }
+          },
+          {
+            "title": "Service Endpoints",
+            "type": "table",
+            "gridPos": {"h": 4, "w": 12, "x": 12, "y": 18},
+            "targets": [
+              {
+                "expr": "{job=\"cluster-events\"} |= \"cluster.setup.completed\" | json | line_format \"{{.service_endpoints}}\"",
+                "format": "table",
+                "refId": "A"
+              }
+            ]
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "datasource": "Loki",
+              "enable": true,
+              "expr": "{job=\"cluster-events\"} |= \"cluster.setup\"",
+              "name": "Setup Events",
+              "tagKeys": "event_type,status",
+              "textFormat": "{{.message}}"
+            }
+          ]
+        }
+      },
+      "inputs": [],
+      "requires": [],
+      "editable": true
+    }
+
+---
+# Dashboard provider to auto-load dashboards
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-provider
+  namespace: {{ .Values.namespace }}
+data:
+  dashboard-provider.yaml: |
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: 'Kubernetes'
+      type: file
+      disableDeletion: false
+      updateIntervalSeconds: 10
+      allowUiUpdates: true
+      options:
+        path: /var/lib/grafana/dashboards

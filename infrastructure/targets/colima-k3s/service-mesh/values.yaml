@@ -1,0 +1,82 @@
+# Default values for service-mesh template
+# These can be overridden by target-specific values
+
+# Chart naming
+nameOverride: ""
+fullnameOverride: ""
+
+# Mesh configuration
+mesh:
+  traffic:
+    destinationRule:
+      trafficPolicy:
+        tls:
+          mode: ISTIO_MUTUAL
+  mtls:
+    mode: STRICT
+
+# Service mesh settings
+serviceMesh:
+  circuitBreaker:
+    consecutiveErrors: 5
+    interval: 30s
+    baseEjectionTime: 30s
+    maxEjectionPercent: 50
+
+# Gateway configuration
+gateway:
+  enabled: true
+  name: lamina-gateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "*"
+      tls:
+        mode: SIMPLE
+        credentialName: lamina-tls-cert
+
+# Security configuration
+security:
+  peerAuthentication:
+    default:
+      mtls:
+        mode: STRICT
+
+# mTLS configuration (legacy - kept for backward compatibility)
+mtls:
+  mode: STRICT
+  
+# Virtual Service routing
+virtualService:
+  routes:
+    grafana:
+      enabled: true
+      path: /grafana
+      service: grafana.monitoring.svc.cluster.local
+      port: 3000
+    jaeger:
+      enabled: true
+      path: /jaeger
+      service: jaeger-query.observability.svc.cluster.local
+      port: 16686
+    kiali:
+      enabled: true
+      path: /kiali
+      service: kiali.observability.svc.cluster.local
+      port: 20001
+
+# Telemetry configuration
+telemetry:
+  enabled: true
+  metrics: true
+  accessLogs:
+    enabled: true

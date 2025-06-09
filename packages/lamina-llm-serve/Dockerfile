@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 # Install uv for faster dependency management
 RUN pip install uv
 
+# Create non-root user
+RUN groupadd -r lamina && useradd -r -g lamina -u 1000 lamina
+
 # Set working directory
 WORKDIR /app
 
@@ -19,11 +22,17 @@ COPY models.yaml ./
 # Create a minimal README for build
 RUN echo "# lamina-llm-serve Docker container" > README.md
 
-# Install dependencies (skip frozen lock for now)
+# Install dependencies as root, then fix permissions
 RUN uv sync
 
-# Create models directory
+# Create models directory and set permissions
 RUN mkdir -p models
+
+# Change ownership of entire /app directory to lamina user
+RUN chown -R lamina:lamina /app
+
+# Switch to non-root user
+USER lamina
 
 # Expose port
 EXPOSE 8000
