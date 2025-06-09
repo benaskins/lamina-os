@@ -83,3 +83,7 @@ Lamina OS is developed with conscious intention and breath-first practices. Cont
 ---
 
 *Lamina OS represents the conscious intention to provide infrastructure that embeds breath-first principles at the operational level, ensuring that development environments support rather than compromise the creation of presence-aware AI systems.*
+
+---
+
+*Documentation last updated: January 6, 2025 - Testing GitHub Pages deployment*
