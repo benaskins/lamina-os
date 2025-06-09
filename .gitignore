@@ -133,4 +133,4 @@ temp/
 # Package manager
 node_modules/
 yarn.lock
-package-lock.json
+package-lock.json*.tar
