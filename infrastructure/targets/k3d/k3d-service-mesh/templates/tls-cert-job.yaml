@@ -1,0 +1,77 @@
+{{- if .Values.gateway.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-lamina-tls-cert
+  namespace: istio-system
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      serviceAccountName: lamina-tls-cert-creator
+      restartPolicy: Never
+      containers:
+      - name: cert-creator
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          # Generate self-signed certificate
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout /tmp/lamina-key.pem \
+            -out /tmp/lamina-cert.pem \
+            -days 365 -nodes \
+            -subj "/CN=*.lamina.local"
+          
+          # Create Kubernetes secret
+          kubectl create secret tls lamina-tls-cert \
+            -n istio-system \
+            --cert=/tmp/lamina-cert.pem \
+            --key=/tmp/lamina-key.pem \
+            --dry-run=client -o yaml | kubectl apply -f -
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: lamina-tls-cert-creator
+  namespace: istio-system
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lamina-tls-cert-creator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create", "get", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lamina-tls-cert-creator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+subjects:
+- kind: ServiceAccount
+  name: lamina-tls-cert-creator
+  namespace: istio-system
+roleRef:
+  kind: ClusterRole
+  name: lamina-tls-cert-creator
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

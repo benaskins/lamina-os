@@ -1,0 +1,238 @@
+# Development environment configuration for k3d
+# Consolidated values for all services
+
+# Global configuration
+global:
+  target: k3d
+  environment: development
+  
+# Lamina LLM Serve configuration
+lamina-llm-serve:
+  replicaCount: 1
+  
+  image:
+    repository: lamina-llm-serve
+    tag: latest
+    pullPolicy: Never  # Use local image for development
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  ingress:
+    enabled: true
+    hostname: llm.lamina.local
+  
+  istio:
+    enabled: true
+    gateway: istio-system/lamina-gateway
+  
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  
+  # Model configuration
+  models:
+    downloadOnStartup: true
+    storage:
+      size: 100Gi
+      storageClass: "lamina-host-storage"
+  
+  env:
+    - name: PYTHONPATH
+      value: "/app"
+    - name: FLASK_ENV
+      value: "development"
+  
+  healthCheck:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+    runAsGroup: 1000
+
+# Monitoring stack configuration
+monitoring:
+  namespace: monitoring
+  
+  prometheus:
+    enabled: true
+    image:
+      repository: prom/prometheus
+      tag: v2.45.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    retention: 7d
+    scrapeInterval: 30s
+    persistence:
+      enabled: true
+      size: 50Gi
+  
+  loki:
+    enabled: true
+    image:
+      repository: grafana/loki
+      tag: 2.9.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    persistence:
+      enabled: true
+      size: 50Gi
+  
+  vector:
+    enabled: true
+    image:
+      repository: timberio/vector
+      tag: 0.34.0-alpine
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+  
+  grafana:
+    enabled: true
+    image:
+      repository: grafana/grafana
+      tag: 10.0.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    adminPassword: admin
+    service:
+      type: ClusterIP
+      port: 3000
+    persistence:
+      enabled: true
+      size: 10Gi
+  
+  kubeStateMetrics:
+    enabled: true
+    image:
+      repository: registry.k8s.io/kube-state-metrics/kube-state-metrics
+      tag: v2.10.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  
+  ingress:
+    enabled: true
+    className: ""
+    grafana:
+      host: grafana.local
+      path: /
+      pathType: Prefix
+    prometheus:
+      host: prometheus.local
+      path: /
+      pathType: Prefix
+    tls: false
+  
+  serviceExposure:
+    type: ClusterIP
+
+# Observability stack configuration
+observability:
+  namespace: observability
+  
+  jaeger:
+    enabled: true
+    strategy: allinone
+    replicas: 1  # Single replica for development
+    
+    allInOne:
+      image: jaegertracing/all-in-one:1.61.0
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 512Mi
+      
+      options:
+        memory:
+          max-traces: 50000
+        log-level: info
+      
+      service:
+        type: ClusterIP
+        ports:
+          - port: 16686
+            targetPort: 16686
+            name: query
+          - port: 14250
+            targetPort: 14250
+            name: grpc
+          - port: 14268
+            targetPort: 14268
+            name: http
+  
+  kiali:
+    enabled: true
+    replicas: 1  # Single replica for development
+    
+    auth:
+      strategy: anonymous
+    
+    external_services:
+      prometheus:
+        url: http://prometheus.monitoring.svc.cluster.local:9090
+      jaeger:
+        in_cluster_url: http://jaeger-query.istio-system.svc.cluster.local:16686
+        use_grpc: true
+        grpc_port: 9090
+      grafana:
+        in_cluster_url: http://grafana.monitoring.svc.cluster.local:3000
+        url: http://grafana.monitoring.svc.cluster.local:3000
+    
+    service:
+      type: ClusterIP
+      port: 20001
+    
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+  
+  opentelemetry:
+    enabled: false

@@ -1,0 +1,55 @@
+{{- if .Values.ingress.enabled }}
+---
+# Ingress for Monitoring Services
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: monitoring
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  rules:
+  {{- if .Values.grafana.enabled }}
+  - host: {{ .Values.ingress.grafana.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.grafana.path | default "/" }}
+        pathType: {{ .Values.ingress.grafana.pathType | default "Prefix" }}
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+  {{- end }}
+  {{- if .Values.prometheus.enabled }}
+  - host: {{ .Values.ingress.prometheus.host }}
+    http:
+      paths:
+      - path: {{ .Values.ingress.prometheus.path | default "/" }}
+        pathType: {{ .Values.ingress.prometheus.pathType | default "Prefix" }}
+        backend:
+          service:
+            name: prometheus
+            port:
+              number: 9090
+  {{- end }}
+  {{- if and .Values.ingress.tls .Values.ingress.secretName }}
+  tls:
+  - hosts:
+    {{- if .Values.grafana.enabled }}
+    - {{ .Values.ingress.grafana.host }}
+    {{- end }}
+    {{- if .Values.prometheus.enabled }}
+    - {{ .Values.ingress.prometheus.host }}
+    {{- end }}
+    secretName: {{ .Values.ingress.secretName }}
+  {{- end }}
+{{- end }}

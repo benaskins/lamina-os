@@ -1,0 +1,87 @@
+# Observability Stack for Istio Service Mesh
+namespace: observability
+
+# Jaeger distributed tracing
+jaeger:
+  enabled: true
+  strategy: allinone  # Good for single node
+  replicas: 2  # HA for canary deployments
+  
+  allInOne:
+    image: jaegertracing/all-in-one:1.61.0
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+    
+    # Storage configuration
+    options:
+      memory:
+        max-traces: 50000
+      log-level: info
+    
+    # Service configuration
+    service:
+      type: ClusterIP  # Internal only, accessed via Istio gateway
+      ports:
+        - port: 16686
+          targetPort: 16686
+          name: query
+        - port: 14250
+          targetPort: 14250
+          name: grpc
+        - port: 14268
+          targetPort: 14268
+          name: http
+
+# Kiali service mesh observability
+kiali:
+  enabled: true
+  replicas: 2  # HA for canary deployments
+  
+  # Authentication strategy
+  auth:
+    strategy: anonymous  # For development
+  
+  # External services configuration
+  external_services:
+    prometheus:
+      url: http://prometheus.monitoring.svc.cluster.local:9090
+    jaeger:
+      in_cluster_url: http://jaeger-query.istio-system.svc.cluster.local:16686
+      use_grpc: true
+      grpc_port: 9090
+    grafana:
+      in_cluster_url: http://grafana.monitoring.svc.cluster.local:3000
+      url: http://grafana.monitoring.svc.cluster.local:3000
+  
+  # Service configuration
+  service:
+    type: ClusterIP  # Internal only, accessed via Istio gateway
+    port: 20001
+  
+  # Resource allocation
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# OpenTelemetry Collector (optional)
+opentelemetry:
+  enabled: false  # Start with Jaeger direct integration
+  
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

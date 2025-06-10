@@ -1,0 +1,268 @@
+# Kiali Service Mesh Observability
+{{- if .Values.kiali.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali-config
+  namespace: observability
+  labels:
+    app: kiali
+data:
+  config.yaml: |
+    server:
+      port: 20001
+      web_root: /kiali
+    
+    auth:
+      strategy: {{ .Values.kiali.auth.strategy }}
+    
+    external_services:
+      prometheus:
+        url: {{ .Values.kiali.external_services.prometheus.url }}
+      jaeger:
+        in_cluster_url: {{ .Values.kiali.external_services.jaeger.in_cluster_url }}
+        use_grpc: {{ .Values.kiali.external_services.jaeger.use_grpc }}
+        grpc_port: {{ .Values.kiali.external_services.jaeger.grpc_port }}
+      grafana:
+        in_cluster_url: {{ .Values.kiali.external_services.grafana.in_cluster_url }}
+        url: {{ .Values.kiali.external_services.grafana.url }}
+    
+    istio:
+      component_status:
+        components:
+        - app_label: "istiod"
+          is_core: true
+          is_proxy: false
+        - app_label: "istio-proxy"
+          is_core: true
+          is_proxy: true
+        enabled: true
+      
+      config_map_name: "istio"
+      istio_sidecar_annotation: "sidecar.istio.io/status"
+      
+    deployment:
+      accessible_namespaces: ["**"]
+      cluster_wide_access: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kiali
+  namespace: observability
+  labels:
+    app: kiali
+  annotations:
+    # Force rolling update when config changes
+    deployment.kubernetes.io/revision: "{{ .Release.Revision }}"
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: kiali
+  template:
+    metadata:
+      labels:
+        app: kiali
+      annotations:
+        # Force pod restart on config change
+        checksum/config: {{ .Values | toYaml | sha256sum }}
+    spec:
+      serviceAccountName: kiali
+      containers:
+      - name: kiali
+        image: quay.io/kiali/kiali:v1.77
+        command:
+        - "/opt/kiali/kiali"
+        - "-config"
+        - "/kiali-configuration/config.yaml"
+        ports:
+        - containerPort: 20001
+          protocol: TCP
+        volumeMounts:
+        - name: kiali-configuration
+          mountPath: "/kiali-configuration"
+        - name: kiali-cert
+          mountPath: "/kiali-cert"
+        - name: kiali-secret
+          mountPath: "/kiali-secret"
+        resources:
+{{ toYaml .Values.kiali.resources | indent 10 }}
+        env:
+        - name: ACTIVE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        livenessProbe:
+          httpGet:
+            path: /kiali/healthz
+            port: 20001
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /kiali/healthz
+            port: 20001
+          initialDelaySeconds: 5
+          periodSeconds: 30
+      volumes:
+      - name: kiali-configuration
+        configMap:
+          name: kiali-config
+      - name: kiali-cert
+        secret:
+          secretName: istio.kiali-service-account
+          optional: true
+      - name: kiali-secret
+        secret:
+          secretName: kiali
+          optional: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiali
+  namespace: observability
+  labels:
+    app: kiali
+spec:
+  type: {{ .Values.kiali.service.type }}
+  selector:
+    app: kiali
+  ports:
+  - name: http-kiali
+    port: {{ .Values.kiali.service.port }}
+    targetPort: 20001
+    protocol: TCP
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kiali
+  namespace: observability
+  labels:
+    app: kiali
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kiali
+  labels:
+    app: kiali
+rules:
+- apiGroups: [""]
+  resources:
+  - configmaps
+  - endpoints
+  - namespaces
+  - nodes
+  - pods
+  - pods/log
+  - replicationcontrollers
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: ["apps"]
+  resources:
+  - deployments
+  - replicasets
+  - statefulsets
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: ["autoscaling"]
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: ["batch"]
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: ["networking.istio.io"]
+  resources:
+  - destinationrules
+  - gateways
+  - serviceentries
+  - sidecars
+  - virtualservices
+  - workloadentries
+  - workloadgroups
+  - envoyfilters
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+- apiGroups: ["security.istio.io"]
+  resources:
+  - authorizationpolicies
+  - peerauthentications
+  - requestauthentications
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+- apiGroups: ["telemetry.istio.io"]
+  resources:
+  - telemetries
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+- apiGroups: ["extensions.istio.io"]
+  resources:
+  - wasmplugins
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - patch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kiali
+  labels:
+    app: kiali
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kiali
+subjects:
+- kind: ServiceAccount
+  name: kiali
+  namespace: observability
+
+{{- end }}

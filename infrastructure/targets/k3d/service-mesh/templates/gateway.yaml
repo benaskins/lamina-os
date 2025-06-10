@@ -1,0 +1,108 @@
+# Main Lamina Gateway for external traffic
+{{- if .Values.gateway.enabled }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .Values.gateway.name }}
+  namespace: istio-system
+spec:
+  selector:
+    istio: gateway
+  servers:
+  {{- range .Values.gateway.servers }}
+  - port:
+      number: {{ .port.number }}
+      name: {{ .port.name }}
+      protocol: {{ .port.protocol }}
+    hosts:
+    {{- range .hosts }}
+    - {{ . | quote }}
+    {{- end }}
+    {{- if .tls }}
+    tls:
+      mode: {{ .tls.mode }}
+      {{- if .tls.credentialName }}
+      credentialName: {{ .tls.credentialName }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+---
+# Virtual Service for routing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: lamina-routes
+  namespace: istio-system
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - {{ .Values.gateway.name }}
+  http:
+  # Route to Grafana
+  - match:
+    - uri:
+        prefix: /grafana
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: grafana.monitoring.svc.cluster.local
+        port:
+          number: 3000
+    headers:
+      request:
+        set:
+          x-lamina-service: "grafana"
+  
+  # Route to Jaeger
+  - match:
+    - uri:
+        prefix: /jaeger
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: jaeger-query.observability.svc.cluster.local
+        port:
+          number: 16686
+    headers:
+      request:
+        set:
+          x-lamina-service: "jaeger"
+  
+  # Route to Kiali
+  - match:
+    - uri:
+        prefix: /kiali
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: kiali.observability.svc.cluster.local
+        port:
+          number: 20001
+    headers:
+      request:
+        set:
+          x-lamina-service: "kiali"
+  
+  # Default route - only match specific paths to avoid conflicts with hostname-based routing
+  - match:
+    - uri:
+        prefix: /core
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: lamina-core.lamina-system.svc.cluster.local
+        port:
+          number: 8080
+    headers:
+      request:
+        set:
+          x-lamina-service: "lamina-core"
+
+{{- end }}

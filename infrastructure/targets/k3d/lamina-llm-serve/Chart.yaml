@@ -1,0 +1,24 @@
+apiVersion: v2
+name: lamina-llm-serve
+description: A Helm chart for Lamina LLM Serve - centralized model caching and serving
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - lamina
+  - llm
+  - ai
+  - model-serving
+home: https://getlamina.ai
+sources:
+  - https://github.com/lamina-ai/lamina-os
+maintainers:
+  - name: Luthier
+    email: luthier@getlamina.ai
+  - name: Ben Askins
+    email: human@getlamina.ai
+# dependencies:
+#   - name: istio-base
+#     version: "1.x.x"
+#     repository: "https://istio-release.storage.googleapis.com/charts"
+#     condition: istio.enabled

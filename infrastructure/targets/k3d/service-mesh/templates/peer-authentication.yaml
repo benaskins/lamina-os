@@ -1,0 +1,33 @@
+# Default mTLS Policy for all services
+{{- if .Values.security.peerAuthentication.default }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default-mtls
+  namespace: istio-system
+spec:
+  mtls:
+    mode: {{ .Values.security.peerAuthentication.default.mtls.mode }}
+{{- end }}
+
+# Namespace-specific mTLS policies
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: lamina-mtls
+  namespace: lamina-system
+spec:
+  mtls:
+    mode: {{ .Values.mesh.mtls.mode }}
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: observability-mtls
+  namespace: observability
+spec:
+  mtls:
+    mode: {{ .Values.mesh.mtls.mode }}

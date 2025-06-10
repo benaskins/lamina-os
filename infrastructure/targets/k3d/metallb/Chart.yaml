@@ -1,0 +1,13 @@
+apiVersion: v2
+name: metallb
+description: MetalLB load balancer for bare metal Kubernetes
+type: application
+version: 0.1.0
+appVersion: "v0.14.3"
+keywords:
+  - loadbalancer
+  - metallb
+  - networking
+maintainers:
+  - name: Lamina Team
+    email: support@getlamina.ai
