@@ -22,6 +22,7 @@ This index provides both human and machine-readable access to all Architecture D
 - [ADR-0007](0007-lamina-core-terminology-framework.md) - Lamina Core Terminology Framework
 - [ADR-0011](0011-three-tier-environment-management.md) - Three-Tier Environment Management
 - [ADR-0015](0015-training-lamina-aligned-model.md) - Training a Lamina-Aligned Model on ADR Corpus
+- [ADR-0021](0021-infrastructure-distribution-strategy.md) - Infrastructure Distribution Strategy
 
 ### Feature Branch ADRs
 - **feature/sigil-script-system**
@@ -33,7 +34,7 @@ This index provides both human and machine-readable access to all Architecture D
 | Status | Count | ADR Numbers |
 |--------|-------|-------------|
 | Accepted | 11 | 0001, 0002, 0004, 0005, 0006, 0010, 0012, 0013, 0014, 0016, 0017 |
-| Proposed | 6 | 0003, 0007, 0008*, 0009*, 0011, 0015 |
+| Proposed | 7 | 0003, 0007, 0008*, 0009*, 0011, 0015, 0021 |
 | Draft | 0 | - |
 
 *In feature branch
@@ -76,10 +77,10 @@ graph TD
   "adr_index": {
     "version": "1.0.0",
     "generated": "2025-06-02",
-    "total_adrs": 17,
+    "total_adrs": 18,
     "status_counts": {
       "accepted": 11,
-      "proposed": 6,
+      "proposed": 7,
       "draft": 0
     },
     "adrs": [
