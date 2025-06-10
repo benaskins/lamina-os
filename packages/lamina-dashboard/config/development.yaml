@@ -1,0 +1,15 @@
+# Development configuration for Lamina Dashboard
+server:
+  autoreload: true
+  debug: true
+  workers: 1
+  worker_class: eventlet
+  
+monitoring:
+  update_interval: 2  # Faster updates for development
+  prometheus_timeout: 5
+  kubernetes_timeout: 15
+
+logging:
+  level: DEBUG
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
