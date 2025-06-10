@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanctuary Cluster Visualization - Lamina OS</title>
+    <link rel="stylesheet" href="/static/css/sanctuary.css">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="sanctuary-dashboard">
+        <header class="dashboard-header">
+            <h1>🌬️ Sanctuary Cluster</h1>
+            <div class="cluster-status">
+                <span id="connection-status" class="status-indicator">●</span>
+                <span id="last-update">Connecting...</span>
+            </div>
+        </header>
+
+        <div class="dashboard-layout">
+            <!-- Main Sanctuary View -->
+            <section class="sanctuary-main">
+                <div class="sanctuary-section">
+                    <h2>Ingress</h2>
+                    <div id="ingress-container" class="component-container">
+                        <!-- Ingress components will be populated here -->
+                    </div>
+                </div>
+
+                <div class="agents-section">
+                    <h2>Agents (API servers w agent chat loop awaiting messages)</h2>
+                    <div id="agents-container" class="agents-grid">
+                        <!-- Agent circles will be populated here -->
+                    </div>
+                    <!-- Traffic visualization overlay -->
+                    <svg id="traffic-overlay" class="traffic-overlay">
+                        <!-- Traffic flow lines will be drawn here -->
+                    </svg>
+                </div>
+
+                <div class="bottom-row">
+                    <div class="models-section">
+                        <h2>Models (lamina-llm-serve instances)</h2>
+                        <div id="models-container" class="component-grid">
+                            <!-- Model instances will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="memory-section">
+                        <h2>Memory</h2>
+                        <div id="memory-container" class="component-grid">
+                            <!-- Memory systems will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Telemetry Sidebar -->
+            <aside class="telemetry-sidebar">
+                <h2>Telemetry</h2>
+                <div id="telemetry-container" class="telemetry-list">
+                    <!-- Telemetry components will be populated here -->
+                </div>
+
+                <h3>Network Traffic</h3>
+                <div id="traffic-overview" class="traffic-section">
+                    <div class="traffic-metric">
+                        <label>Request Rate:</label>
+                        <span id="request-rate">0 req/s</span>
+                    </div>
+                    <div class="traffic-metric">
+                        <label>Error Rate:</label>
+                        <span id="error-rate">0%</span>
+                    </div>
+                    <div class="traffic-metric">
+                        <label>Active Flows:</label>
+                        <span id="active-flows">0</span>
+                    </div>
+                </div>
+
+                <h3>Active Flows</h3>
+                <div id="traffic-flows" class="traffic-flows">
+                    <!-- Traffic flows will be populated here -->
+                </div>
+            </aside>
+        </div>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="cluster-health">
+                <span id="cluster-health-text">Cluster Health: </span>
+                <div id="cluster-health-bar" class="health-bar">
+                    <div id="cluster-health-fill" class="health-fill"></div>
+                </div>
+            </div>
+            <div class="breathing-indicator">
+                <span id="breathing-state">Breathing: Steady</span>
+                <div id="breathing-animation" class="breathing-circle"></div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

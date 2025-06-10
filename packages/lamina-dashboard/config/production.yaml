@@ -1,0 +1,24 @@
+# Production configuration for Lamina Dashboard
+server:
+  autoreload: false
+  debug: false
+  workers: 1  # Single worker for WebSocket support
+  worker_class: eventlet
+  timeout: 30
+  keepalive: 2
+  max_requests: 1000
+  max_requests_jitter: 50
+  
+monitoring:
+  update_interval: 5
+  prometheus_timeout: 10
+  kubernetes_timeout: 30
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+security:
+  # Additional security settings for production
+  proxy_headers: true
+  forwarded_allow_ips: "*"

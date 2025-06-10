@@ -1,0 +1,17 @@
+apiVersion: v2
+name: lamina-dashboard
+description: Sanctuary Cluster Visualization Dashboard for Lamina OS
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - lamina
+  - dashboard
+  - kubernetes
+  - monitoring
+  - visualization
+maintainers:
+  - name: Luthier
+    email: luthier@getlamina.ai
+sources:
+  - https://github.com/lamina-os/lamina-os

@@ -1,0 +1,80 @@
+[project]
+name = "lamina-dashboard"
+version = "0.1.0"
+description = "Sanctuary Cluster Visualization Dashboard for Lamina OS"
+authors = [
+    { name = "Luthier", email = "luthier@getlamina.ai" },
+    { name = "Ben Askins", email = "human@getlamina.ai" }
+]
+readme = "README.md"
+license = { text = "MPL-2.0" }
+requires-python = ">=3.11"
+keywords = ["lamina", "kubernetes", "dashboard", "monitoring", "istio"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Systems Administration",
+]
+
+dependencies = [
+    "flask>=3.0.0",
+    "flask-socketio>=5.3.0",
+    "requests>=2.31.0",
+    "pyyaml>=6.0",
+    "kubernetes>=28.1.0",
+    "gunicorn>=21.2.0",
+    "eventlet>=0.33.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+lamina-dashboard = "lamina_dashboard.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/lamina-os/lamina-os"
+Documentation = "https://docs.getlamina.ai"
+Repository = "https://github.com/lamina-os/lamina-os"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lamina_dashboard*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["lamina_dashboard"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+precision = 2
