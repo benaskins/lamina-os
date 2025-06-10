@@ -16,6 +16,7 @@ eventlet.monkey_patch()
 
 import asyncio
 import json
+import secrets
 from datetime import datetime
 from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
@@ -37,7 +38,15 @@ parent_dir = os.path.dirname(current_dir)
 app = Flask(__name__, 
            template_folder=os.path.join(parent_dir, 'templates'),
            static_folder=os.path.join(parent_dir, 'static'))
-app.config['SECRET_KEY'] = 'lamina-sanctuary-dashboard'
+
+# Use environment variable for SECRET_KEY with secure fallback
+secret_key = os.getenv('FLASK_SECRET_KEY')
+if not secret_key:
+    # Generate a secure random key if none provided
+    secret_key = secrets.token_hex(32)
+    print("⚠️  Using auto-generated SECRET_KEY. Set FLASK_SECRET_KEY environment variable for production.")
+
+app.config['SECRET_KEY'] = secret_key
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Load configuration and initialize components
@@ -177,5 +186,13 @@ if __name__ == '__main__':
     print("🔗 Access at: http://localhost:5001")
     print("📊 Monitoring Lamina OS cluster state...")
     
-    # Start Flask app with SocketIO (development mode)
-    socketio.run(app, host='0.0.0.0', port=5001, debug=True)
+    # Get server configuration
+    server_config = config.get_server_config()
+    debug_mode = server_config.get('debug', False)
+    host = server_config.get('host', '0.0.0.0')
+    port = server_config.get('port', 5001)
+    
+    print(f"🔧 Running in {'debug' if debug_mode else 'production'} mode")
+    
+    # Start Flask app with SocketIO using configuration
+    socketio.run(app, host=host, port=port, debug=debug_mode)
