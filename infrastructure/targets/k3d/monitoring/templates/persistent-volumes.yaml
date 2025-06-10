@@ -1,0 +1,53 @@
+# Persistent volumes for monitoring data using host mount
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-data-pv
+  labels:
+    app: prometheus
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: lamina-host-storage
+  hostPath:
+    path: /lamina-data/prometheus
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loki-data-pv
+  labels:
+    app: loki
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: lamina-host-storage
+  hostPath:
+    path: /lamina-data/loki
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-data-pv
+  labels:
+    app: grafana
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: lamina-host-storage
+  hostPath:
+    path: /lamina-data/grafana
+    type: DirectoryOrCreate
+# Note: StorageClass is created by istio-config chart to avoid duplication

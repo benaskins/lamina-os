@@ -13,12 +13,18 @@ infrastructure/
 │   │   ├── observability/             # Jaeger, Kiali for service mesh
 │   │   └── service-mesh/              # Base Istio configuration
 │   └── targets/
-│       └── colima-k3s/                # Target-specific chart modifications
-│           ├── colima-service-mesh/   # Colima-specific Istio config
+│       ├── colima-k3s/                # Target-specific chart modifications
+│       │   ├── colima-service-mesh/   # Colima-specific Istio config
+│       │   └── metallb/               # LoadBalancer configuration
+│       └── k3d/                       # k3d target modifications
+│           ├── k3d-service-mesh/      # k3d-specific Istio config
 │           └── metallb/               # LoadBalancer configuration
 ├── scripts/
 │   └── targets/
-│       └── colima-k3s/
+│       ├── colima-k3s/
+│       │   ├── setup.sh               # Deployment script
+│       │   └── teardown.sh            # Cleanup script
+│       └── k3d/
 │           ├── setup.sh               # Deployment script
 │           └── teardown.sh            # Cleanup script
 ├── environments/                      # Environment-specific values
@@ -47,13 +53,13 @@ infrastructure/
 
 ## Usage
 
-### Development Environment
+### Development Environment (k3d)
 ```bash
-cd infrastructure/scripts/targets/colima-k3s
+cd infrastructure/scripts/targets/k3d
 ./setup.sh --env development
 ```
 
-### Production Environment  
+### Production Environment (Colima/K3s)
 ```bash
 cd infrastructure/scripts/targets/colima-k3s
 ./setup.sh --env production
@@ -61,7 +67,7 @@ cd infrastructure/scripts/targets/colima-k3s
 
 ### Teardown
 ```bash
-cd infrastructure/scripts/targets/colima-k3s
+cd infrastructure/scripts/targets/k3d
 ./teardown.sh --env [development|production]
 ```
 

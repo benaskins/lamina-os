@@ -1,0 +1,20 @@
+{{- if and .Values.istio.enabled .Values.ingress.enabled }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "lamina-llm-serve.fullname" . }}-vs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "lamina-llm-serve.labels" . | nindent 4 }}
+spec:
+  hosts:
+  - {{ .Values.ingress.hostname }}
+  gateways:
+  - {{ .Values.istio.gateway }}
+  http:
+  - route:
+    - destination:
+        host: {{ include "lamina-llm-serve.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+        port:
+          number: {{ .Values.service.port }}
+{{- end }}

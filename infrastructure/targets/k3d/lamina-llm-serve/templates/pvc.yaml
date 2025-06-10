@@ -1,0 +1,18 @@
+{{- if .Values.models.storage }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "lamina-llm-serve.fullname" . }}-models-pvc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "lamina-llm-serve.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.models.storage.size }}
+  {{- if .Values.models.storage.storageClass }}
+  storageClassName: {{ .Values.models.storage.storageClass }}
+  {{- end }}
+{{- end }}
