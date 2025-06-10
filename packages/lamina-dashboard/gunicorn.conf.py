@@ -8,16 +8,16 @@ import os
 bind = "0.0.0.0:5001"
 backlog = 2048
 
-# Worker processes
-workers = 1  # Use single worker for WebSocket support
+# Worker processes - single worker for stability
+workers = 1  # Single worker for WebSocket and stability
 worker_class = "eventlet"  # Required for SocketIO WebSocket support
-worker_connections = 1000
-timeout = 30
-keepalive = 2
+worker_connections = 100  # Reduced for stability
+timeout = 60  # Increased timeout for health checks
+keepalive = 5
 
-# Restart workers after this many requests, to prevent memory leaks
-max_requests = 1000
-max_requests_jitter = 50
+# Restart workers less frequently for stability
+max_requests = 10000  # Higher threshold
+max_requests_jitter = 100
 
 # Logging
 accesslog = "-"  # Log to stdout

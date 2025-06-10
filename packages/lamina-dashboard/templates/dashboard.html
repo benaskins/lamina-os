@@ -83,6 +83,13 @@
                 <div id="traffic-flows" class="traffic-flows">
                     <!-- Traffic flows will be populated here -->
                 </div>
+
+                <h3>Pod Status</h3>
+                <div id="pod-status-section" class="pod-status-section">
+                    <div id="problematic-pods" class="problematic-pods">
+                        <!-- Problematic pods will be populated here -->
+                    </div>
+                </div>
             </aside>
         </div>
 
@@ -101,6 +108,6 @@
         </footer>
     </div>
 
-    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/dashboard.js?v={{ cache_bust }}"></script>
 </body>
 </html>

@@ -33,25 +33,29 @@ ingress:
 resources:
   limits:
     cpu: 500m
-    memory: 512Mi
+    memory: 2Gi
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 1Gi
 
 # Health checks
 livenessProbe:
   httpGet:
     path: /api/cluster/state
     port: 5001
-  initialDelaySeconds: 30
+  initialDelaySeconds: 60
   periodSeconds: 30
+  timeoutSeconds: 15
+  failureThreshold: 5
 
 readinessProbe:
   httpGet:
     path: /api/cluster/state
     port: 5001
-  initialDelaySeconds: 5
-  periodSeconds: 10
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  timeoutSeconds: 15
+  failureThreshold: 5
 
 # Security context
 securityContext:

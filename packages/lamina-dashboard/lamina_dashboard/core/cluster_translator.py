@@ -323,17 +323,72 @@ class ClusterTranslator:
         return agents
     
     def _assess_cluster_health(self, raw_data: Dict) -> Dict[str, Any]:
-        """Assess overall cluster health."""
+        """Assess overall cluster health with detailed pod states."""
         pods = raw_data.get('pods', [])
-        ready_pods = sum(1 for pod in pods if self._is_pod_ready(pod))
+        
+        # Categorize pods by status
+        pod_states = {
+            'running': [],
+            'pending': [],
+            'terminating': [],
+            'failed': [],
+            'unknown': []
+        }
+        
+        ready_pods = 0
+        
+        for pod in pods:
+            pod_name = pod.get('metadata', {}).get('name', 'unknown')
+            namespace = pod.get('metadata', {}).get('namespace', 'unknown')
+            phase = pod.get('status', {}).get('phase', 'Unknown')
+            is_ready = self._is_pod_ready(pod)
+            restart_count = self._get_restart_count(pod)
+            
+            # Check if pod is terminating
+            deletion_timestamp = pod.get('metadata', {}).get('deletionTimestamp')
+            is_terminating = deletion_timestamp is not None
+            
+            pod_info = {
+                'name': pod_name,
+                'namespace': namespace,
+                'phase': phase,
+                'ready': is_ready,
+                'restart_count': restart_count,
+                'age': self._calculate_pod_age(pod)
+            }
+            
+            if is_ready:
+                ready_pods += 1
+            
+            # Categorize by state
+            if is_terminating:
+                pod_info['reason'] = 'Terminating'
+                pod_states['terminating'].append(pod_info)
+            elif phase == 'Running':
+                if not is_ready:
+                    pod_info['reason'] = 'Not Ready'
+                pod_states['running'].append(pod_info)
+            elif phase == 'Pending':
+                pod_info['reason'] = 'Pending'
+                pod_states['pending'].append(pod_info)
+            elif phase == 'Failed':
+                pod_info['reason'] = 'Failed'
+                pod_states['failed'].append(pod_info)
+            else:
+                pod_info['reason'] = f'Unknown ({phase})'
+                pod_states['unknown'].append(pod_info)
+        
         total_pods = len(pods)
+        failing_pods = total_pods - ready_pods
         
         return {
             'overall_health': ready_pods / total_pods if total_pods > 0 else 0,
             'total_pods': total_pods,
             'ready_pods': ready_pods,
-            'failing_pods': total_pods - ready_pods,
-            'breathing_state': 'steady' if ready_pods == total_pods else 'irregular'
+            'failing_pods': failing_pods,
+            'breathing_state': 'steady' if ready_pods == total_pods else 'irregular',
+            'pod_states': pod_states,
+            'problematic_pods': pod_states['pending'] + pod_states['terminating'] + pod_states['failed'] + pod_states['unknown'] + [p for p in pod_states['running'] if not p['ready']]
         }
     
     # Utility methods for other component types

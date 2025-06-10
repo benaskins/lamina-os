@@ -30,6 +30,7 @@ class SanctuaryDashboard {
 
         this.socket.on('cluster_update', (data) => {
             console.log('Received cluster update:', data);
+            console.log('📊 Health data received:', data.cluster_health);
             this.clusterState = data;
             this.updateDashboard(data);
             this.lastUpdateTime = new Date();
@@ -56,6 +57,13 @@ class SanctuaryDashboard {
         setInterval(() => {
             this.updateLastUpdateTime();
         }, 1000);
+
+        // Auto-refresh cluster data every 10 seconds
+        setInterval(() => {
+            if (this.socket && this.socket.connected) {
+                this.socket.emit('request_update');
+            }
+        }, 10000);
     }
 
     updateConnectionStatus(status) {
@@ -106,6 +114,41 @@ class SanctuaryDashboard {
         this.updateTelemetry(data.telemetry || {});
         this.updateNetworkTraffic(data.network_traffic || {});
         this.updateClusterHealth(data.cluster_health || {});
+        this.updatePodStatus();
+    }
+
+    async updatePodStatus() {
+        try {
+            const response = await fetch('/api/pod-states');
+            const data = await response.json();
+            this.updateProblematicPods(data.problematic_pods || []);
+        } catch (error) {
+            console.error('Error fetching pod states:', error);
+        }
+    }
+
+    updateProblematicPods(problematicPods) {
+        const container = document.getElementById('problematic-pods');
+        container.innerHTML = '';
+        
+        if (problematicPods.length === 0) {
+            container.innerHTML = '<div style="color: var(--lamina-green); text-align: center; padding: 10px;">✅ All pods healthy</div>';
+            return;
+        }
+        
+        problematicPods.forEach(pod => {
+            const podElement = document.createElement('div');
+            podElement.className = `pod-item ${pod.reason.toLowerCase().replace(/\s+/g, '-')}`;
+            
+            podElement.innerHTML = `
+                <div class="pod-name">${pod.name}</div>
+                <div class="pod-namespace">${pod.namespace}</div>
+                <div class="pod-reason">${pod.reason}</div>
+                <div class="pod-details">Phase: ${pod.phase} | Restarts: ${pod.restart_count} | Age: ${pod.age}</div>
+            `;
+            
+            container.appendChild(podElement);
+        });
     }
 
     updateIngress(ingress) {
@@ -342,6 +385,7 @@ class SanctuaryDashboard {
 
         if (health.overall_health !== undefined) {
             const healthPercent = Math.round(health.overall_health * 100);
+            console.log(`🏥 Updating health display: ${health.overall_health} -> ${healthPercent}%`);
             healthText.textContent = `Cluster Health: ${healthPercent}%`;
             healthFill.style.width = `${healthPercent}%`;
             

@@ -493,3 +493,60 @@ body {
 .traffic-flow-item.high-rate {
     background: rgba(106, 76, 147, 0.1);
 }
+
+/* Pod Status Section */
+.pod-status-section {
+    margin-bottom: 20px;
+}
+
+.problematic-pods {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.pod-item {
+    background: rgba(40, 45, 50, 0.6);
+    border-left: 4px solid var(--warning-color);
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.pod-item.terminating {
+    border-left-color: var(--warning-color);
+}
+
+.pod-item.failed {
+    border-left-color: var(--error-color);
+}
+
+.pod-item.pending {
+    border-left-color: var(--warning-color);
+}
+
+.pod-item.not-ready {
+    border-left-color: var(--warning-color);
+}
+
+.pod-name {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.pod-namespace {
+    color: var(--secondary-color);
+    font-size: 11px;
+}
+
+.pod-reason {
+    color: var(--warning-color);
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.pod-details {
+    color: var(--text-muted);
+    font-size: 10px;
+    margin-top: 2px;
+}

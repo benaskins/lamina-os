@@ -10,6 +10,10 @@ A web-based dashboard that visualizes Kubernetes cluster state through
 Lamina OS abstractions (sanctuaries, agents, breathing patterns).
 """
 
+# CRITICAL: Import eventlet first and patch before any other modules
+import eventlet
+eventlet.monkey_patch()
+
 import asyncio
 import json
 from datetime import datetime
@@ -44,7 +48,7 @@ k8s_client = KubernetesClient()
 prometheus_client = PrometheusClient()
 translator = ClusterTranslator(k8s_client, prometheus_client)
 
-# Global state for real-time updates
+# Global state for real-time updates - use thread-safe approach
 cluster_state = {
     'last_updated': None,
     'sanctuaries': {},
@@ -54,79 +58,102 @@ cluster_state = {
     'telemetry': {}
 }
 
-def update_cluster_state():
-    """Background task to continuously update cluster state."""
-    while True:
-        try:
-            # Get raw cluster data
-            raw_data = k8s_client.get_cluster_snapshot()
-            
-            # Create translator without Prometheus to avoid failing queries
-            k8s_translator = ClusterTranslator(k8s_client, None)
-            lamina_data = k8s_translator.translate_cluster_state(raw_data)
-            
-            # Update global state
-            global cluster_state
-            cluster_state.update(lamina_data)
-            cluster_state['last_updated'] = datetime.now().isoformat()
-            
-            # Emit updates to connected clients
-            socketio.emit('cluster_update', cluster_state)
-            print(f"✅ Cluster state updated: {len(lamina_data.get('sanctuaries', {}))} sanctuaries, {len(lamina_data.get('telemetry', {}))} telemetry")
-            
-        except Exception as e:
-            print(f"Error updating cluster state: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Use configurable update interval
-        time.sleep(monitoring_config.get('update_interval', 5))
+# No background monitoring in web app - keep it simple and stable
+# WebSocket will only send data when API endpoints are called
 
 @app.route('/')
 def dashboard():
     """Main dashboard page."""
-    return render_template('dashboard.html')
+    # Add cache-busting timestamp
+    timestamp = str(int(time.time()))
+    return render_template('dashboard.html', cache_bust=timestamp)
 
 @app.route('/api/cluster/state')
 def get_cluster_state():
     """Get current cluster state in Lamina abstractions."""
-    return jsonify(cluster_state)
+    try:
+        # Force fresh data fetch to avoid stale global state in multiprocess environment
+        print(f"🔄 Fetching fresh cluster data for API request")
+        raw_data = k8s_client.get_cluster_snapshot()
+        k8s_translator = ClusterTranslator(k8s_client, None)
+        fresh_data = k8s_translator.translate_cluster_state(raw_data)
+        fresh_data['last_updated'] = datetime.now().isoformat()
+        print(f"✅ Fresh data: {fresh_data.get('cluster_health', {}).get('total_pods')} pods, {fresh_data.get('cluster_health', {}).get('overall_health')} health")
+        return jsonify(fresh_data)
+    except Exception as e:
+        print(f"❌ Error fetching fresh cluster state: {e}")
+        # Fallback to global state if fresh fetch fails
+        return jsonify(cluster_state)
+
+def get_fresh_cluster_data():
+    """Helper function to get fresh cluster data."""
+    try:
+        raw_data = k8s_client.get_cluster_snapshot()
+        k8s_translator = ClusterTranslator(k8s_client, None)
+        return k8s_translator.translate_cluster_state(raw_data)
+    except Exception as e:
+        print(f"Error fetching fresh data: {e}")
+        return cluster_state
 
 @app.route('/api/sanctuaries')
 def get_sanctuaries():
     """Get all sanctuary information."""
-    return jsonify(cluster_state.get('sanctuaries', {}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('sanctuaries', {}))
 
 @app.route('/api/agents')
 def get_agents():
     """Get all agent status and information."""
-    return jsonify(cluster_state.get('agents', {}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('agents', {}))
 
 @app.route('/api/models')
 def get_models():
     """Get model serving status."""
-    return jsonify(cluster_state.get('models', {}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('models', {}))
 
 @app.route('/api/memory')
 def get_memory_systems():
     """Get memory system status."""
-    return jsonify(cluster_state.get('memory_systems', {}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('memory_systems', {}))
 
 @app.route('/api/telemetry')
 def get_telemetry():
     """Get telemetry and observability status."""
-    return jsonify(cluster_state.get('telemetry', {}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('telemetry', {}))
 
 @app.route('/api/traffic')
 def get_network_traffic():
     """Get network traffic flows and metrics."""
-    return jsonify(cluster_state.get('network_traffic', {'flows': [], 'metrics': {}}))
+    fresh_data = get_fresh_cluster_data()
+    return jsonify(fresh_data.get('network_traffic', {'flows': [], 'metrics': {}}))
+
+@app.route('/api/pod-states')
+def get_pod_states():
+    """Get detailed pod state information including problematic pods."""
+    fresh_data = get_fresh_cluster_data()
+    cluster_health = fresh_data.get('cluster_health', {})
+    return jsonify({
+        'pod_states': cluster_health.get('pod_states', {}),
+        'problematic_pods': cluster_health.get('problematic_pods', []),
+        'summary': {
+            'total_pods': cluster_health.get('total_pods', 0),
+            'ready_pods': cluster_health.get('ready_pods', 0),
+            'failing_pods': cluster_health.get('failing_pods', 0),
+            'overall_health': cluster_health.get('overall_health', 0)
+        }
+    })
 
 @socketio.on('connect')
 def handle_connect():
     """Handle client connection."""
     print('Client connected')
-    emit('cluster_update', cluster_state)
+    # Send fresh data on connect
+    fresh_data = get_fresh_cluster_data()
+    emit('cluster_update', fresh_data)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -136,38 +163,14 @@ def handle_disconnect():
 @socketio.on('request_update')
 def handle_update_request():
     """Handle manual update request from client."""
-    emit('cluster_update', cluster_state)
+    # Always send fresh data on request
+    fresh_data = get_fresh_cluster_data()
+    emit('cluster_update', fresh_data)
 
-# Start background monitoring when module is loaded (for Gunicorn)
-def start_monitoring():
-    """Start the background monitoring thread."""
-    try:
-        if not hasattr(app, '_monitoring_started'):
-            update_thread = threading.Thread(target=update_cluster_state, daemon=True)
-            update_thread.start()
-            app._monitoring_started = True
-            print("🔄 Background cluster monitoring started")
-            
-            # Force an immediate update
-            try:
-                raw_data = k8s_client.get_cluster_snapshot()
-                k8s_translator = ClusterTranslator(k8s_client, None)
-                lamina_data = k8s_translator.translate_cluster_state(raw_data)
-                global cluster_state
-                cluster_state.update(lamina_data)
-                cluster_state['last_updated'] = datetime.now().isoformat()
-                print(f"🚀 Initial cluster state loaded: {len(lamina_data.get('sanctuaries', {}))} sanctuaries, {len(lamina_data.get('telemetry', {}))} telemetry")
-            except Exception as e:
-                print(f"Failed to load initial cluster state: {e}")
-                import traceback
-                traceback.print_exc()
-    except Exception as e:
-        print(f"Failed to start monitoring: {e}")
-        import traceback
-        traceback.print_exc()
-
-# Start monitoring immediately
-start_monitoring()
+# Simplified startup - no background threads
+print("🌬️ Sanctuary Dashboard initialized")
+print("📊 Using on-demand cluster state fetching")
+print("🔗 WebSocket support enabled")
 
 if __name__ == '__main__':
     print("🌬️ Starting Sanctuary Dashboard")
