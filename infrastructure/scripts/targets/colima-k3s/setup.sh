@@ -387,9 +387,6 @@ install_lamina_dashboard() {
         --create-namespace \
         --wait
     
-    # Enable Istio sidecar injection on the namespace (idempotent)
-    kubectl label namespace lamina-dashboard istio-injection=enabled --overwrite
-    
     # Restart deployment to ensure latest image is used
     kubectl rollout restart deployment/lamina-dashboard -n lamina-dashboard
     kubectl rollout status deployment/lamina-dashboard -n lamina-dashboard --timeout=300s
