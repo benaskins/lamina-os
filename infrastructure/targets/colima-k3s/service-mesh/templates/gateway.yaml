@@ -29,7 +29,7 @@ spec:
   {{- end }}
 
 ---
-# Grafana VirtualService
+# Grafana VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -41,6 +41,17 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  # Redirect HTTP to HTTPS
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
+  # HTTPS traffic routing
   - route:
     - destination:
         host: grafana.monitoring.svc.cluster.local
@@ -48,7 +59,7 @@ spec:
           number: 3000
 
 ---
-# Prometheus VirtualService
+# Prometheus VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -60,6 +71,15 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - route:
     - destination:
         host: prometheus.monitoring.svc.cluster.local
@@ -67,7 +87,7 @@ spec:
           number: 9090
 
 ---
-# Jaeger VirtualService
+# Jaeger VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -79,6 +99,15 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - route:
     - destination:
         host: jaeger-query.observability.svc.cluster.local
@@ -86,7 +115,7 @@ spec:
           number: 16686
 
 ---
-# Kiali VirtualService
+# Kiali VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -98,6 +127,15 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - route:
     - destination:
         host: kiali.observability.svc.cluster.local
@@ -105,7 +143,7 @@ spec:
           number: 20001
 
 ---
-# Lamina Core VirtualService
+# Lamina Core VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -117,6 +155,15 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - route:
     - destination:
         host: lamina-core.lamina-system.svc.cluster.local
@@ -124,7 +171,7 @@ spec:
           number: 8080
 
 ---
-# Lamina Dashboard VirtualService
+# Lamina Dashboard VirtualService with HTTPS redirect
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -136,6 +183,15 @@ spec:
   gateways:
   - {{ .Values.gateway.name }}
   http:
+  {{- if .Values.gateway.httpsOnly }}
+  - match:
+    - headers:
+        ":scheme":
+          exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - route:
     - destination:
         host: lamina-dashboard.lamina-dashboard.svc.cluster.local

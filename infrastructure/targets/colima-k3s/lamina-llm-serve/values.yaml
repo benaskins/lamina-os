@@ -58,6 +58,19 @@ securityContext:
   fsGroup: 1000
   runAsGroup: 1000
 
+# ChromaDB configuration
+chromadb:
+  auth:
+    # Base64 encoded token for production use
+    token: ""  # Override in production with generated token
+    # Plain text token for development (DO NOT USE IN PRODUCTION)
+    tokenPlain: "lamina_chroma_token_dev"
+    # Enable debug mode for development
+    debug: false
+
+# Namespace configuration
+namespace: lamina-llm-serve
+
 # Node selection
 nodeSelector: 
   kubernetes.io/hostname: "colima-production"  # Default for Colima target
