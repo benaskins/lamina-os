@@ -1,0 +1,273 @@
+# Istio AuthorizationPolicies for fine-grained service-to-service access control
+# These policies implement zero-trust authorization with explicit allow rules
+
+---
+# Default deny-all policy for lamina-system namespace
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: lamina-system-default-deny
+  namespace: lamina-system
+spec:
+  # No rules = deny all by default
+
+---
+# Allow access to lamina-core services from specific sources
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: lamina-core-access
+  namespace: lamina-system
+spec:
+  selector:
+    matchLabels:
+      app: lamina-core
+  rules:
+  # Allow ingress gateway to access lamina-core
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow monitoring to scrape metrics
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics", "/health", "/ready"]
+  # Allow observability to collect traces
+  - from:
+    - source:
+        namespaces: ["observability"]
+  # Allow lamina-llm-serve communication
+  - from:
+    - source:
+        namespaces: ["lamina-llm-serve"]
+  - to:
+    - source:
+        namespaces: ["lamina-llm-serve"]
+
+---
+# Default deny-all policy for monitoring namespace
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: monitoring-default-deny
+  namespace: monitoring
+spec:
+  # No rules = deny all by default
+
+---
+# Allow access to Prometheus
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: prometheus-access
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  rules:
+  # Allow ingress gateway for UI access
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow Grafana to query Prometheus
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+        principals: ["cluster.local/ns/monitoring/sa/grafana"]
+  # Allow scraping metrics from all namespaces
+  - to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/api/v1/*", "/metrics"]
+
+---
+# Allow access to Grafana
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: grafana-access
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  rules:
+  # Allow ingress gateway for UI access
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow internal health checks
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/api/health", "/metrics"]
+
+---
+# Allow access to Loki
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: loki-access
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: loki
+  rules:
+  # Allow Vector to send logs
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+        principals: ["cluster.local/ns/monitoring/sa/vector"]
+  # Allow Grafana to query logs
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+        principals: ["cluster.local/ns/monitoring/sa/grafana"]
+  # Allow all namespaces to send logs via Vector
+  - from:
+    - source:
+        namespaces: ["lamina-system", "lamina-llm-serve", "observability"]
+
+---
+# Default deny-all policy for observability namespace
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: observability-default-deny
+  namespace: observability
+spec:
+  # No rules = deny all by default
+
+---
+# Allow access to Jaeger
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: jaeger-access
+  namespace: observability
+spec:
+  selector:
+    matchLabels:
+      app: jaeger
+  rules:
+  # Allow ingress gateway for UI access
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow all namespaces to send traces
+  - from:
+    - source:
+        namespaces: ["lamina-system", "lamina-llm-serve", "monitoring"]
+    to:
+    - operation:
+        ports: ["14268", "14250"]  # Jaeger collector ports
+
+---
+# Allow access to Kiali
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: kiali-access
+  namespace: observability
+spec:
+  selector:
+    matchLabels:
+      app: kiali
+  rules:
+  # Allow ingress gateway for UI access
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow Kiali to query all namespaces for mesh visualization
+  - to:
+    - operation:
+        methods: ["GET"]
+
+---
+# Default deny-all policy for lamina-llm-serve namespace
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: lamina-llm-serve-default-deny
+  namespace: lamina-llm-serve
+spec:
+  # No rules = deny all by default
+
+---
+# Allow access to lamina-llm-serve services
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: lamina-llm-serve-access
+  namespace: lamina-llm-serve
+spec:
+  selector:
+    matchLabels:
+      app: lamina-llm-serve
+  rules:
+  # Allow ingress gateway for API access
+  - from:
+    - source:
+        namespaces: ["istio-gateway"]
+  # Allow lamina-system services to access models
+  - from:
+    - source:
+        namespaces: ["lamina-system"]
+  # Allow monitoring to scrape metrics
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics", "/health"]
+  # Allow observability to collect traces
+  - from:
+    - source:
+        namespaces: ["observability"]
+
+---
+# ChromaDB access control
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: chromadb-access
+  namespace: lamina-llm-serve
+spec:
+  selector:
+    matchLabels:
+      app: chromadb
+  rules:
+  # Only allow lamina-system services to access ChromaDB
+  - from:
+    - source:
+        namespaces: ["lamina-system"]
+        principals: ["cluster.local/ns/lamina-system/sa/lamina-core"]
+  # Allow monitoring for health checks
+  - from:
+    - source:
+        namespaces: ["monitoring"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/api/v1/heartbeat"]
+
+---
+# Istio system authorization (allow broad access for control plane)
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: istio-system-access
+  namespace: istio-system
+spec:
+  # Allow all traffic to istio-system components (control plane needs broad access)
+  rules:
+  - {}
