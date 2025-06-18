@@ -111,6 +111,30 @@ spec:
         maxRequestsPerConnection: 10
 
 ---
+# Destination rule for lamina-llm-serve services  
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: lamina-llm-serve-services
+  namespace: lamina-llm-serve
+spec:
+  host: "*.lamina-llm-serve.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 200
+        maxRequestsPerConnection: 20
+    outlierDetection:
+      consecutive5xxErrors: {{ .Values.serviceMesh.circuitBreaker.consecutiveErrors }}
+      interval: {{ .Values.serviceMesh.circuitBreaker.interval }}
+      baseEjectionTime: {{ .Values.serviceMesh.circuitBreaker.baseEjectionTime }}
+      maxEjectionPercent: {{ .Values.serviceMesh.circuitBreaker.maxEjectionPercent }}
+
+---
 # Kubernetes API server requires special handling (not part of mesh)
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
