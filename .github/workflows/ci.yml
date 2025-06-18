@@ -34,13 +34,32 @@ jobs:
     - name: Install dependencies
       run: uv sync --extra dev
     
-    - name: Lint with ruff
-      if: matrix.test-tier == 'unit'
-      run: uv run ruff check
+    - name: Auto-fix linting and formatting with ruff
+      if: matrix.test-tier == 'unit' && matrix.python-version == '3.12'
+      run: |
+        uv run ruff check --fix
+        uv run ruff format
     
-    - name: Format check with ruff
+    - name: Commit auto-fixes back to branch
+      if: matrix.test-tier == 'unit' && matrix.python-version == '3.12'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        if ! git diff --cached --quiet; then
+          git commit -m "auto-fix: apply ruff formatting and linting fixes
+
+          🤖 Auto-applied by CI
+
+          Co-Authored-By: GitHub Actions <action@github.com>"
+          git push
+        fi
+    
+    - name: Verify linting after auto-fix
       if: matrix.test-tier == 'unit'
-      run: uv run ruff format --check
+      run: |
+        uv run ruff check
+        uv run ruff format --check
     
     # Security check removed - now handled by dedicated security workflow
     
