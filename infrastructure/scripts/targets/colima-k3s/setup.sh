@@ -361,11 +361,6 @@ install_observability() {
 install_lamina_dashboard() {
     lamina_log "Installing Lamina Dashboard..."
     
-    # Create namespace with sidecar injection enabled
-    kubectl create namespace lamina-dashboard --dry-run=client -o yaml | \
-        kubectl label --local -f - istio-injection=enabled -o yaml | \
-        kubectl apply -f -
-    
     # Build and load lamina-dashboard Docker image
     local package_dir="$INFRA_DIR/../packages/lamina-dashboard"
     local image_tar_path="$package_dir/lamina-dashboard.tar"
@@ -389,7 +384,11 @@ install_lamina_dashboard() {
     # Install/upgrade dashboard - idempotent
     helm upgrade --install lamina-dashboard "$BASE_CHARTS_DIR/lamina-dashboard" \
         --namespace lamina-dashboard \
+        --create-namespace \
         --wait
+    
+    # Enable Istio sidecar injection on the namespace (idempotent)
+    kubectl label namespace lamina-dashboard istio-injection=enabled --overwrite
     
     # Restart deployment to ensure latest image is used
     kubectl rollout restart deployment/lamina-dashboard -n lamina-dashboard
@@ -467,6 +466,7 @@ install_lamina_llm_serve() {
     # Install/upgrade Lamina LLM Serve chart - idempotent
     helm upgrade --install lamina-llm-serve "$BASE_CHARTS_DIR/lamina-llm-serve" \
         --namespace lamina-llm-serve \
+        --create-namespace \
         --values "$temp_values" \
         --wait
     
