@@ -37,9 +37,41 @@ class InfrastructureConfig:
         self._config = None
         self._load_config()
 
+    def _validate_config_path(self, config_path: Path) -> bool:
+        """
+        Validate that config path is safe and doesn't contain path traversal.
+        
+        Args:
+            config_path: Path to validate
+            
+        Returns:
+            True if path is safe, False otherwise
+        """
+        try:
+            # Convert to absolute path to handle relative paths consistently
+            abs_path = config_path.resolve()
+            
+            # Check for path traversal patterns
+            path_str = str(abs_path)
+            if ".." in path_str or path_str.startswith("/etc/") or path_str.startswith("/proc/"):
+                return False
+                
+            # Allow paths in current working directory or config/ subdirectory
+            cwd = Path.cwd().resolve()
+            return (
+                abs_path.is_relative_to(cwd) or  # Within current directory
+                abs_path.name.endswith(('.yaml', '.yml', '.json'))  # Has valid config extension
+            )
+        except (OSError, ValueError):
+            return False
+
     def _load_config(self):
         """Load and process the configuration file."""
         config_path = Path(self.config_file)
+
+        # Validate path to prevent traversal attacks
+        if not self._validate_config_path(config_path):
+            raise ValueError(f"Invalid configuration path: {config_path}")
 
         if not config_path.exists():
             raise FileNotFoundError(f"Infrastructure configuration file not found: {config_path}")
