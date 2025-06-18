@@ -40,22 +40,22 @@ class InfrastructureConfig:
     def _validate_config_path(self, config_path: Path) -> bool:
         """
         Validate that config path is safe and doesn't contain path traversal.
-        
+
         Args:
             config_path: Path to validate
-            
+
         Returns:
             True if path is safe, False otherwise
         """
         try:
             # Convert to absolute path to handle relative paths consistently
             abs_path = config_path.resolve()
-            
+
             # Check for path traversal patterns
             path_str = str(abs_path)
             if ".." in path_str or path_str.startswith("/etc/") or path_str.startswith("/proc/"):
                 return False
-                
+
             # Allow paths in current working directory or config/ subdirectory
             cwd = Path.cwd().resolve()
             return (

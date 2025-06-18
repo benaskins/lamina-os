@@ -22,7 +22,6 @@ from datetime import datetime
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
 from flask_wtf.csrf import CSRFProtect
-from werkzeug.exceptions import BadRequest
 
 from .config import DashboardConfig
 from .core.cluster_translator import ClusterTranslator
@@ -92,23 +91,23 @@ def add_security_headers(response):
         "base-uri 'self';"
     )
     response.headers["Content-Security-Policy"] = csp_policy
-    
+
     # Prevent clickjacking
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
-    
+
     # Prevent MIME type sniffing
     response.headers["X-Content-Type-Options"] = "nosniff"
-    
+
     # XSS Protection
     response.headers["X-XSS-Protection"] = "1; mode=block"
-    
+
     # Referrer Policy
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    
+
     # Only send HSTS header over HTTPS
     if request.is_secure:
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-    
+
     return response
 
 def _is_allowed_origin(origin):

@@ -13,11 +13,11 @@ import yaml
 def _validate_path_safe(path: Path, allowed_base: Path) -> bool:
     """
     Validate that a path is safe and within allowed directory.
-    
+
     Args:
         path: Path to validate
         allowed_base: Base directory that path must be within
-        
+
     Returns:
         True if path is safe, False otherwise
     """
@@ -25,7 +25,7 @@ def _validate_path_safe(path: Path, allowed_base: Path) -> bool:
         # Resolve to absolute paths to handle symlinks and relative paths
         resolved_path = path.resolve()
         resolved_base = allowed_base.resolve()
-        
+
         # Check if the resolved path is within the allowed base
         return resolved_path.is_relative_to(resolved_base)
     except (OSError, ValueError):
@@ -35,25 +35,25 @@ def _validate_path_safe(path: Path, allowed_base: Path) -> bool:
 def _sanitize_filename(filename: str) -> str:
     """
     Sanitize filename to prevent path traversal.
-    
+
     Args:
         filename: Filename to sanitize
-        
+
     Returns:
         Sanitized filename
-        
+
     Raises:
         ValueError: If filename contains invalid characters
     """
     # Remove path separators and other dangerous characters
     if ".." in filename or "/" in filename or "\\" in filename:
         raise ValueError(f"Invalid filename: {filename}")
-    
+
     # Allow only alphanumeric, hyphens, underscores, and dots
     allowed_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.")
     if not all(c in allowed_chars for c in filename):
         raise ValueError(f"Filename contains invalid characters: {filename}")
-    
+
     return filename
 
 

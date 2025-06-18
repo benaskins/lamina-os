@@ -55,19 +55,19 @@ ALLOWED_ARGS = {
 def _run_secure_command(cmd_parts: list[str]) -> subprocess.CompletedProcess:
     """
     Securely execute a command with validation.
-    
+
     Args:
         cmd_parts: List of command parts (e.g., ["uv", "run", "pytest", "tests/"])
-        
+
     Returns:
         CompletedProcess result
-        
+
     Raises:
         ValueError: If command is not allowed
     """
     if not cmd_parts:
         raise ValueError("Empty command not allowed")
-    
+
     # Extract command type (e.g., "pytest" from ["uv", "run", "pytest", ...])
     cmd_type = None
     for allowed_cmd in ALLOWED_COMMANDS:
@@ -76,14 +76,14 @@ def _run_secure_command(cmd_parts: list[str]) -> subprocess.CompletedProcess:
             cmd_type = allowed_cmd
             args = cmd_parts[len(base_cmd):]
             break
-    
+
     if not cmd_type:
         raise ValueError(f"Command not allowed: {cmd_parts}")
-    
+
     # Validate arguments
     allowed_dirs = ALLOWED_ARGS[cmd_type]["directories"]
     allowed_flags = ALLOWED_ARGS[cmd_type]["flags"]
-    
+
     for arg in args:
         # Check if it's an allowed directory or flag
         is_valid = False
@@ -93,7 +93,7 @@ def _run_secure_command(cmd_parts: list[str]) -> subprocess.CompletedProcess:
                 break
         if not is_valid and arg not in allowed_flags:
             raise ValueError(f"Argument not allowed for {cmd_type}: {arg}")
-    
+
     # Execute with validated command parts
     return subprocess.run(cmd_parts, capture_output=True, text=True, timeout=300)
 

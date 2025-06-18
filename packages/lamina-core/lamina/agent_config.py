@@ -105,17 +105,17 @@ class AgentConfigLoader:
     def _validate_agent_name(self, agent_name: str) -> bool:
         """
         Validate agent name to prevent path traversal attacks.
-        
+
         Args:
             agent_name: Agent name to validate
-            
+
         Returns:
             True if name is safe, False otherwise
         """
         # Check for path traversal patterns
         if ".." in agent_name or "/" in agent_name or "\\" in agent_name:
             return False
-        
+
         # Allow only alphanumeric characters, hyphens, and underscores
         allowed_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
         return all(c in allowed_chars for c in agent_name) and len(agent_name) > 0
@@ -126,7 +126,7 @@ class AgentConfigLoader:
             # Validate agent_name to prevent path traversal
             if not self._validate_agent_name(agent_name):
                 raise ValueError(f"Invalid agent name: {agent_name}")
-            
+
             # Load from sanctuary if exists
             agent_config_path = self.sanctuary_path / "agents" / agent_name / "agent.yaml"
 

@@ -149,7 +149,7 @@ class AgenticMemoryStore:
         try:
             # Get ChromaDB token from environment variable or Kubernetes secret
             chroma_token = os.getenv("CHROMADB_TOKEN", "lamina_chroma_token")  # Fallback for dev
-            
+
             # Try to connect to containerized ChromaDB service directly (internal Docker network)
             # Use internal container name and port instead of nginx proxy
             self.client = chromadb.HttpClient(
