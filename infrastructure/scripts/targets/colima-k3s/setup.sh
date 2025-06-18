@@ -333,6 +333,43 @@ install_observability() {
     lamina_log "Observability stack installed"
 }
 
+# Install Lamina Dashboard
+install_lamina_dashboard() {
+    lamina_log "Installing Lamina Dashboard..."
+    
+    # Build and load lamina-dashboard Docker image
+    local package_dir="$INFRA_DIR/../packages/lamina-dashboard"
+    local image_tar_path="$package_dir/lamina-dashboard.tar"
+    
+    if [ -f "$package_dir/Dockerfile" ]; then
+        lamina_log "Building lamina-dashboard Docker image..."
+        cd "$package_dir"
+        docker buildx build -t lamina-dashboard:latest --load .
+        docker save lamina-dashboard:latest -o lamina-dashboard.tar
+        cd - >/dev/null
+        
+        lamina_log "Loading lamina-dashboard Docker image into cluster..."
+        docker load < "$image_tar_path"
+    elif [ -f "$image_tar_path" ]; then
+        lamina_log "Loading existing lamina-dashboard Docker image into cluster..."
+        docker load < "$image_tar_path"
+    else
+        lamina_warn "No Dockerfile or image tar found, assuming image is already available"
+    fi
+    
+    # Install/upgrade dashboard - idempotent
+    helm upgrade --install lamina-dashboard "$BASE_CHARTS_DIR/lamina-dashboard" \
+        --namespace lamina-dashboard \
+        --create-namespace \
+        --wait
+    
+    # Restart deployment to ensure latest image is used
+    kubectl rollout restart deployment/lamina-dashboard -n lamina-dashboard
+    kubectl rollout status deployment/lamina-dashboard -n lamina-dashboard --timeout=300s
+    
+    lamina_log "Lamina Dashboard installed"
+}
+
 # Install Istio configuration (after observability stack)
 install_istio_config() {
     lamina_log "Installing Istio configuration..."
@@ -511,7 +548,13 @@ display_access_info() {
     echo "🔍 Jaeger (Tracing):       http://$jaeger_ip:16686"
     echo "🕸️  Kiali (Service Mesh):   http://$kiali_ip:20001"
     echo "🤖 Lamina LLM Serve:       http://llm.lamina.local/health"
-    echo "📊 Grafana (via gateway):  http://grafana.lamina.local/grafana"
+    echo
+    echo "=== Hostname-based Access (via Istio Gateway) ==="
+    echo "🌬️  Lamina Dashboard:       http://dashboard.lamina.local"
+    echo "📊 Grafana:                http://grafana.lamina.local"
+    echo "📈 Prometheus:             http://prometheus.lamina.local"
+    echo "🔍 Jaeger:                 http://jaeger.lamina.local"
+    echo "🕸️  Kiali:                  http://kiali.lamina.local"
     echo
     echo "=== Cluster Information ==="
     echo "• Cluster: k3d production (running in colima-production)"
@@ -591,6 +634,7 @@ main() {
     install_istio_config
     install_monitoring
     install_observability
+    install_lamina_dashboard
     install_lamina_llm_serve
     wait_for_services
     configure_host_access

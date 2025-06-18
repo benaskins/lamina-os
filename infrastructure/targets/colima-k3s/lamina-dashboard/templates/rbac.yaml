@@ -1,0 +1,27 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "lamina-dashboard.fullname" . }}
+  labels:
+    {{- include "lamina-dashboard.labels" . | nindent 4 }}
+rules:
+{{- with .Values.rbac.rules }}
+{{- toYaml . | nindent 2 }}
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "lamina-dashboard.fullname" . }}
+  labels:
+    {{- include "lamina-dashboard.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "lamina-dashboard.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "lamina-dashboard.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

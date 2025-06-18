@@ -55,24 +55,34 @@ security:
 mtls:
   mode: STRICT
   
-# Virtual Service routing
+# Virtual Service routing (hostname-based)
 virtualService:
-  routes:
+  services:
     grafana:
       enabled: true
-      path: /grafana
+      hostname: grafana.lamina.local
       service: grafana.monitoring.svc.cluster.local
       port: 3000
+    prometheus:
+      enabled: true
+      hostname: prometheus.lamina.local
+      service: prometheus.monitoring.svc.cluster.local
+      port: 9090
     jaeger:
       enabled: true
-      path: /jaeger
+      hostname: jaeger.lamina.local
       service: jaeger-query.observability.svc.cluster.local
       port: 16686
     kiali:
       enabled: true
-      path: /kiali
+      hostname: kiali.lamina.local
       service: kiali.observability.svc.cluster.local
       port: 20001
+    lamina-core:
+      enabled: true
+      hostname: core.lamina.local
+      service: lamina-core.lamina-system.svc.cluster.local
+      port: 8080
 
 # Telemetry configuration
 telemetry:

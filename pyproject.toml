@@ -90,6 +90,8 @@ ignore = [
 "examples/**/*" = ["S101", "S603"]
 "scripts/**/*" = ["S603"]
 "tools/**/*" = ["F841"]
+"packages/lamina-dashboard/lamina_dashboard/app.py" = ["E402"]  # eventlet monkey patching required first
+"packages/lamina-dashboard/lamina_dashboard/integrations/prometheus.py" = ["W291"]  # trailing whitespace from multiline query
 
 [tool.black]
 line-length = 100
