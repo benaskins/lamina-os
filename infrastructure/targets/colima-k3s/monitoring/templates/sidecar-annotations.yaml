@@ -1,0 +1,23 @@
+# This file adds necessary annotations for services to work properly with Istio sidecars
+# These annotations ensure proper traffic flow and startup ordering
+
+{{- define "istio.sidecar.annotations" -}}
+# Ensure sidecars are injected
+sidecar.istio.io/inject: "true"
+# Configure traffic to bypass sidecar for certain operations
+traffic.sidecar.istio.io/includeInboundPorts: "*"
+traffic.sidecar.istio.io/excludeInboundPorts: ""
+traffic.sidecar.istio.io/excludeOutboundPorts: ""
+# Ensure proper startup order - wait for sidecar before starting app
+sidecar.istio.io/proxyCPU: "100m"
+sidecar.istio.io/proxyMemory: "128Mi"
+{{- end -}}
+
+{{- define "istio.telemetry.annotations" -}}
+{{ include "istio.sidecar.annotations" . }}
+# Additional annotations for telemetry services
+# Allow prometheus scraping through sidecar
+prometheus.io/path: "/stats/prometheus"
+prometheus.io/port: "15020"
+prometheus.io/scrape: "true"
+{{- end -}}

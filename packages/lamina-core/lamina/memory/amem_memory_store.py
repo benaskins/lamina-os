@@ -147,13 +147,16 @@ class AgenticMemoryStore:
         embedding_fn = SentenceTransformerEmbeddingFunction(model_name=model_name)
 
         try:
+            # Get ChromaDB token from environment variable or Kubernetes secret
+            chroma_token = os.getenv("CHROMADB_TOKEN", "lamina_chroma_token")  # Fallback for dev
+
             # Try to connect to containerized ChromaDB service directly (internal Docker network)
             # Use internal container name and port instead of nginx proxy
             self.client = chromadb.HttpClient(
                 host="chromadb",  # Internal Docker service name
                 port=8000,  # Internal ChromaDB port
                 ssl=False,  # No SSL for internal communication
-                headers={"Authorization": "Bearer lamina_chroma_token"},
+                headers={"Authorization": f"Bearer {chroma_token}"},
             )
 
             # Test connection

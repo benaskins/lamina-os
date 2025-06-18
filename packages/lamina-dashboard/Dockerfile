@@ -7,8 +7,9 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install kubectl for Kubernetes access
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+# Install kubectl for Kubernetes access (architecture-aware)
+RUN ARCH=$(dpkg --print-architecture) \
+    && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH}/kubectl" \
     && chmod +x kubectl \
     && mv kubectl /usr/local/bin/
 

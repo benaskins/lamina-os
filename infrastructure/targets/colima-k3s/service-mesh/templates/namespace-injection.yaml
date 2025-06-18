@@ -1,0 +1,41 @@
+# Enable automatic Istio sidecar injection for all application namespaces
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    istio-injection: enabled
+    name: monitoring
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    istio-injection: enabled
+    name: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lamina-dashboard
+  labels:
+    istio-injection: enabled
+    name: lamina-dashboard
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lamina-system
+  labels:
+    istio-injection: enabled
+    name: lamina-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lamina-llm-serve
+  labels:
+    istio-injection: enabled
+    name: lamina-llm-serve

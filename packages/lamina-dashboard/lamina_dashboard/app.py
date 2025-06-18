@@ -19,8 +19,9 @@ import os
 import time
 from datetime import datetime
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
+from flask_wtf.csrf import CSRFProtect
 
 from .config import DashboardConfig
 from .core.cluster_translator import ClusterTranslator
@@ -37,11 +38,24 @@ app = Flask(
     template_folder=os.path.join(parent_dir, "templates"),
     static_folder=os.path.join(parent_dir, "static"),
 )
+
+# Security Configuration
 # Use environment variable for SECRET_KEY, fallback to generating a secure random key
 app.config["SECRET_KEY"] = (
     os.getenv("FLASK_SECRET_KEY") or os.getenv("SECRET_KEY") or os.urandom(24).hex()
 )
-socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Enable CSRF protection
+csrf = CSRFProtect(app)
+
+# Configure CSRF settings
+app.config["WTF_CSRF_TIME_LIMIT"] = None  # No time limit for dashboard usage
+app.config["WTF_CSRF_SSL_STRICT"] = False  # Allow HTTP for local development
+
+# Configure SocketIO with security considerations
+# Only allow specific origins in production
+allowed_origins = os.getenv("DASHBOARD_ALLOWED_ORIGINS", "*").split(",")
+socketio = SocketIO(app, cors_allowed_origins=allowed_origins)
 
 # Load configuration and initialize components
 config = DashboardConfig()
@@ -61,6 +75,63 @@ cluster_state = {
     "telemetry": {},
 }
 
+
+# Security Headers Middleware
+@app.after_request
+def add_security_headers(response):
+    """Add security headers to all responses."""
+    # Content Security Policy - restrict resource loading
+    csp_policy = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "  # Allow inline scripts for dashboard functionality
+        "style-src 'self' 'unsafe-inline'; "  # Allow inline styles
+        "img-src 'self' data:; "  # Allow data URLs for images
+        "connect-src 'self' ws: wss:; "  # Allow WebSocket connections
+        "font-src 'self'; "
+        "object-src 'none'; "
+        "base-uri 'self';"
+    )
+    response.headers["Content-Security-Policy"] = csp_policy
+
+    # Prevent clickjacking
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+
+    # Prevent MIME type sniffing
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # XSS Protection
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    # Referrer Policy
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # Only send HSTS header over HTTPS
+    if request.is_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+    return response
+
+
+def _is_allowed_origin(origin):
+    """Check if origin is in allowed list."""
+    if "*" in allowed_origins:
+        return True
+    return origin in allowed_origins
+
+
+def _validate_origin(func):
+    """Decorator to validate request origin for API endpoints."""
+
+    def wrapper(*args, **kwargs):
+        origin = request.headers.get("Origin")
+        if origin and not _is_allowed_origin(origin):
+            return jsonify({"error": "Invalid origin"}), 403
+        return func(*args, **kwargs)
+
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
 # No background monitoring in web app - keep it simple and stable
 # WebSocket will only send data when API endpoints are called
 
@@ -73,6 +144,8 @@ def dashboard():
     return render_template("dashboard.html", cache_bust=timestamp)
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/cluster/state")
 def get_cluster_state():
     """Get current cluster state in Lamina abstractions."""
@@ -104,6 +177,8 @@ def get_fresh_cluster_data():
         return cluster_state
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/sanctuaries")
 def get_sanctuaries():
     """Get all sanctuary information."""
@@ -111,6 +186,8 @@ def get_sanctuaries():
     return jsonify(fresh_data.get("sanctuaries", {}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/agents")
 def get_agents():
     """Get all agent status and information."""
@@ -118,6 +195,8 @@ def get_agents():
     return jsonify(fresh_data.get("agents", {}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/models")
 def get_models():
     """Get model serving status."""
@@ -125,6 +204,8 @@ def get_models():
     return jsonify(fresh_data.get("models", {}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/memory")
 def get_memory_systems():
     """Get memory system status."""
@@ -132,6 +213,8 @@ def get_memory_systems():
     return jsonify(fresh_data.get("memory_systems", {}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/telemetry")
 def get_telemetry():
     """Get telemetry and observability status."""
@@ -139,6 +222,8 @@ def get_telemetry():
     return jsonify(fresh_data.get("telemetry", {}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/traffic")
 def get_network_traffic():
     """Get network traffic flows and metrics."""
@@ -146,6 +231,8 @@ def get_network_traffic():
     return jsonify(fresh_data.get("network_traffic", {"flows": [], "metrics": {}}))
 
 
+@csrf.exempt
+@_validate_origin
 @app.route("/api/pod-states")
 def get_pod_states():
     """Get detailed pod state information including problematic pods."""
