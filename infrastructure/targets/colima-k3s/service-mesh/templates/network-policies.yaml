@@ -1,0 +1,420 @@
+# NetworkPolicies for comprehensive network segmentation and security
+# These policies implement zero-trust networking with explicit allow rules
+
+---
+# lamina-system namespace - core system components
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lamina-system-policy
+  namespace: lamina-system
+  labels:
+    app.kubernetes.io/name: lamina-system-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}  # Apply to all pods in namespace
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from istio-system (for sidecar injection and mesh communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow ingress from istio-gateway (for external access)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-gateway
+  # Allow inter-pod communication within same namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  egress:
+  # Allow egress to istio-system (for mesh communication)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow egress to monitoring for telemetry
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow egress to lamina-llm-serve for model serving
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS egress for external API calls
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+---
+# monitoring namespace - telemetry and observability
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitoring-policy
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: monitoring-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from istio-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow ingress from istio-gateway
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-gateway
+  # Allow ingress from all namespaces for telemetry collection
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  # Allow inter-pod communication within monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  egress:
+  # Allow egress to istio-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow egress to all namespaces for scraping metrics
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  # Allow inter-pod communication within monitoring
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS egress for external integrations
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+---
+# observability namespace - Jaeger, Kiali, etc.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: observability-policy
+  namespace: observability
+  labels:
+    app.kubernetes.io/name: observability-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from istio-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow ingress from istio-gateway
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-gateway
+  # Allow ingress from all namespaces for trace collection
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow inter-pod communication within observability
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  egress:
+  # Allow egress to istio-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow egress to monitoring for metrics integration
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow inter-pod communication within observability
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS egress for external integrations
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+---
+# lamina-llm-serve namespace - model serving
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: lamina-llm-serve-policy
+  namespace: lamina-llm-serve
+  labels:
+    app.kubernetes.io/name: lamina-llm-serve-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from istio-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow ingress from istio-gateway
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-gateway
+  # Allow ingress from lamina-system (agents need to access models)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  # Allow ingress from monitoring for telemetry
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow ingress from observability for tracing
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  # Allow inter-pod communication within lamina-llm-serve
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  egress:
+  # Allow egress to istio-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow egress to monitoring for telemetry
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  # Allow egress to observability for tracing
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  # Allow inter-pod communication within lamina-llm-serve
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS egress for model downloads from HuggingFace, etc.
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow HTTP egress for model downloads
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+
+---
+# istio-system namespace - service mesh control plane
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: istio-system-policy
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: istio-system-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow ingress from all namespaces (istio control plane needs broad access)
+  - from:
+    - namespaceSelector: {}
+  # Allow ingress from istio-gateway
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-gateway
+  # Allow inter-pod communication within istio-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  egress:
+  # Allow egress to all namespaces (istio control plane needs broad access)
+  - to:
+    - namespaceSelector: {}
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  # Allow HTTPS egress for external integrations
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+---
+# istio-gateway namespace - ingress gateway
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: istio-gateway-policy
+  namespace: istio-gateway
+  labels:
+    app.kubernetes.io/name: istio-gateway-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow all ingress (external traffic entry point)
+  - {}
+  egress:
+  # Allow egress to istio-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+  # Allow egress to all application namespaces
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-system
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: lamina-llm-serve
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+
+---
+# default namespace - deny all by default
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: default
+  labels:
+    app.kubernetes.io/name: default-deny-network-policy
+    app.kubernetes.io/component: security
+    app.kubernetes.io/part-of: lamina-os
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  # No ingress or egress rules = deny all
