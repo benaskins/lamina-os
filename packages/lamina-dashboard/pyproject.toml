@@ -63,6 +63,10 @@ target-version = "py311"
 select = ["E", "F", "I", "N", "W"]
 ignore = ["E501"]
 
+[tool.ruff.lint.per-file-ignores]
+"lamina_dashboard/app.py" = ["E402"]  # eventlet monkey patching required first
+"lamina_dashboard/integrations/prometheus.py" = ["W291"]  # trailing whitespace from multiline query
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
