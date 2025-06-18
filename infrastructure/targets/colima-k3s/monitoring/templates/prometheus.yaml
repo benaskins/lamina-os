@@ -57,6 +57,14 @@ spec:
         app: prometheus
     spec:
       serviceAccountName: prometheus
+      # Security context for the pod
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534  # nobody user
+        runAsGroup: 65534  # nobody group
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: prometheus
         image: {{ .Values.prometheus.image.repository }}:{{ .Values.prometheus.image.tag }}
@@ -70,11 +78,24 @@ spec:
           - '--web.enable-lifecycle'
         ports:
         - containerPort: 9090
+        # Container security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+          capabilities:
+            drop:
+            - ALL
         volumeMounts:
         - name: prometheus-config
           mountPath: /etc/prometheus
+          readOnly: true
         - name: prometheus-storage
           mountPath: /prometheus
+        - name: tmp-volume
+          mountPath: /tmp
         resources:
 {{ toYaml .Values.prometheus.resources | indent 10 }}
       volumes:
@@ -88,6 +109,8 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
+      - name: tmp-volume
+        emptyDir: {}
 ---
 # Prometheus Service
 apiVersion: v1
