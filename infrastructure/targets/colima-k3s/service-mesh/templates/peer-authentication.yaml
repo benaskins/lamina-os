@@ -41,3 +41,23 @@ metadata:
 spec:
   mtls:
     mode: {{ .Values.mesh.mtls.mode }}
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: lamina-llm-serve-mtls
+  namespace: lamina-llm-serve
+spec:
+  mtls:
+    mode: {{ .Values.mesh.mtls.mode }}
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: monitoring-mtls
+  namespace: monitoring
+spec:
+  mtls:
+    mode: {{ .Values.mesh.mtls.mode }}

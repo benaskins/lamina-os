@@ -27,6 +27,8 @@ serviceMesh:
 gateway:
   enabled: true
   name: lamina-gateway
+  # Enable HTTPS-only with HTTP redirect for security
+  httpsOnly: true
   servers:
     - port:
         number: 80
@@ -34,6 +36,7 @@ gateway:
         protocol: HTTP
       hosts:
         - "*"
+      # HTTP redirect to HTTPS (configured in VirtualServices)
     - port:
         number: 443
         name: https
