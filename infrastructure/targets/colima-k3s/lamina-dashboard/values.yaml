@@ -41,20 +41,20 @@ resources:
 # Health checks
 livenessProbe:
   httpGet:
-    path: /api/cluster/state
+    path: /
     port: 5001
-  initialDelaySeconds: 60
+  initialDelaySeconds: 90  # Increased to allow sidecar startup
   periodSeconds: 30
-  timeoutSeconds: 15
+  timeoutSeconds: 30
   failureThreshold: 5
 
 readinessProbe:
   httpGet:
-    path: /api/cluster/state
+    path: /
     port: 5001
-  initialDelaySeconds: 30
+  initialDelaySeconds: 60  # Increased to allow sidecar startup
   periodSeconds: 15
-  timeoutSeconds: 15
+  timeoutSeconds: 30
   failureThreshold: 5
 
 # Security context

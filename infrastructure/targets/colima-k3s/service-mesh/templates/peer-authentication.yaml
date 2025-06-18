@@ -31,3 +31,13 @@ metadata:
 spec:
   mtls:
     mode: {{ .Values.mesh.mtls.mode }}
+
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: lamina-dashboard-mtls
+  namespace: lamina-dashboard
+spec:
+  mtls:
+    mode: {{ .Values.mesh.mtls.mode }}

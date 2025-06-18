@@ -23,6 +23,81 @@ from .validators import EnvironmentValidationError, validate_environment_config
 logger = logging.getLogger(__name__)
 
 
+# Security: Define allowed commands to prevent command injection
+ALLOWED_COMMANDS = {
+    "pytest": ["uv", "run", "pytest"],
+    "ruff": ["uv", "run", "ruff"],
+    "black": ["uv", "run", "black"],
+    "bandit": ["uv", "run", "bandit"],
+}
+
+# Security: Define allowed arguments to prevent injection
+ALLOWED_ARGS = {
+    "pytest": {
+        "directories": ["packages/lamina-core/tests/", "packages/", "tests/"],
+        "flags": ["-m", "unit", "-m", "integration", "-v", "--tb=short"],
+    },
+    "ruff": {
+        "directories": ["packages/", "packages/lamina-core/"],
+        "flags": ["check", "--fix"],
+    },
+    "black": {
+        "directories": ["packages/", "packages/lamina-core/"],
+        "flags": ["--check", "--diff"],
+    },
+    "bandit": {
+        "directories": ["packages/", "packages/lamina-core/"],
+        "flags": ["-r", "-f", "json"],
+    },
+}
+
+
+def _run_secure_command(cmd_parts: list[str]) -> subprocess.CompletedProcess:
+    """
+    Securely execute a command with validation.
+    
+    Args:
+        cmd_parts: List of command parts (e.g., ["uv", "run", "pytest", "tests/"])
+        
+    Returns:
+        CompletedProcess result
+        
+    Raises:
+        ValueError: If command is not allowed
+    """
+    if not cmd_parts:
+        raise ValueError("Empty command not allowed")
+    
+    # Extract command type (e.g., "pytest" from ["uv", "run", "pytest", ...])
+    cmd_type = None
+    for allowed_cmd in ALLOWED_COMMANDS:
+        base_cmd = ALLOWED_COMMANDS[allowed_cmd]
+        if len(cmd_parts) >= len(base_cmd) and cmd_parts[:len(base_cmd)] == base_cmd:
+            cmd_type = allowed_cmd
+            args = cmd_parts[len(base_cmd):]
+            break
+    
+    if not cmd_type:
+        raise ValueError(f"Command not allowed: {cmd_parts}")
+    
+    # Validate arguments
+    allowed_dirs = ALLOWED_ARGS[cmd_type]["directories"]
+    allowed_flags = ALLOWED_ARGS[cmd_type]["flags"]
+    
+    for arg in args:
+        # Check if it's an allowed directory or flag
+        is_valid = False
+        for allowed_dir in allowed_dirs:
+            if arg.startswith(allowed_dir):
+                is_valid = True
+                break
+        if not is_valid and arg not in allowed_flags:
+            raise ValueError(f"Argument not allowed for {cmd_type}: {arg}")
+    
+    # Execute with validated command parts
+    return subprocess.run(cmd_parts, capture_output=True, text=True, timeout=300)
+
+
 class EnvironmentManager:
     """
     Manages environment configurations and operations.
@@ -310,7 +385,7 @@ class EnvironmentManager:
         for cmd in test_commands:
             try:
                 logger.info(f"{from_config.sigil} Running: {cmd}")
-                result = subprocess.run(cmd.split(), capture_output=True, text=True)
+                result = _run_secure_command(cmd.split())
                 if result.returncode != 0:
                     logger.error(f"{from_config.sigil} Test failed: {cmd}")
                     logger.error(f"Error: {result.stderr}")

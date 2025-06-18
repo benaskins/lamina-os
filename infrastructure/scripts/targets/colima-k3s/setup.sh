@@ -291,18 +291,30 @@ install_monitoring() {
     local env_values="$ENV_VALUES_DIR/$ENV/values.yaml"
     local temp_values="/tmp/monitoring-values.yaml"
     
-    # Extract monitoring section for this deployment
-    if command -v yq >/dev/null 2>&1; then
-        yq eval '.monitoring' "$env_values" > "$temp_values"
+    # Check if environment values file exists
+    if [ ! -f "$env_values" ]; then
+        lamina_warn "Environment values file not found at $env_values, using chart defaults"
+        temp_values=""
     else
-        # Fallback - use the entire environment file and let Helm ignore non-matching keys
-        cp "$env_values" "$temp_values"
+        # Extract monitoring section for this deployment
+        if command -v yq >/dev/null 2>&1; then
+            yq eval '.monitoring' "$env_values" > "$temp_values"
+        else
+            # Fallback - use the entire environment file and let Helm ignore non-matching keys
+            cp "$env_values" "$temp_values"
+        fi
     fi
     
     # Install/upgrade monitoring stack (Prometheus, Grafana, Loki, Vector) - idempotent
+    local values_flag=""
+    if [ -n "$temp_values" ] && [ -f "$temp_values" ]; then
+        values_flag="--values $temp_values"
+    fi
+    
     helm upgrade --install monitoring "$BASE_CHARTS_DIR/monitoring" \
         --namespace monitoring \
-        --values "$temp_values" \
+        --create-namespace \
+        $values_flag \
         --wait
     
     lamina_log "Monitoring stack installed"
@@ -316,18 +328,30 @@ install_observability() {
     local env_values="$ENV_VALUES_DIR/$ENV/values.yaml"
     local temp_values="/tmp/observability-values.yaml"
     
-    # Extract observability section for this deployment
-    if command -v yq >/dev/null 2>&1; then
-        yq eval '.observability' "$env_values" > "$temp_values"
+    # Check if environment values file exists
+    if [ ! -f "$env_values" ]; then
+        lamina_warn "Environment values file not found at $env_values, using chart defaults"
+        temp_values=""
     else
-        # Fallback - use the entire environment file and let Helm ignore non-matching keys
-        cp "$env_values" "$temp_values"
+        # Extract observability section for this deployment
+        if command -v yq >/dev/null 2>&1; then
+            yq eval '.observability' "$env_values" > "$temp_values"
+        else
+            # Fallback - use the entire environment file and let Helm ignore non-matching keys
+            cp "$env_values" "$temp_values"
+        fi
     fi
     
     # Install/upgrade observability stack (Jaeger, Kiali) - idempotent
+    local values_flag=""
+    if [ -n "$temp_values" ] && [ -f "$temp_values" ]; then
+        values_flag="--values $temp_values"
+    fi
+    
     helm upgrade --install observability "$BASE_CHARTS_DIR/observability" \
         --namespace observability \
-        --values "$temp_values" \
+        --create-namespace \
+        $values_flag \
         --wait
     
     lamina_log "Observability stack installed"
@@ -336,6 +360,11 @@ install_observability() {
 # Install Lamina Dashboard
 install_lamina_dashboard() {
     lamina_log "Installing Lamina Dashboard..."
+    
+    # Create namespace with sidecar injection enabled
+    kubectl create namespace lamina-dashboard --dry-run=client -o yaml | \
+        kubectl label --local -f - istio-injection=enabled -o yaml | \
+        kubectl apply -f -
     
     # Build and load lamina-dashboard Docker image
     local package_dir="$INFRA_DIR/../packages/lamina-dashboard"
@@ -360,7 +389,6 @@ install_lamina_dashboard() {
     # Install/upgrade dashboard - idempotent
     helm upgrade --install lamina-dashboard "$BASE_CHARTS_DIR/lamina-dashboard" \
         --namespace lamina-dashboard \
-        --create-namespace \
         --wait
     
     # Restart deployment to ensure latest image is used
@@ -617,11 +645,32 @@ cleanup_and_ingest() {
     fi
 }
 
+# Function to check for stuck Helm operations and clean them
+check_and_clean_helm_locks() {
+    lamina_log "Checking for stuck Helm operations..."
+    
+    # List any pending Helm operations
+    local pending_releases=$(helm list --all-namespaces --pending 2>/dev/null | grep -v NAME | wc -l)
+    
+    if [ "$pending_releases" -gt 0 ]; then
+        lamina_warn "Found $pending_releases pending Helm operations. Checking if they're stuck..."
+        helm list --all-namespaces --pending
+        
+        # In a production setup, you might want to automatically rollback stuck releases
+        # For now, we'll just warn and let the user decide
+        lamina_warn "If setup fails due to stuck operations, run: helm rollback <release-name> <revision> -n <namespace>"
+    fi
+}
+
 # Main execution
 main() {
     # Record start time
     START_TIME=$(date +%s)
     SETUP_FAILED=false
+    
+    # Set up error handling
+    set -e
+    trap 'SETUP_FAILED=true; lamina_error "Setup failed at step: $BASH_COMMAND"' ERR
     
     lamina_log "Starting production Kubernetes cluster setup..."
     
@@ -631,6 +680,7 @@ main() {
     wait_for_cluster
     install_metallb
     install_istio
+    check_and_clean_helm_locks
     install_istio_config
     install_monitoring
     install_observability

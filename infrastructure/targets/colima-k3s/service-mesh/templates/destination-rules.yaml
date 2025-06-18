@@ -92,7 +92,26 @@ spec:
         maxRequestsPerConnection: 10
 
 ---
-# Specific overrides for external-facing services (no Istio sidecar)
+# Destination rule for lamina-dashboard services
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: lamina-dashboard-services
+  namespace: lamina-dashboard
+spec:
+  host: "*.lamina-dashboard.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: {{ .Values.mesh.traffic.destinationRule.trafficPolicy.tls.mode }}
+    connectionPool:
+      tcp:
+        maxConnections: 50
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 10
+
+---
+# Kubernetes API server requires special handling (not part of mesh)
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -102,51 +121,4 @@ spec:
   host: kubernetes.default.svc.cluster.local
   trafficPolicy:
     tls:
-      mode: DISABLE  # API server has no sidecar
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: grafana-external
-  namespace: istio-system
-spec:
-  host: grafana.monitoring.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: DISABLE  # Grafana has no sidecar
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: jaeger-external
-  namespace: istio-system
-spec:
-  host: jaeger-query.observability.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: DISABLE  # Jaeger has no sidecar
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: kiali-external
-  namespace: istio-system
-spec:
-  host: kiali.observability.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: DISABLE  # Kiali has no sidecar
-
----
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: prometheus-external
-  namespace: istio-system
-spec:
-  host: prometheus.monitoring.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: DISABLE  # Prometheus has no sidecar
+      mode: DISABLE  # API server is external to mesh
