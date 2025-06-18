@@ -59,8 +59,8 @@ class InfrastructureConfig:
             # Allow paths in current working directory or config/ subdirectory
             cwd = Path.cwd().resolve()
             return (
-                abs_path.is_relative_to(cwd) or  # Within current directory
-                abs_path.name.endswith(('.yaml', '.yml', '.json'))  # Has valid config extension
+                abs_path.is_relative_to(cwd)  # Within current directory
+                or abs_path.name.endswith((".yaml", ".yml", ".json"))  # Has valid config extension
             )
         except (OSError, ValueError):
             return False

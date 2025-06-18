@@ -72,9 +72,9 @@ def _run_secure_command(cmd_parts: list[str]) -> subprocess.CompletedProcess:
     cmd_type = None
     for allowed_cmd in ALLOWED_COMMANDS:
         base_cmd = ALLOWED_COMMANDS[allowed_cmd]
-        if len(cmd_parts) >= len(base_cmd) and cmd_parts[:len(base_cmd)] == base_cmd:
+        if len(cmd_parts) >= len(base_cmd) and cmd_parts[: len(base_cmd)] == base_cmd:
             cmd_type = allowed_cmd
-            args = cmd_parts[len(base_cmd):]
+            args = cmd_parts[len(base_cmd) :]
             break
 
     if not cmd_type:

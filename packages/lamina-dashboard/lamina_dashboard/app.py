@@ -75,6 +75,7 @@ cluster_state = {
     "telemetry": {},
 }
 
+
 # Security Headers Middleware
 @app.after_request
 def add_security_headers(response):
@@ -110,21 +111,26 @@ def add_security_headers(response):
 
     return response
 
+
 def _is_allowed_origin(origin):
     """Check if origin is in allowed list."""
     if "*" in allowed_origins:
         return True
     return origin in allowed_origins
 
+
 def _validate_origin(func):
     """Decorator to validate request origin for API endpoints."""
+
     def wrapper(*args, **kwargs):
         origin = request.headers.get("Origin")
         if origin and not _is_allowed_origin(origin):
             return jsonify({"error": "Invalid origin"}), 403
         return func(*args, **kwargs)
+
     wrapper.__name__ = func.__name__
     return wrapper
+
 
 # No background monitoring in web app - keep it simple and stable
 # WebSocket will only send data when API endpoints are called
