@@ -56,12 +56,30 @@ spec:
       labels:
         app: grafana
     spec:
+      # Security context for the pod
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 472  # grafana user
+        runAsGroup: 0   # root group (required for Grafana)
+        fsGroup: 472
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: grafana
         image: {{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}
         imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
         ports:
         - containerPort: 3000
+        # Container security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false  # Grafana needs write access to data directory
+          runAsNonRoot: true
+          runAsUser: 472
+          runAsGroup: 0
+          capabilities:
+            drop:
+            - ALL
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
           valueFrom:
@@ -70,15 +88,26 @@ spec:
               key: {{ .Values.grafana.secretKey }}
         - name: GF_USERS_ALLOW_SIGN_UP
           value: "false"
+        - name: GF_SECURITY_DISABLE_GRAVATAR
+          value: "true"
+        - name: GF_SECURITY_COOKIE_SECURE
+          value: "true"
+        - name: GF_SECURITY_COOKIE_SAMESITE
+          value: "strict"
         volumeMounts:
         - name: grafana-datasources
           mountPath: /etc/grafana/provisioning/datasources
+          readOnly: true
         - name: grafana-storage
           mountPath: /var/lib/grafana
         - name: grafana-dashboards
           mountPath: /var/lib/grafana/dashboards
+          readOnly: true
         - name: grafana-dashboard-provider
           mountPath: /etc/grafana/provisioning/dashboards
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
         resources:
 {{ toYaml .Values.grafana.resources | indent 10 }}
       volumes:
@@ -98,6 +127,8 @@ spec:
       - name: grafana-dashboard-provider
         configMap:
           name: grafana-dashboard-provider
+      - name: tmp-volume
+        emptyDir: {}
 ---
 # Grafana PersistentVolumeClaim
 {{- if .Values.grafana.persistence.enabled }}
